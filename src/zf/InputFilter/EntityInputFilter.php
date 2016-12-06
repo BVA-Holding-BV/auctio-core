@@ -1,30 +1,30 @@
 <?php
 
-namespace Auctio\Zf\InputFilter;
+namespace AuctioCore\Zf\InputFilter;
 
 use Zend\InputFilter\InputFilter;
 
-class StringInputFilter
+class EntityInputFilter
 {
 
     /**
-     * Get InputFilter for a String-type field
+     * Get InputFilter for a Entity-type field
      *
      * @param $name
-     * @param bool $required
+     * @param boolean $required
      * @return void|InputFilter
      */
-    public function getFilter($name, $required = false)
+    public function getFilter($name)
     {
         if ($name == null) {
             return;
         } else {
             $filter = [
-                'name'      => $name,
-                'required'  => $required,
-                'filters'   => [
-                    ['name' => 'StripTags'],
-                    ['name' => 'StringTrim'],
+                'name' => $name,
+                'validators' => [
+                    [
+                        'name' => 'NotEmpty',
+                    ],
                 ],
             ];
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Auctio\Zf\InputFilter;
+namespace AuctioCore\Zf\InputFilter;
 
 use Zend\InputFilter\InputFilter;
 

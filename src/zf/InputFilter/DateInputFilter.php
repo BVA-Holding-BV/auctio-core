@@ -1,29 +1,30 @@
 <?php
 
-namespace Auctio\Zf\InputFilter;
+namespace AuctioCore\Zf\InputFilter;
 
 use Zend\InputFilter\InputFilter;
 
-class EntityInputFilter
+class DateInputFilter
 {
 
     /**
-     * Get InputFilter for a Entity-type field
+     * Get InputFilter for a Date-type field
      *
      * @param $name
-     * @param boolean $required
+     * @param bool $required
      * @return void|InputFilter
      */
-    public function getFilter($name)
+    public function getFilter($name, $required = false)
     {
         if ($name == null) {
             return;
         } else {
             $filter = [
                 'name' => $name,
+                'required' => $required,
                 'validators' => [
                     [
-                        'name' => 'NotEmpty',
+                        'name' => 'Date',
                     ],
                 ],
             ];

@@ -1,14 +1,14 @@
 <?php
 
-namespace Auctio\Zf\InputFilter;
+namespace AuctioCore\Zf\InputFilter;
 
 use Zend\InputFilter\InputFilter;
 
-class DateInputFilter
+class IntegerInputFilter
 {
 
     /**
-     * Get InputFilter for a Date-type field
+     * Get InputFilter for a Integer-type field
      *
      * @param $name
      * @param bool $required
@@ -24,7 +24,7 @@ class DateInputFilter
                 'required' => $required,
                 'validators' => [
                     [
-                        'name' => 'Date',
+                        'name' => 'Digits',
                     ],
                 ],
             ];

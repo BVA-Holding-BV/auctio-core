@@ -1,0 +1,23 @@
+{
+  "name": "berrybuitenhuis/auctio-core",
+  "type": "library",
+  "license": "Apache2",
+  "description": "Auctio-Core - General/basic functions for Auctio",
+  "keywords": [],
+  "homepage": "",
+  "authors": [
+    {
+      "name": "Berry Buitenhuis",
+      "email": "berrybuitenhuis@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.0",
+    "zendframework/zend-inputfilter": "^2.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "AuctioCore\\": "src"
+    }
+  }
+}

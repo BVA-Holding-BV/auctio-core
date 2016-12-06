@@ -1,14 +1,14 @@
 <?php
 
-namespace Auctio\Zf\InputFilter;
+namespace AuctioCore\Zf\InputFilter;
 
 use Zend\InputFilter\InputFilter;
 
-class IntegerInputFilter
+class StringInputFilter
 {
 
     /**
-     * Get InputFilter for a Integer-type field
+     * Get InputFilter for a String-type field
      *
      * @param $name
      * @param bool $required
@@ -20,12 +20,11 @@ class IntegerInputFilter
             return;
         } else {
             $filter = [
-                'name' => $name,
-                'required' => $required,
-                'validators' => [
-                    [
-                        'name' => 'Digits',
-                    ],
+                'name'      => $name,
+                'required'  => $required,
+                'filters'   => [
+                    ['name' => 'StripTags'],
+                    ['name' => 'StringTrim'],
                 ],
             ];
 
