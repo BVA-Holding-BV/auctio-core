@@ -63,12 +63,12 @@ abstract class AbstractService implements InputFilterAwareInterface
     /**
      * Set the ObjectName
      *
-     * @param $moduleName
+     * @param $entityNamespace
      * @param $name
      */
-    public function setObjectName($moduleName = '', $name)
+    public function setObjectName($entityNamespace)
     {
-        $this->objectName = $moduleName . '\Entity\\'. $name;
+        $this->objectName = $entityNamespace;
     }
 
     /**
