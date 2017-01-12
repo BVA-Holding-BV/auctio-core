@@ -28,6 +28,11 @@ abstract class AbstractService implements InputFilterAwareInterface
     private $objectName;
 
     /**
+     * @var inputData
+     */
+    protected $inputData;
+
+    /**
      * @var InputFilter
      */
     protected $inputFilter;
@@ -126,6 +131,32 @@ abstract class AbstractService implements InputFilterAwareInterface
 
         return $this;
     }
+
+    /**
+     * Prepare input-data (default)
+     *
+     * @param  array $data
+     * @return array
+     */
+    public function prepareInputDataDefault($data)
+    {
+        // Unset specific database-fields (if available)
+        if (isset($data['id'])) unset($data['id']);
+        if (isset($data['created'])) unset($data['created']);
+        if (isset($data['lastUpdated'])) unset($data['lastUpdated']);
+
+        // Set default data (if not available)
+        if (!isset($data['deleted']) || empty($data['deleted'])) $data['deleted'] = false;
+
+        $this->inputData = $data;
+    }
+
+    /**
+     * Prepare input-data (specific for entity)
+     *
+     * @return array
+     */
+    public abstract function prepareInputData();
 
     /**
      * Hydrate object, apply inputfilter, save it, and return result
@@ -272,8 +303,12 @@ abstract class AbstractService implements InputFilterAwareInterface
         // create object instance
         $object = new $this->objectName();
 
+        // Prepare data
+        $this->prepareInputDataDefault($data);
+        $this->prepareInputData();
+
         // hydrate object, apply inputfilter, and save it
-        if ($this->filterAndPersist($data, $object)) {
+        if ($this->filterAndPersist($this->inputData, $object)) {
             if ($output == 'array') {
                 return $this->getHydrator()->extract($object);
             } else {
@@ -308,8 +343,17 @@ abstract class AbstractService implements InputFilterAwareInterface
             ];
         }
 
+        // Prepare data
+        $this->prepareInputDataDefault($data);
+        $this->prepareInputData();
+
+        // Set last-updated (if available)
+        if (property_exists($object, 'lastUpdated')) {
+            $this->inputData['lastUpdated'] = new \DateTime();
+        }
+
         // hydrate object, apply inputfilter, save it, and return result
-        if ($this->filterAndPersist($data, $object)) {
+        if ($this->filterAndPersist($this->inputData, $object)) {
             if ($output == 'array') {
                 return $this->getHydrator()->extract($object);
             } else {
@@ -327,9 +371,10 @@ abstract class AbstractService implements InputFilterAwareInterface
      * Delete an object from the repository
      *
      * @param $id
+     * @param $remove
      * @return array
      */
-    public function delete($id)
+    public function delete($id, $remove = false)
     {
         // get object from the repository specified by primary key
         $object = $this->om
@@ -344,15 +389,23 @@ abstract class AbstractService implements InputFilterAwareInterface
             ];
         }
 
-        // remove the object from the repository or return error if something went wrong
-        try {
-            $this->om->remove($object);
-            $this->om->flush();
-        } catch (Exception $e) {
-            return [
-                'error' => true,
-                'message' => $e->getMessage(),
-            ];
+        // check if object really has to move of only update status
+        if ($remove === false) {
+            $result = $this->update($id, ['deleted'=>true], 'array');
+            if (isset($result['error'])) {
+                return $result;
+            }
+        } else {
+            // remove the object from the repository or return error if something went wrong
+            try {
+                $this->om->remove($object);
+                $this->om->flush();
+            } catch (Exception $e) {
+                return [
+                    'error' => true,
+                    'message' => $e->getMessage(),
+                ];
+            }
         }
 
         // return succes message
