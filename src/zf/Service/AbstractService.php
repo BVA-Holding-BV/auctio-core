@@ -15,7 +15,7 @@ abstract class AbstractService implements InputFilterAwareInterface
     /**
      * @var \Doctrine\ORM\EntityManager
      */
-    private $om;
+    protected $om;
 
     /**
      * @var \DoctrineModule\Stdlib\Hydrator\DoctrineObject
@@ -25,7 +25,7 @@ abstract class AbstractService implements InputFilterAwareInterface
     /**
      * @var Name of the \Doctrine\ORM\EntityRepository
      */
-    private $objectName;
+    protected $objectName;
 
     /**
      * @var inputData
