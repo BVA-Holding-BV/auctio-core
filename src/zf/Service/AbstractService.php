@@ -145,9 +145,6 @@ abstract class AbstractService implements InputFilterAwareInterface
         if (isset($data['created'])) unset($data['created']);
         if (isset($data['lastUpdated'])) unset($data['lastUpdated']);
 
-        // Set default data (if not available)
-        if (!isset($data['deleted']) || empty($data['deleted'])) $data['deleted'] = false;
-
         $this->inputData = $data;
     }
 
@@ -427,6 +424,10 @@ abstract class AbstractService implements InputFilterAwareInterface
         $this->prepareInputDataDefault($data);
         $this->prepareInputData();
 
+        // Set default data (if not available)
+        if (property_exists($object, 'created')) $this->inputData['created'] = new \DateTime();
+        if (property_exists($object, 'deleted')) $this->inputData['deleted'] = false;
+
         // hydrate object, apply inputfilter, and save it
         if ($this->filterAndPersist($this->inputData, $object)) {
             if ($output == 'array') {
@@ -470,10 +471,8 @@ abstract class AbstractService implements InputFilterAwareInterface
         $this->prepareInputDataDefault($data);
         $this->prepareInputData();
 
-        // Set last-updated (if available)
-        if (property_exists($object, 'lastUpdated')) {
-            $this->inputData['lastUpdated'] = new \DateTime();
-        }
+        // Set default data (if not available)
+        if (property_exists($object, 'lastUpdated')) $this->inputData['lastUpdated'] = new \DateTime();
 
         // hydrate object, apply inputfilter, save it, and return result
         if ($this->filterAndPersist($this->inputData, $object)) {
