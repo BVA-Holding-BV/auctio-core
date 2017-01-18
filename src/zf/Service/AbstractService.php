@@ -277,8 +277,14 @@ abstract class AbstractService implements InputFilterAwareInterface
         // Convert object to array (if output is array)
         if ($output == 'array') {
             $hydrator = $this->getHydrator();
-            foreach ($records['results'] AS $k => $v) {
-                $records['results'][$k] = $hydrator->extract($v);
+            if ($paginator === true) {
+                foreach ($records['results'] AS $k => $v) {
+                    $records['results'][$k] = $hydrator->extract($v);
+                }
+            } else {
+                foreach ($records AS $k => $v) {
+                    $records[$k] = $hydrator->extract($v);
+                }
             }
 
             // Return result
