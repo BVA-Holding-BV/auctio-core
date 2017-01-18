@@ -2,7 +2,7 @@
 
 namespace AuctioCore;
 
-class RequestParams
+class Input
 {
 
     /**
@@ -20,6 +20,26 @@ class RequestParams
         $output['limit'] = (isset($params->limit)) ? $params->limit : null;
         $output['offset'] = (isset($params->page)) ? ($params->page - 1) * $output['limit'] : null;
         $output['debug'] = (isset($params->debug) && ($params->debug == 'true' || $params->debug == 1)) ? true : false;
+
+        return $output;
+    }
+
+    /**
+     * Decode x-form-encoded data
+     *
+     * @param string $dataString, example test=1&test2=3&data=1+2
+     * @param boolean $urlEncode, url-encode value
+     * @return array
+     */
+    public function formDecode($dataString, $urlEncode = false) {
+        if (empty($dataString)) return array();
+
+        $output = array();
+        $dataElements = explode("&", $dataString);
+        foreach ($dataElements AS $dataElement) {
+            $data = explode("=", $dataElement);
+            $output[$data[0]] = ($urlEncode === true) ? urlencode($data[1]) : $data[1];
+        }
 
         return $output;
     }
