@@ -210,13 +210,15 @@ abstract class AbstractService implements InputFilterAwareInterface
 
         // convert objects to arrays
         if ($output == 'array') {
-            $data = [];
+            $records = [];
+            $hydrator = $this->getHydrator();
             foreach ($objects as $object) {
-                $data[] = $this->getHydrator()->extract($object);
+                $records[] = $hydrator->extract($object);
             }
 
-            // return
-            return $data;
+            // Return result
+            if (method_exists($this, 'transformData')) return $this->transformData($records);
+            else return $records;
         } else {
             return $objects;
         }
@@ -243,10 +245,127 @@ abstract class AbstractService implements InputFilterAwareInterface
 
         // return
         if ($output == 'array') {
-            $hydrator = $this->getHydrator();
-            return $hydrator->extract($object);
+            $record = $this->getHydrator()->extract($object);
+
+            // Return result
+            if (method_exists($this, 'transformData')) return $this->transformData($record);
+            else return $record;
         } else {
             return $object;
+        }
+    }
+
+    /**
+     * Return a list of objects from the repository
+     *
+     * @param string $output
+     * @param array $filter
+     * @param array $orderBy
+     * @param integer $limitRecords
+     * @param integer $offset
+     * @param boolean $paginator
+     * @param boolean $debug
+     * @return array/object
+     */
+    public function getList($output = 'object', $filter = NULL, $orderBy = NULL, $limitRecords = 25, $offset = 0, $paginator = false, $debug = false)
+    {
+        if (!empty($limitRecords)) $limit['limit'] = (int) $limitRecords;
+        else $limit['limit'] = 25;
+        $limit['offset'] = $offset;
+        if (!is_array($filter)) $filter = array();
+
+        // Get results
+        $records = $this->getByFilter($filter, $orderBy, $limit, $paginator, $debug);
+
+        // Convert object to array (if output is array)
+        if ($output == 'array') {
+            $hydrator = $this->getHydrator();
+            foreach ($records['results'] AS $k => $v) {
+                $records['results'][$k] = $hydrator->extract($v);
+            }
+
+            // Return result
+            if (method_exists($this, 'transformData')) return $this->transformData($records);
+            else return $records;
+        } else {
+            // Return result
+            return $records;
+        }
+    }
+
+    /**
+     * Return objects by filter
+     *
+     * @param $filter
+     * @param $orderBy
+     * @param $limit
+     * @param $paginator
+     * @param $debug
+     * @return array/object
+     */
+    public function getByFilter($filter = NULL, $orderBy = null, $limit = NULL, $paginator = false, $debug = false)
+    {
+        // Build query
+        $query = $this->om->createQueryBuilder();
+        if ($paginator) $queryPaginator = $this->om->createQueryBuilder();
+
+        // Set fields
+        $query->select('f');
+        if ($paginator) $queryPaginator->select(array('COUNT(f.id) total'));
+        // Set from
+        $query->from($this->objectName, 'f');
+        if ($paginator) $queryPaginator->from($this->objectName, 'f');
+        // Set filter (if available)
+        if (!empty($filter)) {
+            $query->where($filter['filter']);
+            $query->setParameters($filter['parameters']);
+            if ($paginator) $queryPaginator->where($filter['filter']);
+            if ($paginator) $queryPaginator->setParameters($filter['parameters']);
+        }
+        // Set order-by (if available)
+        if (!empty($orderBy)) {
+            foreach ($orderBy AS $order) {
+                $direction = (!empty($order['direction'])) ? $order['direction'] : null;
+                $query->addOrderBy($order['field'], $direction);
+            }
+        }
+        // Set limit (if available)
+        if (!empty($limit)) {
+            if (!empty($limit['offset'])) {
+                $query->setFirstResult($limit['offset']);
+            }
+            if (!empty($limit['limit'])) {
+                // Set maximum limit to 1000 records!
+                if ($limit['limit'] > 1000) {
+                    $limit['limit'] = 1000;
+                }
+
+                $query->setMaxResults($limit['limit']);
+            }
+        }
+
+        // Return DQL (in debug-mode)
+        if ($debug) {
+            return array("results"=>array("query"=>$query->getQuery()->getDQL(), "parameters"=>$filter['parameters']));
+        }
+
+        // Get results
+        if ($paginator) {
+            // Set paginator-results
+            $paginatorResults = $queryPaginator->getQuery()->getSingleResult();
+            $paginatorData['records'] = (int) $paginatorResults['total'];
+            $paginatorData['pages'] = (int) ceil($paginatorResults['total'] / $limit['limit']);
+            $paginatorData['currentPage'] = (int) (ceil($limit['offset'] / $limit['limit']) + 1);
+            $paginatorData['recordsPage'] = (int) $limit['limit'];
+
+            // Get "page"-results
+            $results = $query->getQuery()->getResult();
+
+            // Return
+            return array("paginator"=>$paginatorData, "results"=>$results);
+        } else {
+            // Return
+            return $query->getQuery()->getResult();
         }
     }
 
@@ -273,8 +392,9 @@ abstract class AbstractService implements InputFilterAwareInterface
         // convert objects to arrays
         if ($output == 'array') {
             $data = [];
+            $hydrator = $this->getHydrator();
             foreach ($objects as $object) {
-                $data[] = $this->getHydrator()->extract($object);
+                $data[] = $hydrator->extract($object);
             }
 
             // return
@@ -310,7 +430,10 @@ abstract class AbstractService implements InputFilterAwareInterface
         // hydrate object, apply inputfilter, and save it
         if ($this->filterAndPersist($this->inputData, $object)) {
             if ($output == 'array') {
-                return $this->getHydrator()->extract($object);
+                // Return result
+                $record = $this->getHydrator()->extract($object);
+                if (method_exists($this, 'transformData')) return $this->transformData($record);
+                else return $record;
             } else {
                 return $object;
             }
@@ -355,7 +478,10 @@ abstract class AbstractService implements InputFilterAwareInterface
         // hydrate object, apply inputfilter, save it, and return result
         if ($this->filterAndPersist($this->inputData, $object)) {
             if ($output == 'array') {
-                return $this->getHydrator()->extract($object);
+                // Return result
+                $record = $this->getHydrator()->extract($object);
+                if (method_exists($this, 'transformData')) return $this->transformData($record);
+                else return $record;
             } else {
                 return $object;
             }
