@@ -193,32 +193,37 @@ abstract class AbstractService implements InputFilterAwareInterface
         }
     }
 
-    /**
-     * Return all objects from the repository
-     *
-     * @return array
-     */
-    public function getAll($output = 'object')
+    public function transformValues($data, $fields)
     {
-        // get all objects from the repository
-        $objects = $this->om
-            ->getRepository($this->objectName)
-            ->findAll();
+        if (empty($fields)) return;
+        if (empty($data)) return;
 
-        // convert objects to arrays
-        if ($output == 'array') {
-            $records = [];
-            $hydrator = $this->getHydrator();
-            foreach ($objects as $object) {
-                $records[] = $hydrator->extract($object);
+        if ($data instanceof \Doctrine\ORM\PersistentCollection) {
+            if (count($data) < 1) return;
+
+            $values = [];
+            foreach ($data AS $k => $v) {
+                $values[$k] = $this->transformValues($v, $fields);
             }
-
-            // Return result
-            if (method_exists($this, 'transformData')) return $this->transformData($records);
-            else return $records;
         } else {
-            return $objects;
+            $values = [];
+            foreach ($fields AS $k => $field) {
+                if (is_array($field)) {
+                    $func = 'get' . ucfirst($k);
+                    $values[$k] = $this->transformValues($data->$func(), $field);
+                } else {
+                    if (is_object($data)) {
+                        $func = 'get' . ucfirst($field);
+                        $fieldValue = $data->$func();
+                    } elseif (is_array($data)) {
+                        $fieldValue = $data[$field];
+                    }
+                    $values[$field] = $fieldValue;
+                }
+            }
         }
+
+        return $values;
     }
 
     /**
@@ -249,6 +254,34 @@ abstract class AbstractService implements InputFilterAwareInterface
             else return $record;
         } else {
             return $object;
+        }
+    }
+
+    /**
+     * Return all objects from the repository
+     *
+     * @return array
+     */
+    public function getAll($output = 'object')
+    {
+        // get all objects from the repository
+        $objects = $this->om
+            ->getRepository($this->objectName)
+            ->findAll();
+
+        // convert objects to arrays
+        if ($output == 'array') {
+            $records = [];
+            $hydrator = $this->getHydrator();
+            foreach ($objects as $object) {
+                $records[] = $hydrator->extract($object);
+            }
+
+            // Return result
+            if (method_exists($this, 'transformData')) return $this->transformData($records);
+            else return $records;
+        } else {
+            return $objects;
         }
     }
 
