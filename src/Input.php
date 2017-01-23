@@ -28,17 +28,17 @@ class Input
      * Decode x-form-encoded data
      *
      * @param string $dataString, example test=1&test2=3&data=1+2
-     * @param boolean $urlEncode, url-encode value
+     * @param boolean $urlDecode, url-decode value
      * @return array
      */
-    public function formDecode($dataString, $urlEncode = false) {
+    public function formDecode($dataString, $urlDecode = false) {
         if (empty($dataString)) return array();
 
         $output = array();
         $dataElements = explode("&", $dataString);
         foreach ($dataElements AS $dataElement) {
             $data = explode("=", $dataElement);
-            $output[$data[0]] = ($urlEncode === true) ? urlencode($data[1]) : $data[1];
+            $output[$data[0]] = ($urlDecode === true) ? urldecode($data[1]) : $data[1];
         }
 
         return $output;
