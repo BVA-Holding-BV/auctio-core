@@ -193,6 +193,44 @@ abstract class AbstractService implements InputFilterAwareInterface
         }
     }
 
+    /**
+     * Transform object-data into usable data
+     *
+     * @param array $data
+     * @return array
+     */
+    public function transformData($data)
+    {
+        if (isset($data['results']) && is_array($data['results'])) {
+            foreach ($data['results'] AS $k => $record) {
+                $data['results'][$k] = $this->transformRecord($record);
+            }
+        } elseif (is_array($data) && !isset($data['id'])) {
+            foreach ($data AS $k => $record) {
+                $data[$k] = $this->transformRecord($record);
+            }
+        } else {
+            $data = $this->transformRecord($data);
+        }
+        return $data;
+    }
+
+    /**
+     * Transform object-record into usable record
+     *
+     * @param array $record
+     * @return array
+     */
+
+    public abstract function transformRecord($record);
+
+    /**
+     * Transform object-values into usable values
+     *
+     * @param mixed $data
+     * @param array $fields
+     * @return array
+     */
     public function transformValues($data, $fields)
     {
         if (empty($fields)) return;
