@@ -31,8 +31,10 @@ class Input
      * @param boolean $urlDecode, url-decode value
      * @return array
      */
-    public function formDecode($dataString, $urlDecode = false) {
+    public function formDecode($dataString, $urlDecode = false)
+    {
         if (empty($dataString)) return array();
+        if (self::isJson($dataString)) return json_decode($dataString, true);
 
         $output = array();
         $dataElements = explode("&", $dataString);
@@ -42,6 +44,17 @@ class Input
         }
 
         return $output;
+    }
+
+    /**
+     * Check if string is JSON-string
+     *
+     * @param string $string
+     * @return boolean
+     */
+    public function isJson($string)
+    {
+        return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
     }
 
 }
