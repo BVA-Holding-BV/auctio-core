@@ -14,19 +14,26 @@ class EntityInputFilter
      * @param boolean $required
      * @return void|InputFilter
      */
-    public function getFilter($name)
+    public function getFilter($name, $required = false)
     {
         if ($name == null) {
             return;
         } else {
-            $filter = [
-                'name' => $name,
-                'validators' => [
-                    [
-                        'name' => 'NotEmpty',
+            if ($required === false) {
+                $filter = [
+                    'name' => $name,
+                    'allow_empty' => true,
+                ];
+            } else {
+                $filter = [
+                    'name' => $name,
+                    'validators' => [
+                        [
+                            'name' => 'NotEmpty',
+                        ],
                     ],
-                ],
-            ];
+                ];
+            }
 
             $inputFilter = new InputFilter();
             $inputFilter->add($filter, $name);
