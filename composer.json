@@ -13,7 +13,8 @@
   ],
   "require": {
     "php": "^7.0",
-    "zendframework/zend-inputfilter": "^2.7"
+    "zendframework/zend-inputfilter": "^2.7",
+    "guzzlehttp/guzzle": "^6.2"
   },
   "autoload": {
     "psr-4": {
