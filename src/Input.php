@@ -20,6 +20,7 @@ class Input
         $output['limit'] = (isset($params->limit)) ? $params->limit : null;
         $output['offset'] = (isset($params->page)) ? ($params->page - 1) * $output['limit'] : null;
         $output['debug'] = (isset($params->debug) && ($params->debug == 'true' || $params->debug == 1)) ? true : false;
+        $output['customRequestId'] = (isset($params->customRequestId) && !empty($params->customRequestId)) ? $params->customRequestId : null;
 
         return $output;
     }
