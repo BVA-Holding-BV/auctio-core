@@ -200,31 +200,31 @@ class MyParcel
     public function validateAddress($person, $street, $number, $numberSuffix, $postalCode, $city, $countryCode)
     {
         $errors = array();
-        if (empty($person)) $errors['person'] = "Value is required";
-        if (empty($street)) $errors['street'] = "Value is required";
-        if (empty($number)) $errors['number'] = "Value is required";
-        if (empty($postalCode)) $errors['postalCode'] = "Value is required";
-        if (empty($city)) $errors['city'] = "Value is required";
-        if (empty($countryCode)) $errors['countryCode'] = "Value is required";
+        if (empty($person)) $errors[] = "Person is required";
+        if (empty($street)) $errors[] = "Street is required";
+        if (empty($number)) $errors[] = "Number is required";
+        if (empty($postalCode)) $errors[] = "Postal-code is required";
+        if (empty($city)) $errors[] = "City is required";
+        if (empty($countryCode)) $errors[] = "Country is required";
 
         // Check if number is only numeric
         if (!empty($number) && preg_match("/[^0-9]/", $number)) {
-            $errors['number'] = "Value is not allowed (only numbers)";
+            $errors[] = "Number is not allowed (only numbers)";
         }
 
         // Check if numberSuffix is not equal to street
         if (!empty($numberSuffix) && strtolower($numberSuffix) == strtolower($street)) {
-            $errors['numberSuffix'] = "Value is not valid (same as street)";
+            $errors[] = "Number-suffix is not valid (same as street)";
         }
 
         // Check if numberSuffix is not equal to number
         if (!empty($numberSuffix) && strtolower($numberSuffix) == strtolower($number)) {
-            $errors['numberSuffix'] = "Value is not valid (same as number)";
+            $errors[] = "Number-suffix is not valid (same as number)";
         }
 
         // Check if numberSuffix is max 4 characters
         if (!empty($numberSuffix) && strlen($numberSuffix) > 4) {
-            $errors['numberSuffix'] = "Value is not allowed (max 4 characters)";
+            $errors[] = "Number-suffix is not allowed (max 4 characters)";
         }
 
         // Check postalCode
@@ -237,13 +237,13 @@ class MyParcel
 
             // Check if postalCode is valid
             if (array_key_exists($countryCode, $regularExpr) && !preg_match($regularExpr[$countryCode], $postalCode)) {
-                $errors['postalCode'] = "Value is not valid";
+                $errors[] = "Postal-code is not valid";
             }
         }
 
         // Check if countryCode is allowed for sending
         if (!empty($countryCode) && !in_array($countryCode, $this->allowedCountryCodes)) {
-            $errors['countryCode'] = "Value is not allowed (" . implode(", ", $this->allowedCountryCodes) . ")";
+            $errors[] = "Country is not allowed (" . implode(", ", $this->allowedCountryCodes) . ")";
         }
 
         if (empty($errors)) return true;
