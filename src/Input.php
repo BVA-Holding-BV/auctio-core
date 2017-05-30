@@ -16,7 +16,7 @@ class Input
     {
         if (!is_object($dataString) && !is_array($dataString)) {
             $dataString = str_replace("'", '"', $dataString);
-            if ($this->isJson($dataString)) {
+            if (self::isJson($dataString)) {
                 $data = $dataString;
             } else {
                 return;
