@@ -487,6 +487,33 @@ abstract class AbstractService implements InputFilterAwareInterface
     }
 
     /**
+     * Get id(s) by field-value(s)
+     *
+     * @param string $field
+     * @param string|array $value
+     * @return string|array
+     */
+    public function getIdByField($field, $value)
+    {
+        // Find records by field-value parameters
+        $multiple = (is_array($value)) ? true : false;
+        $records = $this->getByParameters([$field=>$value], "object", $multiple);
+
+        // Return
+        if (is_array($value)) {
+            // Get mulitple ids
+            $ids = [];
+            foreach ($records AS $record) {
+                $ids[] = $record->getId();
+            }
+
+            return $ids;
+        } else {
+            return $records->getId();
+        }
+    }
+
+    /**
      * Create a new object
      *
      * @param $data
