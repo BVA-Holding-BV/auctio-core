@@ -269,14 +269,20 @@ abstract class AbstractService implements InputFilterAwareInterface
      *
      * @param $id
      * @param $output
-     * @return array/object
+     * @param $refresh
+     * @return object|array
      */
-    public function get($id, $output = 'object')
+    public function get($id, $output = 'object', $refresh = false)
     {
         // get object from the repository specified by primary key
         $object = $this->om
             ->getRepository($this->objectName)
             ->find($id);
+
+        // refresh entity (clear all local changes)
+        if ($refresh === true) {
+            $this->om->refresh($object);
+        }
 
         // return error if object not found
         if ($object == null) {
@@ -298,7 +304,8 @@ abstract class AbstractService implements InputFilterAwareInterface
     /**
      * Return all objects from the repository
      *
-     * @return array
+     * @param $output
+     * @return object|array
      */
     public function getAll($output = 'object')
     {
