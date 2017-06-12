@@ -525,15 +525,17 @@ abstract class AbstractService implements InputFilterAwareInterface
      * Create a new object
      *
      * @param $data
+     * @param $output
+     * @param $overrule
      * @return array
      */
-    public function create($data, $output = 'object')
+    public function create($data, $output = 'object', $overrule = [])
     {
         // create object instance
         $object = new $this->objectName();
 
         // Prepare data
-        $this->prepareInputDataDefault($data);
+        $this->prepareInputDataDefault($data, $overrule);
         $this->prepareInputData();
 
         // Set default data (if not available)
@@ -563,6 +565,7 @@ abstract class AbstractService implements InputFilterAwareInterface
      *
      * @param $id
      * @param $data
+     * @param $output
      * @return array
      */
     public function update($id, $data, $output = 'object')
