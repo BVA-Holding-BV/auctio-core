@@ -136,14 +136,15 @@ abstract class AbstractService implements InputFilterAwareInterface
      * Prepare input-data (default)
      *
      * @param  array $data
+     * @param  array $overrule
      * @return array
      */
-    public function prepareInputDataDefault($data)
+    public function prepareInputDataDefault($data, $overrule = [])
     {
         // Unset specific database-fields (if available)
-        if (isset($data['id'])) unset($data['id']);
-        if (isset($data['created'])) unset($data['created']);
-        if (isset($data['lastUpdated'])) unset($data['lastUpdated']);
+        if (isset($data['id']) && !in_array('id', $overrule)) unset($data['id']);
+        if (isset($data['created']) && !in_array('created', $overrule)) unset($data['created']);
+        if (isset($data['lastUpdated']) && !in_array('lastUpdated', $overrule)) unset($data['lastUpdated']);
 
         $this->inputData = $data;
     }
