@@ -23,9 +23,7 @@ class DateInputFilter
                 'name' => $name,
                 'required' => $required,
                 'validators' => [
-                    [
-                        'name' => 'Date',
-                    ],
+                    ['name' => 'Date'],
                 ],
             ];
 

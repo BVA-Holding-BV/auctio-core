@@ -207,6 +207,11 @@ class MyParcel
         if (empty($city)) $errors['city'] = "Value is required";
         if (empty($countryCode)) $errors['countryCode'] = "Value is required";
 
+        // Check if person is max 50 characters
+        if (!empty($person) && strlen($person) > 50) {
+            $errors['person'] = "Value is not allowed (max 50 characters)";
+        }
+
         // Check if number is only numeric
         if (!empty($number) && preg_match("/[^0-9]/", $number)) {
             $errors['number'] = "Value is not allowed (only numbers)";

@@ -23,9 +23,7 @@ class IntegerInputFilter
                 'name' => $name,
                 'required' => $required,
                 'validators' => [
-                    [
-                        'name' => 'Digits',
-                    ],
+                    ['name' => 'Digits'],
                 ],
             ];
 
