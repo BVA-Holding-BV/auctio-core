@@ -28,9 +28,7 @@ class EntityInputFilter
                 $filter = [
                     'name' => $name,
                     'validators' => [
-                        [
-                            'name' => 'NotEmpty',
-                        ],
+                        ['name' => 'NotEmpty'],
                     ],
                 ];
             }

@@ -27,7 +27,9 @@ class DecimalInputFilter
                 'validators'   => [
                     [
                         'name' => 'Regex',
-                        'pattern' => '\b\d{1,' . ($precision - $scale) . '}\.\d{1,' . $scale . '}\b',
+                        'options' => [
+                            'pattern' => '\b\d{1,' . ($precision - $scale) . '}\.\d{1,' . $scale . '}\b',
+                        ],
                     ],
                 ],
             ];
