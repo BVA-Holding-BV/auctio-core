@@ -28,7 +28,7 @@ class DecimalInputFilter
                     [
                         'name' => 'Regex',
                         'options' => [
-                            'pattern' => '\b\d{1,' . ($precision - $scale) . '}\.\d{1,' . $scale . '}\b',
+                            'pattern' => '/^\d{1,' . ($precision - $scale) . '}\.\d{1,' . $scale . '}/',
                         ],
                     ],
                 ],
