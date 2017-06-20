@@ -336,6 +336,8 @@ abstract class AbstractService implements InputFilterAwareInterface
      *
      * @param string $output
      * @param array $filter
+     * @param array $groupBy
+     * @param array $having
      * @param array $orderBy
      * @param integer $limitRecords
      * @param integer $offset
@@ -343,7 +345,7 @@ abstract class AbstractService implements InputFilterAwareInterface
      * @param boolean $debug
      * @return array/object
      */
-    public function getList($output = 'object', $filter = NULL, $orderBy = NULL, $limitRecords = 25, $offset = 0, $paginator = false, $debug = false)
+    public function getList($output = 'object', $filter = NULL, $groupBy = null, $having = null, $orderBy = NULL, $limitRecords = 25, $offset = 0, $paginator = false, $debug = false)
     {
         if (!empty($limitRecords)) $limit['limit'] = (int) $limitRecords;
         else $limit['limit'] = 25;
@@ -351,7 +353,7 @@ abstract class AbstractService implements InputFilterAwareInterface
         if (!is_array($filter)) $filter = array();
 
         // Get results
-        $records = $this->getByFilter($filter, $orderBy, $limit, $paginator, $debug);
+        $records = $this->getByFilter($filter, $groupBy, $having, $orderBy, $limit, $paginator, $debug);
 
         // Convert object to array (if output is array)
         if ($output == 'array') {
