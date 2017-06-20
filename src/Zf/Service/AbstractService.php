@@ -379,17 +379,20 @@ abstract class AbstractService implements InputFilterAwareInterface
      * Return objects by filter
      *
      * @param $filter
+     * @param $groupBy
+     * @param $having
      * @param $orderBy
      * @param $limit
      * @param $paginator
      * @param $debug
      * @return array/object
      */
-    public function getByFilter($filter = NULL, $orderBy = null, $limit = NULL, $paginator = false, $debug = false)
+    public function getByFilter($filter = NULL, $groupBy = null, $having = null, $orderBy = null, $limit = NULL, $paginator = false, $debug = false)
     {
         // Build query
         $query = $this->om->createQueryBuilder();
         if ($paginator) $queryPaginator = $this->om->createQueryBuilder();
+        $parameters = [];
 
         // Set fields
         $query->select('f');
@@ -400,16 +403,20 @@ abstract class AbstractService implements InputFilterAwareInterface
         // Set filter (if available)
         if (!empty($filter)) {
             $query->where($filter['filter']);
-            $query->setParameters($filter['parameters']);
             if ($paginator) $queryPaginator->where($filter['filter']);
-            if ($paginator) $queryPaginator->setParameters($filter['parameters']);
+            $parameters = (empty($parameters)) ? $filter['parameters'] : array_merge($parameters, $filter['parameters']);
         }
-        // Set order-by (if available)
-        if (!empty($orderBy)) {
-            foreach ($orderBy AS $order) {
-                $direction = (!empty($order['direction'])) ? $order['direction'] : null;
-                $query->addOrderBy($order['field'], $direction);
+        // Set group-by (if available)
+        if (!empty($groupBy)) {
+            foreach ($groupBy AS $group) {
+                $query->addGroupBy($group);
             }
+        }
+        // Set having (if available)
+        if (!empty($having)) {
+            $query->having($having['filter']);
+            if ($paginator) $queryPaginator->having($having['filter']);
+            $parameters = (empty($parameters)) ? $having['parameters'] : array_merge($parameters, $having['parameters']);
         }
         // Set limit (if available)
         if (!empty($limit)) {
@@ -425,10 +432,15 @@ abstract class AbstractService implements InputFilterAwareInterface
                 $query->setMaxResults($limit['limit']);
             }
         }
+        // Set parameters (if available)
+        if (!empty($parameters)) {
+            $query->setParameters($parameters);
+            if ($paginator) $queryPaginator->setParameters($parameters);
+        }
 
         // Return DQL (in debug-mode)
         if ($debug) {
-            return array("results"=>array("query"=>$query->getQuery()->getDQL(), "parameters"=>$filter['parameters']));
+            return array("results"=>array("query"=>$query->getQuery()->getDQL(), "parameters"=>$parameters));
         }
 
         // Get results
