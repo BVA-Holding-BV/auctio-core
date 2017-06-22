@@ -1,8 +1,8 @@
 <?php
 
-namespace AuctioCore\Api;
+namespace AuctioCore\Api\MyParcel;
 
-class MyParcel
+class Api
 {
 
     private $allowedCountryCodes;
