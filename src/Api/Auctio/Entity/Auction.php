@@ -11,35 +11,35 @@ class Auction extends Base {
      */
     public $id;
     /**
-     * @var LocaleMessage
+     * @var Custom\LocaleMessage
      */
     public $name;
     /**
-     * @var LocaleMessage
+     * @var Custom\LocaleMessage
      */
     public $description;
     /**
-     * @var LocaleMessage
+     * @var Custom\LocaleMessage
      */
     //public $keywords;
     /**
-     * @var LocaleMessage
+     * @var Custom\LocaleMessage
      */
     public $auctionClosedText;
     /**
-     * @var LocaleMessage
+     * @var Custom\LocaleMessage
      */
     public $bidRestrictionExplanationText;
     /**
-     * @var LocaleMessage
+     * @var Custom\LocaleMessage
      */
     public $extraExplanationText;
     /**
-     * @var LocaleMessage
+     * @var Custom\LocaleMessage
      */
     public $importantInformation;
     /**
-     * @var LocaleMessage
+     * @var Custom\LocaleMessage
      */
     public $auctionAdvertisement;
     /**
@@ -99,7 +99,7 @@ class Auction extends Base {
      */
     public $showBanners;
     /**
-     * @var LocaleMessage
+     * @var Custom\LocaleMessage
      */
     public $extraTermsText;
     /**
@@ -125,7 +125,7 @@ class Auction extends Base {
      */
     public $disableBidding;
     /**
-     * @var LocaleMessage
+     * @var Custom\LocaleMessage
      */
     public $themeIntroduction;
     /**

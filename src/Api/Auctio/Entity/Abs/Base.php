@@ -76,17 +76,16 @@ abstract class Base implements \AuctioCore\Api\Auctio\Entity\Interfaces\Base
 	 * @return self
 	 */
 	public function populate($data) {
-
-		if($data === null) {
+		if ($data === null || empty($data)) {
 			return $this;
 		}
 
 		if(!($data instanceof \stdClass)) {
-			throw new \InvalidArgumentException('$data should be instance of stdClass');
+            throw new \InvalidArgumentException('$data should be instance of stdClass');
 		}
 
 		if(!isset(static::$populateProperties[get_called_class()])) {
-			$reflectionObject = new \ReflectionObject($this);
+            $reflectionObject = new \ReflectionObject($this);
 
 			// loop over all properties looking for custom datatypes
 			foreach($reflectionObject->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
@@ -106,7 +105,7 @@ abstract class Base implements \AuctioCore\Api\Auctio\Entity\Interfaces\Base
 					if(!class_exists($className)) {
 						throw new \Exception('Could not find type:' . $className);
 					}
-					if(!is_subclass_of($className, '\Bva\Api\Bva\Entity\Interfaces\Base')) {
+					if(!is_subclass_of($className, '\AuctioCore\Api\Auctio\Entity\Interfaces\Base')) {
 						throw new \Exception('Type is not known:' . $className);
 					}
 					static::$populateProperties[get_called_class()][$property->getName()] = $className;
