@@ -47,7 +47,7 @@ class Auction extends Base {
      */
     public $bidLimitDispensationAmount;
     /**
-     * @var int
+     * @var string
      */
     public $countryId;
     /**
