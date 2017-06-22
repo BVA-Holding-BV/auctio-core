@@ -28,6 +28,11 @@ abstract class AbstractService implements InputFilterAwareInterface
     protected $objectName;
 
     /**
+     * @var List of filter-associations
+     */
+    protected $filterAssociations;
+
+    /**
      * @var inputData
      */
     protected $inputData;
@@ -69,7 +74,6 @@ abstract class AbstractService implements InputFilterAwareInterface
      * Set the ObjectName
      *
      * @param $entityNamespace
-     * @param $name
      */
     public function setObjectName($entityNamespace)
     {
@@ -130,6 +134,26 @@ abstract class AbstractService implements InputFilterAwareInterface
         $this->inputFilter = $inputFilter;
 
         return $this;
+    }
+
+    /**
+     * Set filter-associations of entity
+     *
+     * @param array $filterAssociations
+     */
+    public function setFilterAssociations($filterAssociations)
+    {
+        $this->filterAssociations = $filterAssociations;
+    }
+
+    /**
+     * Get filter-associations of entity
+     *
+     * @return mixed
+     */
+    public function getFilterAssociations()
+    {
+        return $this->filterAssociations;
     }
 
     /**
@@ -402,6 +426,15 @@ abstract class AbstractService implements InputFilterAwareInterface
         // Set from
         $query->from($this->objectName, 'f');
         if ($paginator) $queryPaginator->from($this->objectName, 'f');
+        // Set joins (if available/needed)
+        if (!empty($filter) && !empty($this->getFilterAssociations())) {
+            foreach ($this->getFilterAssociations() AS $filterAssociation) {
+                if (stristr($filter['filter'], $filterAssociation['alias'] . ".")) {
+                    $query->leftJoin($filterAssociation['join'], $filterAssociation['alias']);
+                    if ($paginator) $queryPaginator->leftJoin($filterAssociation['join'], $filterAssociation['alias']);
+                }
+            }
+        }
         // Set filter (if available)
         if (!empty($filter)) {
             $query->where($filter['filter']);
@@ -412,6 +445,7 @@ abstract class AbstractService implements InputFilterAwareInterface
         if (!empty($groupBy)) {
             foreach ($groupBy AS $group) {
                 $query->addGroupBy($group);
+                if ($paginator) $queryPaginator->addGroupBy($group);
             }
         }
         // Set having (if available)
@@ -419,6 +453,13 @@ abstract class AbstractService implements InputFilterAwareInterface
             $query->having($having['filter']);
             if ($paginator) $queryPaginator->having($having['filter']);
             $parameters = (empty($parameters)) ? $having['parameters'] : array_merge($parameters, $having['parameters']);
+        }
+        // Set order-by (if available)
+        if (!empty($orderBy)) {
+            foreach ($orderBy AS $order) {
+                $direction = (!empty($order['direction'])) ? $order['direction'] : null;
+                $query->addOrderBy($order['field'], $direction);
+            }
         }
         // Set limit (if available)
         if (!empty($limit)) {
