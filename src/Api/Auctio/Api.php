@@ -82,6 +82,7 @@ class Api
         // Prepare request
         $requestHeader = $this->clientHeaders;
 
+        // Execute request
         $result = $this->client->request('POST', 'logout', ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
@@ -93,7 +94,8 @@ class Api
                 return ["error"=>true, "message"=>$response->errors, "data"=>[]];
             }
         } else {
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>[]];
+            $response = json_decode((string) $result->getBody());
+            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
         }
     }
 
@@ -103,7 +105,7 @@ class Api
         $requestHeader = $this->clientHeaders;
 
         // Execute request
-        $result = $this->client->request('PUT', 'ext123/auction/' . $id, ["headers"=>$requestHeader, ""]);
+        $result = $this->client->request('PUT', 'ext123/auction', ["headers"=>$requestHeader, "body"=>$auction->encode()]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
@@ -114,7 +116,8 @@ class Api
                 return ["error"=>true, "message"=>$response->errors, "data"=>[]];
             }
         } else {
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>[]];
+            $response = json_decode((string) $result->getBody());
+            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
         }
 
     }
@@ -136,7 +139,8 @@ class Api
                 return ["error"=>true, "message"=>$response->errors, "data"=>[]];
             }
         } else {
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>[]];
+            $response = json_decode((string) $result->getBody());
+            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
         }
 
     }
