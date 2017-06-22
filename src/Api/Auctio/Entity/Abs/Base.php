@@ -133,9 +133,9 @@ abstract class Base implements \AuctioCore\Api\Auctio\Entity\Interfaces\Base
                     $typeObject = new $type;
 					if(is_array($value)) {
                         $this->$name = array();
-						foreach($value as $valueElement) {
+						foreach($value as $keyElement => $valueElement) {
 							array_push($this->$name,
-								$typeObject->populate($valueElement)
+								$typeObject->populate([$keyElement => $valueElement])
 							);
 						}
 					} else {

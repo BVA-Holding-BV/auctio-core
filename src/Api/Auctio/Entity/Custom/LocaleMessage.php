@@ -24,6 +24,17 @@ class LocaleMessage extends Base {
 	 */
 	public $de;
 
+    public function populate($data) {
+
+        foreach ($data AS $language => $text) {
+            if (property_exists($this, $language)) {
+                $this->$language = $text;
+            }
+        }
+
+        return $this;
+    }
+
 	public function encode() {
 		$data = array();
 		$encoded = parent::encode();
