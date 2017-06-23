@@ -6,151 +6,81 @@ use AuctioCore\Api\Auctio\Entity\Abs\Base;
 
 class Auction extends Base {
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
-    /**
-     * @var Custom\LocaleMessage
-     */
+    /** @var Custom\LocaleMessage */
     public $name;
-    /**
-     * @var Custom\LocaleMessage
-     */
+    /** @var Custom\LocaleMessage */
     public $description;
-    /**
-     * @var Custom\LocaleMessage
-     */
+    /** @var Custom\LocaleMessage */
     //public $keywords;
-    /**
-     * @var Custom\LocaleMessage
-     */
+    /** @var Custom\LocaleMessage */
     public $auctionClosedText;
-    /**
-     * @var Custom\LocaleMessage
-     */
+    /** @var Custom\LocaleMessage */
     public $bidRestrictionExplanationText;
-    /**
-     * @var Custom\LocaleMessage
-     */
+    /** @var Custom\LocaleMessage */
     public $extraExplanationText;
-    /**
-     * @var Custom\LocaleMessage
-     */
+    /** @var Custom\LocaleMessage */
     public $importantInformation;
-    /**
-     * @var Custom\LocaleMessage
-     */
+    /** @var Custom\LocaleMessage */
     public $auctionAdvertisement;
-    /**
-     * @var float
-     */
+    /** @var float */
     public $bidLimitDispensationAmount;
-    /**
-     * @var string
-     */
+    /** @var string */
     public $countryId;
-    /**
-     * @var Custom\DateTime
-     */
+    /** @var Custom\DateTime */
     public $creationDate;
-    /**
-     * @var Custom\DateTime
-     */
+    /** @var Custom\DateTime */
     public $startDate;
-    /**
-     * @var Custom\DateTime
-     */
+    /** @var Custom\DateTime */
     public $endDate;
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $onlyBusinessCustomersCanBid;
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $onlyLocalCustomersCanBid;
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $privateAuction;
-    /**
-     * @ReadOnly
-     */
+    /** @ReadOnly */
     public $privateAuctionText;
-    /**
-     * @ReadOnly
-     */
+    /** @ReadOnly */
     public $privateAuctionApplicationEmail;
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $showPrivateAuctionOnHomepage;
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $allowPrivateAuctionApplications;
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $allowAutomaticPrivateAuctionAccess;
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $showBanners;
-    /**
-     * @var Custom\LocaleMessage
-     */
+    /** @var Custom\LocaleMessage */
     public $extraTermsText;
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $extraTermsRequired;
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $bidLimitRequired;
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $active;
-    /**
-     * @ReadOnly
-     */
+    /** * @ReadOnly */
     public $termsUrl;
+    /** * @ReadOnly */
     public $leafletURL;
+    /** * @ReadOnly */
     public $remark;
-    /**
-     * @var int
-     */
+    /** @var int */
     public $disableBidding;
-    /**
-     * @var Custom\LocaleMessage
-     */
+    /** @var Custom\LocaleMessage */
     public $themeIntroduction;
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $permissionRequired;
-    /**
-     * @var int
-     */
+    /** @var int */
     public $bidRangeId;
-    /**
-     * @var int
-     */
+    /** @var int */
     public $responsibilityUnitId;
-    /**
-     * @var array
-     */
+    /** @var array */
     public $languages;
-    /**
-     * @var array
-     */
+    /** @var array */
     public $channelCodes;
-    /**
-     * @var int
-     */
+    /** @var int */
     public $reverseBidRangeId;
     /**
      * @var string
