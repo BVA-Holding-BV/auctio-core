@@ -314,6 +314,28 @@ class Api
         }
     }
 
+    public function getAuctionMainCategories($auctionId)
+    {
+        // Prepare request
+        $requestHeader = $this->clientHeaders;
+
+        // Execute request
+        $result = $this->client->request('GET', 'ext123/auction/' . $auctionId . "/lotmaincategories", ["headers"=>$requestHeader]);
+        if ($result->getStatusCode() == 200) {
+            $response = json_decode((string) $result->getBody());
+
+            // Return
+            if (!isset($response->errors)) {
+                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+            } else {
+                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+            }
+        } else {
+            $response = json_decode((string) $result->getBody());
+            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+        }
+    }
+
     public function getLot($lotId)
     {
         // Prepare request
@@ -336,13 +358,57 @@ class Api
         }
     }
 
-    public function getAuctionMainCategories($auctionId)
+    public function getLotsByAuction($auctionId)
+    {
+        // Prepare request
+        $requestHeader = $this->clientHeaders;
+
+        // Set page-config
+        $pageSize = 100;
+        $pageNumber = 1;
+        $pages = 1;
+
+        // Execute request (loop for all lots)
+        $error = false;
+        while ($error === false && $pages >= $pageNumber) {
+            $result = $this->client->request('GET', 'ext123/lots/byauction/' . $auctionId . '/' . $pageSize . '/' . $pageNumber . '?enddate=ASC', ["headers"=>$requestHeader]);
+            if ($result->getStatusCode() == 200) {
+                $response = json_decode((string) $result->getBody());
+
+                // Reset total pages of auction
+                $pages = (int) ceil($response->totalLotCount / $response->pageSize);
+                $pageNumber++;
+
+                // Merge lots of different calls (while-loop)
+                $lots = (isset($lots) && !empty($lots)) ? array_merge($lots, $response->lots) : $response->lots;
+                $response->lots = $lots;
+            } else {
+                $response = json_decode((string) $result->getBody());
+
+                // Set error, break while-loop
+                $error = true;
+            }
+        }
+
+        if ($error === false) {
+            // Return
+            if (!isset($response->errors)) {
+                return ["error" => false, "message" => "Ok", "data" => $response];
+            } else {
+                return ["error" => true, "message" => $response->errors, "data" => []];
+            }
+        } else {
+            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+        }
+    }
+
+    public function getLotsByAuctionPaged($auctionId, $pageSize = 25, $pageNumber = 1)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
 
         // Execute request
-        $result = $this->client->request('GET', 'ext123/auction/' . $auctionId . "/lotmaincategories", ["headers"=>$requestHeader]);
+        $result = $this->client->request('GET', 'ext123/lots/byauction/' . $auctionId . '/' . $pageSize . '/' . $pageNumber . '/', ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
