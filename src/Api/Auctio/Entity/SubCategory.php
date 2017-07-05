@@ -11,9 +11,9 @@ class SubCategory extends Base {
     public $parentLotCategoryId;
     /** @var int */
     public $position;
-    /** @var Custom\LocaleMessage */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $name;
-    /** @var Custom\LocaleMessage */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $description;
 
 }

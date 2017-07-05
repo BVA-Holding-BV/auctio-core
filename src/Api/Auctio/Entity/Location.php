@@ -7,7 +7,7 @@ class Location extends Base {
 
     /** @var int */
     public $id;
-    /** @var Custom\LocaleMessage */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $name;
     /** @var string */
     public $address;

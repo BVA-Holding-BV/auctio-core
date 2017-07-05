@@ -8,31 +8,31 @@ class Auction extends Base {
 
     /** @var int */
     public $id;
-    /** @var Custom\LocaleMessage */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $name;
-    /** @var Custom\LocaleMessage */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $description;
-    /** @var Custom\LocaleMessage */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     //public $keywords;
-    /** @var Custom\LocaleMessage */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $auctionClosedText;
-    /** @var Custom\LocaleMessage */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $bidRestrictionExplanationText;
-    /** @var Custom\LocaleMessage */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $extraExplanationText;
-    /** @var Custom\LocaleMessage */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $importantInformation;
-    /** @var Custom\LocaleMessage */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $auctionAdvertisement;
     /** @var float */
     public $bidLimitDispensationAmount;
     /** @var string */
     public $countryId;
-    /** @var Custom\DateTime */
+    /** @var Api\Auctio\Entity\Custom\DateTime */
     public $creationDate;
-    /** @var Custom\DateTime */
+    /** @var Api\Auctio\Entity\Custom\DateTime */
     public $startDate;
-    /** @var Custom\DateTime */
+    /** @var Api\Auctio\Entity\Custom\DateTime */
     public $endDate;
     /** @var bool */
     public $onlyBusinessCustomersCanBid;
@@ -52,7 +52,7 @@ class Auction extends Base {
     public $allowAutomaticPrivateAuctionAccess;
     /** @var bool */
     public $showBanners;
-    /** @var Custom\LocaleMessage */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $extraTermsText;
     /** @var bool */
     public $extraTermsRequired;
@@ -68,7 +68,7 @@ class Auction extends Base {
     public $remark;
     /** @var int */
     public $disableBidding;
-    /** @var Custom\LocaleMessage */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $themeIntroduction;
     /** @var bool */
     public $permissionRequired;

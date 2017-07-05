@@ -32,9 +32,9 @@ class Lot extends Base {
      * @ReadOnly
      */
     public $fullNumber;
-    /** @var Custom\DateTime */
+    /** @var Api\Auctio\Entity\Custom\DateTime */
     public $startDate;
-    /** @var Custom\DateTime */
+    /** @var Api\Auctio\Entity\Custom\DateTime */
     public $endDate;
     /**
      * @var string
@@ -55,9 +55,9 @@ class Lot extends Base {
     public $endDateSeconds;
     /** @var bool */
     public $open;
-    /** @var Custom\LocaleMessage */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $name;
-    /** @var Custom\LocaleMessage */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $description;
     /** @var string */
     public $thumbnailUrl;
@@ -93,11 +93,11 @@ class Lot extends Base {
     public $assignedExplicitly;
     /** @var string */
     public $vehicleTaxAmount;
-    /** @var Custom\LocaleMessage */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $extraDownloadName;
     /** @var string */
     public $extraDownloadURL;
-    /** @var Custom\LocaleMessage */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $extraDownload2Name;
     /** @var string */
     public $extraDownload2URL;

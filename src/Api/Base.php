@@ -2,7 +2,7 @@
 
 namespace AuctioCore\Api;
 
-use AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage AS AuctioLocaleMessage;
+use AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage;
 
 abstract class Base implements BaseInterface
 {
@@ -132,7 +132,7 @@ abstract class Base implements BaseInterface
                     // This is a custom value. If a list, we loop over each item
                     $typeObject = new $type;
                     if(is_array($value)) {
-                        if($typeObject instanceof AuctioLocaleMessage) {
+                        if($typeObject instanceof LocaleMessage) {
                             $this->$name = $typeObject->populate($value);
                         } else {
                             $this->$name = array();
