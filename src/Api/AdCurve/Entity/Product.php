@@ -1,9 +1,9 @@
 <?php
-namespace AuctioCore\Api\Auctio\Entity;
+namespace AuctioCore\Api\AdCurve\Entity;
 
 use AuctioCore\Api\Base;
 
-class Location extends Base {
+class Product extends Base {
 
     /** @var int */
     public $id;

@@ -1,8 +1,8 @@
 <?php
 
-namespace AuctioCore\Api\Auctio\Entity\Interfaces;
+namespace AuctioCore\Api;
 
-interface Base
+interface BaseInterface
 {
     /**
      * Loop over all properties and set them in the entity

@@ -2,8 +2,7 @@
 
 namespace AuctioCore\Api\Auctio\Entity\Custom;
 
-use AuctioCore\Api\Auctio\Defaults;
-use AuctioCore\Api\Auctio\Entity\Abs\Base;
+use AuctioCore\Api\Base;
 
 class LocaleMessage extends Base {
 

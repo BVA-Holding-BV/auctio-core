@@ -7,8 +7,6 @@ class Api
 
     private $client;
     private $clientHeaders;
-    private $accessToken;
-    private $refreshToken;
 
     /**
      * Constructor
@@ -119,7 +117,7 @@ class Api
         }
     }
 
-    public function createLocation(\AuctioCore\Api\Auctio\Entity\Location $location)
+    public function createLocation(\AuctioCore\Api\Auctio\Entity\Product $location)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;

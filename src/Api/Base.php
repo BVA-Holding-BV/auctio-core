@@ -1,11 +1,10 @@
 <?php
 
-namespace AuctioCore\Api\Auctio\Entity\Abs;
+namespace AuctioCore\Api;
 
-use AuctioCore\Api\Auctio\Defaults;
-use AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage;
+use AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage AS AuctioLocaleMessage;
 
-abstract class Base implements \AuctioCore\Api\Auctio\Entity\Interfaces\Base
+abstract class Base implements BaseInterface
 {
 
     public function __construct($data = array()) {
@@ -106,7 +105,7 @@ abstract class Base implements \AuctioCore\Api\Auctio\Entity\Interfaces\Base
                     if(!class_exists($className)) {
                         throw new \Exception('Could not find type:' . $className);
                     }
-                    if(!is_subclass_of($className, '\AuctioCore\Api\Auctio\Entity\Interfaces\Base')) {
+                    if(!is_subclass_of($className, '\AuctioCore\Api\BaseInterface')) {
                         throw new \Exception('Type is not known:' . $className);
                     }
                     static::$populateProperties[get_called_class()][$property->getName()] = $className;
@@ -133,7 +132,7 @@ abstract class Base implements \AuctioCore\Api\Auctio\Entity\Interfaces\Base
                     // This is a custom value. If a list, we loop over each item
                     $typeObject = new $type;
                     if(is_array($value)) {
-                        if($typeObject instanceof LocaleMessage) {
+                        if($typeObject instanceof AuctioLocaleMessage) {
                             $this->$name = $typeObject->populate($value);
                         } else {
                             $this->$name = array();

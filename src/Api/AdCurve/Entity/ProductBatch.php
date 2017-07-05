@@ -1,10 +1,10 @@
 <?php
 
-namespace AuctioCore\Api\Auctio\Entity;
+namespace AuctioCore\Api\AdCurve\Entity;
 
 use AuctioCore\Api\Base;
 
-class Auction extends Base {
+class ProductBatch extends Base {
 
     /** @var int */
     public $id;

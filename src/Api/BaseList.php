@@ -1,10 +1,8 @@
 <?php
 
-namespace AuctioCore\Api\Auctio\Entity\Abs;
+namespace AuctioCore\Api;
 
-use AuctioCore\Api\Auctio\Defaults;
-
-abstract class BaseList implements \AuctioCore\Api\Auctio\Entity\Interfaces\Base, \ArrayAccess, \Iterator, \Countable
+abstract class BaseList implements BaseInterface, \ArrayAccess, \Iterator, \Countable
 {
 
 	/**

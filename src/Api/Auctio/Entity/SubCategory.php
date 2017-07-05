@@ -1,7 +1,7 @@
 <?php
 namespace AuctioCore\Api\Auctio\Entity;
 
-use AuctioCore\Api\Auctio\Entity\Abs\Base;
+use AuctioCore\Api\Base;
 
 class SubCategory extends Base {
 

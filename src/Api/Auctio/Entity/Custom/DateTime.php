@@ -2,9 +2,9 @@
 
 namespace AuctioCore\Api\Auctio\Entity\Custom;
 
-use AuctioCore\Api\Auctio\Entity\Interfaces\Base;
+use AuctioCore\Api\BaseInterface;
 
-class DateTime extends \DateTime implements Base {
+class DateTime extends \DateTime implements BaseInterface {
 
     public function populate($data) {
         if ($data instanceof \DateTime) {

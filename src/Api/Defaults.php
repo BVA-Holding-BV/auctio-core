@@ -1,6 +1,6 @@
 <?php
 
-namespace AuctioCore\Api\Auctio;
+namespace AuctioCore\Api;
 
 class Defaults {
 
