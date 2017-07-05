@@ -32,13 +32,32 @@ class Api
         $this->shopId = $shopId;
     }
 
-    public function createProducts(\AuctioCore\Api\Adcurve\Entity\ProductBatch $productBatch)
+    /**
+     * @param object|array $products
+     * @return array
+     */
+    public function createProducts($products)
     {
+        // Check input
+        if (is_array($products) && count($products) > 0) {
+            foreach ($products AS $product) {
+                if (!($product instanceof \AuctioCore\Api\AdCurve\Entity\Product)) {
+                    return ["error"=>true, "message"=>"No valid input"];
+                }
+            }
+        } else {
+            if (!($products instanceof \AuctioCore\Api\AdCurve\Entity\Product)) {
+                return ["error"=>true, "message"=>"No valid input"];
+            } else {
+                $products = [$products];
+            }
+        }
+
         // Prepare request
         $requestHeader = $this->clientHeaders;
 
         // Execute request
-        $result = $this->client->request('POST', '/v1/shops/' . $this->shopId . '/shop_products/batch', ["headers"=>$requestHeader, "body"=>$productBatch->encode()]);
+        $result = $this->client->request('POST', '/v1/shops/' . $this->shopId . '/shop_products/batch', ["headers"=>$requestHeader, "body"=>$products->encode()]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
