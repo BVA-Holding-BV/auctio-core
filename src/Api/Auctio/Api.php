@@ -15,7 +15,7 @@ class Api
      * @param string $username
      * @param string $password
      */
-    public function __construct($hostname, $username, $password)
+    public function __construct($hostname, $username = null, $password = null)
     {
         // Set client
         $this->client = new \GuzzleHttp\Client(['base_uri' => $hostname, 'http_errors' => false]);
