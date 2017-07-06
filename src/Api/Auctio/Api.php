@@ -356,7 +356,14 @@ class Api
         }
     }
 
-    public function getLotsByAuction($auctionId)
+    /**
+     * Get (all) lots by auction-id, for example indexedBy by lot-number (by default sequantial numeric key)
+     *
+     * @param int $auctionId
+     * @param string $indexedBy
+     * @return array
+     */
+    public function getLotsByAuction($auctionId, $indexedBy = null)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -377,8 +384,20 @@ class Api
                 $pages = (int) ceil($response->totalLotCount / $response->pageSize);
                 $pageNumber++;
 
-                // Merge lots of different calls (while-loop)
-                $lots = (isset($lots) && !empty($lots)) ? array_merge($lots, $response->lots) : $response->lots;
+                // Merge lots of different calls (because of while-loop)
+                if (strtolower($indexedBy) == 'lotnumber') {
+                    // Set lots-array
+                    if (!isset($lots)) $lots = [];
+                    // Reset index of lots-array to lot-number
+                    foreach ($response->lots AS $lot) {
+                        $lots[$lot->fullNumber] = $lot;
+                    }
+                } else {
+                    // Merge lots
+                    $lots = (isset($lots) && !empty($lots)) ? array_merge($lots, $response->lots) : $response->lots;
+                }
+
+                // Set lots to response
                 $response->lots = $lots;
             } else {
                 $response = json_decode((string) $result->getBody());
