@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * API-information: http://implementation.adcurve.com/api/v1/
+ */
 namespace AuctioCore\Api\AdCurve;
 
 class Api

@@ -5,83 +5,200 @@ use AuctioCore\Api\Base;
 
 class Product extends Base {
 
-    /** @var string */
+    /**
+     * Unique ID per product
+     * @var string
+     */
     public $shop_code;
-    /** @var string */
+    /**
+     * Unique ID per variant. A product (shop_code) can contain multiple variants (variant_id)
+     * @var string
+     */
     public $variant_id;
-    /** @var string */
+    /**
+     * Category tree of the product split by ‘->’
+     * @var string
+     */
     public $shop_category;
-    /** @var string */
+    /**
+     * Product deeplink without any referrer parameters
+     * @var string
+     */
     public $deeplink;
-    /** @var string */
+    /**
+     * Name of the product
+     * @var string
+     */
     public $product_name;
-    /** @var int */
+    /**
+     * Selling price of the product including VAT
+     * @var int
+     */
     public $selling_price;
-    /** @var int */
+    /**
+     * Selling price of the product excluding VAT
+     * @var int
+     */
     public $selling_price_ex;
-    /** @var string */
+    /**
+     * Link to the main image of the product
+     * @var string
+     */
     public $picture_link;
-    /** @var int */
+    /**
+     * Original product price excluding VAT
+     * @var int
+     */
     public $cost_price;
-    /** @var int */
+    /**
+     * Delivery costs including VAT
+     * @var int
+     */
     public $delivery_cost;
-    /** @var string */
+    /**
+     * Period it takes to deliver the product
+     * @var string
+     */
     public $delivery_period;
-    /** @var boolean */
+    /**
+     * Set it to ‘false’ to disable a product. Ignore otherwise
+     * @var boolean
+     */
     public $enabled;
-    /** @var int */
+    /**
+     * Before price including VAT
+     * @var int
+     */
     public $market_price;
-    /** @var int */
+    /**
+     * Max CPO of the product
+     * @var int
+     */
     public $max_cpo;
-    /** @var string */
+    /**
+     * Brand of the product
+     * @var string
+     */
     public $product_brand;
-    /** @var string */
+    /**
+     * Description of the product
+     * @var string
+     */
     public $product_description;
-    /** @var string */
+    /**
+     * International Article Number of the product
+     * @var string
+     */
     public $product_ean;
-    /** @var string */
+    /**
+     * How many products there are available
+     * @var string
+     */
     public $product_in_stock;
-    /** @var string */
+    /**
+     * Promotion text for the product
+     * @var string
+     */
     public $promotion_text;
-    /** @var Api\AdCurve\Entity\Custom\Date */
+    /**
+     * Starting date from when the product will be included in the feed (YYYY-MM-DD)
+     * @var Api\AdCurve\Entity\Custom\Date
+     */
     public $start_date;
-    /** @var string */
+    /**
+     * The stock status of the product
+     * @var string
+     */
     public $stock_status;
-    /** @var Api\AdCurve\Entity\Custom\Date */
+    /**
+     * Starting date from when the product will be NOT included in the feed (YYYY-MM-DD)
+     * @var Api\AdCurve\Entity\Custom\Date
+     */
     public $stop_date;
-    /** @var string */
+    /**
+     * Manufacture product id (SKU)
+     * @var string
+     */
     public $vendor_code;
-    /** @var string */
+    /**
+     * URL Image 2
+     * @var string
+     */
     public $user31;
-    /** @var string */
+    /**
+     * URL Image 3
+     * @var string
+     */
     public $user32;
-    /** @var string */
+    /**
+     * URL Image 4
+     * @var string
+     */
     public $user33;
-    /** @var string */
+    /**
+     * URL Image 5
+     * @var string
+     */
     public $user34;
-    /** @var string */
+    /**
+     * URL Image 6
+     * @var string
+     */
     public $user35;
-    /** @var string */
+    /**
+     * MAGENTO ONLY - Unique code for a productrange that contains all colors and sizes
+     * @var string
+     */
     public $user1;
-    /** @var string */
+    /**
+     * MAGENTO ONLY - All sizes the product can have. In case of multiple sizes, seperate each size by a comma
+     * @var string
+     */
     public $user2;
-    /** @var string */
+    /**
+     * MAGENTO ONLY - All sizes which are currently available. In case of multiple sizes, seperate each size by a comma
+     * @var string
+     */
     public $user3;
-    /** @var string */
+    /**
+     * MAGENTO ONLY - Amount of products in stock per size. In case of multiple sizes; seperate each size by a comma. Use the same order as used in sizes_available (user3 field)
+     * @var string
+     */
     public $user4;
-    /** @var string */
+    /**
+     * MAGENTO ONLY - Current selling price of the products in stock per size. In case of multiple sizes/prices, separate each price by a comma. Use the same order as used in sizes_available (user3 field)
+     * @var string
+     */
     public $user5;
-    /** @var string */
+    /**
+     * MAGENTO ONLY - Before price of the products in stock per size. In case of multiple sizes/prices, separate each price by a comma. Use the same order as used in sizes_available (user3 field)
+     * @var string
+     */
     public $user6;
-    /** @var string */
+    /**
+     * MAGENTO ONLY - SKUs of the products in stock per size. In case of multiple sizes/SKUs, separate each SKU by a comma. Use the same order as used in sizes_available (user3 field)
+     * @var string
+     */
     public $user7;
-    /** @var string */
+    /**
+     * MAGENTO ONLY - EANs of the products in stock per size. In case of multiple sizes/EANs, separate each EAN by a comma. Use the same order as used in sizes_available (user3 field)
+     * @var string
+     */
     public $user8;
-    /** @var string */
+    /**
+     * MAGENTO ONLY - Color of the product
+     * @var string
+     */
     public $user9;
-    /** @var string */
+    /**
+     * MAGENTO ONLY - Material of the product
+     * @var string
+     */
     public $user10;
-    /** @var string */
+    /**
+     * MAGENTO ONLY - Gender of the product
+     * @var string
+     */
     public $user11;
 
 }

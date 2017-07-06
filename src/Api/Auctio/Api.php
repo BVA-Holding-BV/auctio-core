@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * API-information: https://api.bva-auctions.com/api/docs/
+ */
 namespace AuctioCore\Api\Auctio;
 
 class Api
