@@ -1,6 +1,6 @@
 <?php
 
-namespace AuctioCore\Api\Auctio\Entity\Custom;
+namespace AuctioCore\Api\Adcurve\Entity\Custom;
 
 use AuctioCore\Api\BaseInterface;
 
