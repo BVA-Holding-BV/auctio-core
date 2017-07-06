@@ -2,18 +2,23 @@
 
 namespace AuctioCore\Api\Adcurve\Entity\Custom;
 
+use AuctioCore\Api\Base;
 use AuctioCore\Api\BaseInterface;
 
-class Date extends \DateTime implements BaseInterface {
+class Date extends Base implements BaseInterface {
 
     public function populate($data) {
+        // Get timestamp of data
         if ($data instanceof \DateTime) {
             $timestamp = $data->getTimestamp();
         } else {
             $date = new \DateTime($data);
             $timestamp = $date->getTimestamp();
         }
-        $this->setTimestamp($timestamp);
+
+        // Set new date-time object
+        $this->date = new \DateTime();
+        $this->date->setTimestamp($timestamp);
         return $this;
     }
 
@@ -23,6 +28,7 @@ class Date extends \DateTime implements BaseInterface {
      * @return string
      */
     public function encode(){
-        return $this->format('Y-m-d');
+        $data = $this->date->format('Y-m-d');
+        return json_encode($data);
     }
 }
