@@ -358,6 +358,28 @@ class Api
         }
     }
 
+    public function getLotMedia($lotId)
+    {
+        // Prepare request
+        $requestHeader = $this->clientHeaders;
+
+        // Execute request
+        $result = $this->client->request('GET', 'ext123/lot/' . $lotId . '/media', ["headers"=>$requestHeader]);
+        if ($result->getStatusCode() == 200) {
+            $response = json_decode((string) $result->getBody());
+
+            // Return
+            if (!isset($response->errors)) {
+                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+            } else {
+                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+            }
+        } else {
+            $response = json_decode((string) $result->getBody());
+            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+        }
+    }
+
     /**
      * Get (all) lots by auction-id, for example indexedBy by lot-number (by default sequantial numeric key)
      *
@@ -428,6 +450,50 @@ class Api
 
         // Execute request
         $result = $this->client->request('GET', 'ext123/lots/byauction/' . $auctionId . '/' . $pageSize . '/' . $pageNumber . '/', ["headers"=>$requestHeader]);
+        if ($result->getStatusCode() == 200) {
+            $response = json_decode((string) $result->getBody());
+
+            // Return
+            if (!isset($response->errors)) {
+                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+            } else {
+                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+            }
+        } else {
+            $response = json_decode((string) $result->getBody());
+            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+        }
+    }
+
+    public function getMainCategory($categoryId)
+    {
+        // Prepare request
+        $requestHeader = $this->clientHeaders;
+
+        // Execute request
+        $result = $this->client->request('GET', 'ext123/lotmaincategory/' . $categoryId, ["headers"=>$requestHeader]);
+        if ($result->getStatusCode() == 200) {
+            $response = json_decode((string) $result->getBody());
+
+            // Return
+            if (!isset($response->errors)) {
+                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+            } else {
+                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+            }
+        } else {
+            $response = json_decode((string) $result->getBody());
+            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+        }
+    }
+
+    public function getSubCategory($subCategoryId)
+    {
+        // Prepare request
+        $requestHeader = $this->clientHeaders;
+
+        // Execute request
+        $result = $this->client->request('GET', 'ext123/lotsubcategory/' . $subCategoryId, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 

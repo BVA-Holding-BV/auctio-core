@@ -18,10 +18,10 @@ class Api
      * @param string $apiKey
      * @param string $shopId
      */
-    public function __construct($hostname, $apiKey, $shopId)
+    public function __construct($hostname, $apiKey, $shopId, $debug = false)
     {
         // Set client
-        $this->client = new \GuzzleHttp\Client(['base_uri' => $hostname, 'http_errors' => false]);
+        $this->client = new \GuzzleHttp\Client(['base_uri' => $hostname, 'http_errors' => false, 'debug' => $debug]);
 
         // Set default header for client-requests
         $this->clientHeaders = [
@@ -42,16 +42,18 @@ class Api
     {
         // Check input
         if (is_array($products) && count($products) > 0) {
-            foreach ($products AS $product) {
+            foreach ($products AS $k => $product) {
                 if (!($product instanceof \AuctioCore\Api\AdCurve\Entity\Product)) {
                     return ["error"=>true, "message"=>"No valid input"];
+                } else {
+                    $products[$k] = json_decode($product->encode());
                 }
             }
         } else {
             if (!($products instanceof \AuctioCore\Api\AdCurve\Entity\Product)) {
                 return ["error"=>true, "message"=>"No valid input"];
             } else {
-                $products = [$products];
+                $products = [json_decode($products->encode())];
             }
         }
 
@@ -59,7 +61,7 @@ class Api
         $requestHeader = $this->clientHeaders;
 
         // Execute request
-        $result = $this->client->request('POST', '/v1/shops/' . $this->shopId . '/shop_products/batch', ["headers"=>$requestHeader, "body"=>$products->encode()]);
+        $result = $this->client->request('POST', 'v1/shops/' . $this->shopId . '/shop_products/batch', ["headers"=>$requestHeader, "body"=>json_encode($products)]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
