@@ -75,7 +75,7 @@ class Auction extends Base {
     /** @var int */
     public $bidRangeId;
     /** @var int */
-    public $responsibilityUnitId;
+    public $channelId;
     /** @var array */
     public $languages;
     /** @var array */

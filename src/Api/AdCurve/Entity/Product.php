@@ -92,7 +92,7 @@ class Product extends Base {
     public $product_ean;
     /**
      * How many products there are available
-     * @var string
+     * @var int
      */
     public $product_in_stock;
     /**
