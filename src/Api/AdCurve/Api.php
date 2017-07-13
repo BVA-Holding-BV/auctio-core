@@ -62,6 +62,28 @@ class Api
 
         // Execute request
         $result = $this->client->request('POST', 'v1/shops/' . $this->shopId . '/shop_products/batch', ["headers"=>$requestHeader, "body"=>json_encode($products)]);
+        if ($result->getStatusCode() == 200 || $result->getStatusCode() == 204) {
+            $response = json_decode((string) $result->getBody());
+
+            // Return
+            if (!isset($response->errors)) {
+                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+            } else {
+                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+            }
+        } else {
+            $response = json_decode((string) $result->getBody());
+            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+        }
+    }
+
+    public function getProduct($variantId)
+    {
+        // Prepare request
+        $requestHeader = $this->clientHeaders;
+
+        // Execute request
+        $result = $this->client->request('GET', 'v2/shops/' . $this->shopId . '/shop_products/' . $variantId, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
