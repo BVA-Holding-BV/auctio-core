@@ -59,7 +59,7 @@ class Api
 
         // Unset array-index
         $products = array_values($products);
-        
+
         // Prepare request
         $requestHeader = $this->clientHeaders;
 
