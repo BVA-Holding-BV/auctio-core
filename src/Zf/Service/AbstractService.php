@@ -330,14 +330,20 @@ abstract class AbstractService implements InputFilterAwareInterface
      * Return all objects from the repository
      *
      * @param $output
+     * @param $refresh
      * @return object|array
      */
-    public function getAll($output = 'object')
+    public function getAll($output = 'object', $refresh = false)
     {
         // get all objects from the repository
         $objects = $this->om
             ->getRepository($this->objectName)
             ->findAll();
+
+        // refresh entity (clear all local changes)
+        if ($refresh === true) {
+            $this->om->refresh($objects);
+        }
 
         // convert objects to arrays
         if ($output == 'array') {
@@ -648,14 +654,20 @@ abstract class AbstractService implements InputFilterAwareInterface
      * @param $id
      * @param $data
      * @param $output
+     * @param $refresh
      * @return array
      */
-    public function update($id, $data, $output = 'object')
+    public function update($id, $data, $output = 'object', $refresh = false)
     {
         // get existing object
         $object = $this->getObjectManager()
             ->getRepository($this->getObjectName())
             ->find($id);
+
+        // refresh entity (clear all local changes)
+        if ($refresh === true) {
+            $this->om->refresh($object);
+        }
 
         if ($object == null) {
             return [
@@ -694,14 +706,20 @@ abstract class AbstractService implements InputFilterAwareInterface
      *
      * @param $id
      * @param $remove
+     * @param $refresh
      * @return array
      */
-    public function delete($id, $remove = false)
+    public function delete($id, $remove = false, $refresh = false)
     {
         // get object from the repository specified by primary key
         $object = $this->om
             ->getRepository($this->objectName)
             ->find($id);
+
+        // refresh entity (clear all local changes)
+        if ($refresh === true) {
+            $this->om->refresh($object);
+        }
 
         // return error if object not found
         if ($object == null) {
