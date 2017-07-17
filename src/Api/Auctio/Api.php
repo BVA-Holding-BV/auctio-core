@@ -119,7 +119,7 @@ class Api
         }
     }
 
-    public function createLocation(\AuctioCore\Api\Auctio\Entity\Product $location)
+    public function createLocation(\AuctioCore\Api\Auctio\Entity\Location $location)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
