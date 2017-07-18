@@ -438,6 +438,13 @@ abstract class AbstractService implements InputFilterAwareInterface
                 if (stristr($filter['filter'], $filterAssociation['alias'] . ".")) {
                     $query->leftJoin($filterAssociation['join'], $filterAssociation['alias']);
                     if ($paginator) $queryPaginator->leftJoin($filterAssociation['join'], $filterAssociation['alias']);
+                } elseif (!empty($orderBy)) {
+                    foreach ($orderBy AS $orderByField) {
+                        if (stristr($orderByField['field'], $filterAssociation['alias'] . ".")) {
+                            $query->leftJoin($filterAssociation['join'], $filterAssociation['alias']);
+                            if ($paginator) $queryPaginator->leftJoin($filterAssociation['join'], $filterAssociation['alias']);
+                        }
+                    }
                 }
             }
         }
