@@ -11,6 +11,8 @@ class Api
     private $clientHeaders;
     private $parcelOptions = [];
     private $recipient = [];
+    private $messages;
+    private $errorData;
 
     /**
      * Constructor
@@ -31,6 +33,63 @@ class Api
             'Authorization' => 'Basic ' . base64_encode($apiKey),
             'Content-Type' => 'application/json',
         ];
+
+        // Set error-messages
+        $this->messages = [];
+        $this->errorData = [];
+    }
+
+    /**
+     * Set error-data
+     *
+     * @param $data
+     * @return array
+     */
+    public function setErrorData($data)
+    {
+        $this->errorData = $data;
+    }
+
+    /**
+     * Get error-data
+     *
+     * @return array
+     */
+    public function getErrorData()
+    {
+        return $this->errorData;
+    }
+
+    /**
+     * Set error-message
+     *
+     * @param array $messages
+     */
+    public function setMessages($messages)
+    {
+        if (!is_array($messages)) $messages = [$messages];
+        $this->messages = $messages;
+    }
+
+    /**
+     * Add error-message
+     *
+     * @param array $message
+     */
+    public function addMessage($message)
+    {
+        if (!is_array($message)) $message = [$message];
+        $this->messages = array_merge($this->messages, $message);
+    }
+
+    /**
+     * Get error-messages
+     *
+     * @return array
+     */
+    public function getMessages()
+    {
+        return $this->messages;
     }
 
     public function setParcelOptions($options)
@@ -101,10 +160,12 @@ class Api
             $this->unsetRecipient();
 
             // Return
-            return ["error"=>false, "message"=>"Ok", "data"=>["shipmentId" => $response->data->ids[0]->id]];
+            return ["shipmentId" => $response->data->ids[0]->id];
         } else {
             // Return
-            return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
         }
     }
 
@@ -159,7 +220,8 @@ class Api
             return true;
         } else {
             // Return
-            return ['code'=>$result->getStatusCode(), 'reason'=>$result->getReasonPhrase()];
+            $this->setMessages($result->getStatusCode() . ": " . $result->getReasonPhrase());
+            return false;
         }
     }
 
@@ -181,7 +243,8 @@ class Api
             return $result;
         } else {
             // Return
-            return ['code'=>$result->getStatusCode(), 'reason'=>$result->getReasonPhrase()];
+            $this->setMessages($result->getStatusCode() . ": " . $result->getReasonPhrase());
+            return false;
         }
     }
 
@@ -252,7 +315,11 @@ class Api
         }
 
         if (empty($errors)) return true;
-        else return $errors;
+        else {
+            // Return
+            $this->setMessages($errors);
+            return false;
+        }
     }
 
 }

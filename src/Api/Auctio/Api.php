@@ -9,6 +9,8 @@ class Api
 
     private $client;
     private $clientHeaders;
+    private $messages;
+    private $errorData;
 
     /**
      * Constructor
@@ -31,6 +33,63 @@ class Api
         if (!empty($username)) {
             $this->login($username, $password);
         }
+
+        // Set error-messages
+        $this->messages = [];
+        $this->errorData = [];
+    }
+
+    /**
+     * Set error-data
+     *
+     * @param $data
+     * @return array
+     */
+    public function setErrorData($data)
+    {
+        $this->errorData = $data;
+    }
+
+    /**
+     * Get error-data
+     *
+     * @return array
+     */
+    public function getErrorData()
+    {
+        return $this->errorData;
+    }
+
+    /**
+     * Set error-message
+     *
+     * @param array $messages
+     */
+    public function setMessages($messages)
+    {
+        if (!is_array($messages)) $messages = [$messages];
+        $this->messages = $messages;
+    }
+
+    /**
+     * Add error-message
+     *
+     * @param array $message
+     */
+    public function addMessage($message)
+    {
+        if (!is_array($message)) $message = [$message];
+        $this->messages = array_merge($this->messages, $message);
+    }
+
+    /**
+     * Get error-messages
+     *
+     * @return array
+     */
+    public function getMessages()
+    {
+        return $this->messages;
     }
 
     /**
@@ -60,13 +119,17 @@ class Api
                 $this->clientHeaders['accessToken'] = $response->accessToken;
                 $this->clientHeaders['refreshToken'] = $response->refreshToken;
                 $this->clientHeaders['X-CSRF-Token'] = $response->csrfToken;
-
                 return true;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
-            return ["error"=>false, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>[]];
+            $response = json_decode((string) $result->getBody());
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return true;
         }
     }
 
@@ -89,11 +152,15 @@ class Api
             if (!isset($response->errors)) {
                 return true;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -109,13 +176,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -131,13 +202,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -153,13 +228,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -175,13 +254,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -197,13 +280,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -214,10 +301,13 @@ class Api
         unset($requestHeader['Content-Type']);
 
         // Check file accessible/exists
-        if (!file_exists($localFilename))
-            throw new Exception('File not found: ' . $localFilename);
-        if (!is_readable($localFilename))
-            throw new Exception('File not readable: ' . $localFilename);
+        if (!file_exists($localFilename)) {
+            $this->setMessages(['File not found: ' . $localFilename]);
+            return false;
+        } if (!is_readable($localFilename)) {
+        $this->setMessages(['File not readable: ' . $localFilename]);
+        return false;
+    }
 
         // Set request-body
         $filename = $lotSequence;
@@ -238,13 +328,18 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
+
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -260,13 +355,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -282,13 +381,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -304,13 +407,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -326,13 +433,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -348,13 +459,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -370,13 +485,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -392,13 +511,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -414,13 +537,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -478,12 +605,16 @@ class Api
         if ($error === false) {
             // Return
             if (!isset($response->errors)) {
-                return ["error" => false, "message" => "Ok", "data" => $response];
+                return $response;
             } else {
-                return ["error" => true, "message" => $response->errors, "data" => []];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -499,13 +630,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -521,13 +656,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 
@@ -543,13 +682,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
         }
     }
 

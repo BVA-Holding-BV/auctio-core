@@ -48,6 +48,11 @@ abstract class AbstractService implements InputFilterAwareInterface
     private $messages;
 
     /**
+     * @var Error-data
+     */
+    private $errorData;
+
+    /**
      * Constructor
      *
      * @param EntityManager $objectManager
@@ -58,6 +63,7 @@ abstract class AbstractService implements InputFilterAwareInterface
             $this->om = $objectManager;
         }
         $this->messages = [];
+        $this->errorData = [];
     }
 
     /**
@@ -157,6 +163,59 @@ abstract class AbstractService implements InputFilterAwareInterface
     }
 
     /**
+     * Set error-data
+     *
+     * @param $data
+     * @return array
+     */
+    public function setErrorData($data)
+    {
+        $this->errorData = $data;
+    }
+
+    /**
+     * Get error-data
+     *
+     * @return array
+     */
+    public function getErrorData()
+    {
+        return $this->errorData;
+    }
+
+    /**
+     * Set error-message
+     *
+     * @param array $messages
+     */
+    public function setMessages($messages)
+    {
+        if (!is_array($messages)) $messages = [$messages];
+        $this->messages = $messages;
+    }
+
+    /**
+     * Add error-message
+     *
+     * @param array $message
+     */
+    public function addMessage($message)
+    {
+        if (!is_array($message)) $message = [$message];
+        $this->messages = array_merge($this->messages, $message);
+    }
+
+    /**
+     * Get error-messages
+     *
+     * @return array|Error
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
+
+    /**
      * Prepare input-data (default)
      *
      * @param  array $data
@@ -196,7 +255,7 @@ abstract class AbstractService implements InputFilterAwareInterface
         $this->getInputFilter()->setData($this->getHydrator()->extract($object));
         if (!$this->getInputFilter()->isValid()) {
             // get error messages from inputfilter
-            $this->messages = array_merge($this->messages, $this->getInputFilter()->getMessages());
+            $this->addMessage($this->getInputFilter()->getMessages());
         }
 
         // if no problems found, continue to save it
@@ -206,7 +265,7 @@ abstract class AbstractService implements InputFilterAwareInterface
                 $this->getObjectManager()->persist($object);
                 $this->getObjectManager()->flush();
             } catch (Exception $e) {
-                $this->messages['flushException'] = $e->getMessage();
+                $this->addMessage(['flushException' => $e->getMessage()]);
             }
         }
 
@@ -311,6 +370,7 @@ abstract class AbstractService implements InputFilterAwareInterface
 
         // return error if object not found
         if ($object == null) {
+            $this->setMessages(['notFound' => $this->objectName. ' not found']);
             return false;
         }
 
@@ -536,6 +596,7 @@ abstract class AbstractService implements InputFilterAwareInterface
 
         // return error if object not found
         if ($objects == null) {
+            $this->setMessages(['notFound' => $this->objectName. ' not found']);
             return false;
         }
 
@@ -648,10 +709,7 @@ abstract class AbstractService implements InputFilterAwareInterface
                 return $object;
             }
         } else {
-            return [
-                'error' => true,
-                'message' => $this->messages,
-            ];
+            return false;
         }
     }
 
@@ -677,10 +735,8 @@ abstract class AbstractService implements InputFilterAwareInterface
         }
 
         if ($object == null) {
-            return [
-                'error' => true,
-                'message' => $this->objectName .' not found!',
-            ];
+            $this->setMessages(['notFound' => $this->objectName. ' not found']);
+            return false;
         }
 
         // Prepare data
@@ -701,10 +757,7 @@ abstract class AbstractService implements InputFilterAwareInterface
                 return $object;
             }
         } else {
-            return [
-                'error' => true,
-                'message' => $this->messages,
-            ];
+            return false;
         }
     }
 
@@ -730,33 +783,25 @@ abstract class AbstractService implements InputFilterAwareInterface
 
         // return error if object not found
         if ($object == null) {
-            return [
-                'error' => true,
-                'message' => $this->objectName .' not found!',
-            ];
+            $this->setMessages(['notFound' => $this->objectName. ' not found']);
+            return false;
         }
 
         // check if object really has to move of only update status
         if ($remove === false) {
             $result = $this->update($id, ['deleted'=>true], 'array');
-            if (isset($result['error'])) {
-                return $result;
-            }
+            return $result;
         } else {
             // remove the object from the repository or return error if something went wrong
             try {
                 $this->om->remove($object);
                 $this->om->flush();
+                return true;
             } catch (Exception $e) {
-                return [
-                    'error' => true,
-                    'message' => $e->getMessage(),
-                ];
+                $this->setMessages($e->getMessage());
+                return false;
             }
         }
-
-        // return succes message
-        return true;
     }
 
 }

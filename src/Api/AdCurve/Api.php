@@ -10,6 +10,8 @@ class Api
     private $client;
     private $clientHeaders;
     private $shopId;
+    private $messages;
+    private $errorData;
 
     /**
      * Constructor
@@ -32,6 +34,63 @@ class Api
 
         // Set shop-id
         $this->shopId = $shopId;
+
+        // Set error-messages
+        $this->messages = [];
+        $this->errorData = [];
+    }
+
+    /**
+     * Set error-data
+     *
+     * @param $data
+     * @return array
+     */
+    public function setErrorData($data)
+    {
+        $this->errorData = $data;
+    }
+
+    /**
+     * Get error-data
+     *
+     * @return array
+     */
+    public function getErrorData()
+    {
+        return $this->errorData;
+    }
+
+    /**
+     * Set error-message
+     *
+     * @param array $messages
+     */
+    public function setMessages($messages)
+    {
+        if (!is_array($messages)) $messages = [$messages];
+        $this->messages = $messages;
+    }
+
+    /**
+     * Add error-message
+     *
+     * @param array $message
+     */
+    public function addMessage($message)
+    {
+        if (!is_array($message)) $message = [$message];
+        $this->messages = array_merge($this->messages, $message);
+    }
+
+    /**
+     * Get error-messages
+     *
+     * @return array
+     */
+    public function getMessages()
+    {
+        return $this->messages;
     }
 
     /**
@@ -44,14 +103,16 @@ class Api
         if (is_array($products) && count($products) > 0) {
             foreach ($products AS $k => $product) {
                 if (!($product instanceof \AuctioCore\Api\AdCurve\Entity\Product)) {
-                    return ["error"=>true, "message"=>"No valid input"];
+                    $this->setMessages("No valid input");
+                    return false;
                 } else {
                     $products[$k] = json_decode($product->encode());
                 }
             }
         } else {
             if (!($products instanceof \AuctioCore\Api\AdCurve\Entity\Product)) {
-                return ["error"=>true, "message"=>"No valid input"];
+                $this->setMessages("No valid input");
+                return false;
             } else {
                 $products = [json_decode($products->encode())];
             }
@@ -70,13 +131,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages($result->getStatusCode() . ": " . $result->getReasonPhrase());
+            return false;
         }
     }
 
@@ -92,13 +157,17 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
-                return ["error"=>false, "message"=>"Ok", "data"=>$response];
+                return $response;
             } else {
-                return ["error"=>true, "message"=>$response->errors, "data"=>[]];
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
-            return ["error"=>true, "message"=>$result->getStatusCode() . ": " . $result->getReasonPhrase(), "data"=>$response];
+            $this->setErrorData($response);
+            $this->setMessages($result->getStatusCode() . ": " . $result->getReasonPhrase());
+            return false;
         }
     }
 
