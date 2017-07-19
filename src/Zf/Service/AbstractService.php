@@ -216,6 +216,15 @@ abstract class AbstractService implements InputFilterAwareInterface
     }
 
     /**
+     * Reset error-messages and error-data
+     */
+    public function resetErrors()
+    {
+        $this->messages = [];
+        $this->errorData = [];
+    }
+
+    /**
      * Prepare input-data (default)
      *
      * @param  array $data
@@ -687,6 +696,9 @@ abstract class AbstractService implements InputFilterAwareInterface
      */
     public function create($data, $output = 'object', $overrule = [])
     {
+        // Reset errors
+        $this->resetErrors();
+
         // create object instance
         $object = new $this->objectName();
 
@@ -724,6 +736,9 @@ abstract class AbstractService implements InputFilterAwareInterface
      */
     public function update($id, $data, $output = 'object', $refresh = false)
     {
+        // Reset errors
+        $this->resetErrors();
+
         // get existing object
         $object = $this->getObjectManager()
             ->getRepository($this->getObjectName())
@@ -771,6 +786,9 @@ abstract class AbstractService implements InputFilterAwareInterface
      */
     public function delete($id, $remove = false, $refresh = false)
     {
+        // Reset errors
+        $this->resetErrors();
+
         // get object from the repository specified by primary key
         $object = $this->om
             ->getRepository($this->objectName)
