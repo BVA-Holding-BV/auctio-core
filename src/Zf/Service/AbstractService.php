@@ -358,6 +358,27 @@ abstract class AbstractService implements InputFilterAwareInterface
     }
 
     /**
+     * Check if object exists
+     *
+     * @param $id
+     * @return boolean
+     */
+    public function exists($id)
+    {
+        // get object from the repository specified by primary key
+        $object = $this->om
+            ->getRepository($this->objectName)
+            ->find($id);
+
+        // return
+        if ($object == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
      * Return a single object from the repository
      *
      * @param $id
