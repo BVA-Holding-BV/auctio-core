@@ -29,7 +29,7 @@ class BooleanInputFilter
                     [
                         'name' => 'InArray',
                         'options' => [
-                            'haystack' => [true, false],
+                            'haystack' => [true, false, 1, 0, "1", "0"],
                             'strict' => \Zend\Validator\InArray::COMPARE_STRICT
                         ],
                     ],
