@@ -554,7 +554,15 @@ abstract class AbstractService implements InputFilterAwareInterface
         // Set having (if available)
         if (!empty($having)) {
             $query->having($having['filter']);
-            if ($paginator) $queryPaginator->having($having['filter']);
+            if ($paginator) {
+                $queryPaginator->having($having['filter']);
+                // Prevent error "Unknown column in having clause"
+                $queryPaginator->addSelect($having['fields']);
+                // Prevent error "In aggregated query without GROUP BY"
+                if (empty($groupBy)) {
+                    $queryPaginator->addGroupBy('f.id');
+                }
+            }
             $parameters = (empty($parameters)) ? $having['parameters'] : array_merge($parameters, $having['parameters']);
         }
         // Set order-by (if available)
@@ -592,7 +600,7 @@ abstract class AbstractService implements InputFilterAwareInterface
         // Get results
         if ($paginator) {
             // Set paginator-results
-            $paginatorResults = $queryPaginator->getQuery()->getSingleResult();
+            $paginatorResults = $queryPaginator->getQuery()->getOneOrNullResult();
             $paginatorData['records'] = (int) $paginatorResults['total'];
             $paginatorData['pages'] = (int) ceil($paginatorResults['total'] / $limit['limit']);
             $paginatorData['currentPage'] = (int) (ceil($limit['offset'] / $limit['limit']) + 1);
