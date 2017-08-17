@@ -560,7 +560,9 @@ abstract class AbstractService implements InputFilterAwareInterface
                 $queryPaginator->addSelect($having['fields']);
                 // Prevent error "In aggregated query without GROUP BY"
                 if (empty($groupBy)) {
-                    $queryPaginator->addGroupBy('f.id');
+                    foreach ($having['groupBy'] AS $group) {
+                        $queryPaginator->addGroupBy($group);
+                    }
                 }
             }
             $parameters = (empty($parameters)) ? $having['parameters'] : array_merge($parameters, $having['parameters']);
