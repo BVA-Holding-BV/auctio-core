@@ -255,30 +255,66 @@ abstract class AbstractService implements InputFilterAwareInterface
      * @param $object
      * @return bool
      */
-    public function filterAndPersist($data, &$object)
+    public function filterAndPersist($data, &$object, $flush = true)
     {
-        // hydrate data to object
+        // Hydrate data to object
         $this->getHydrator()->hydrate($data, $object);
 
-        // check if data is valid
+        // Check if data is valid
         $this->getInputFilter()->setData($this->getHydrator()->extract($object));
         if (!$this->getInputFilter()->isValid()) {
-            // get error messages from inputfilter
+            // Get error messages from inputfilter
             $this->addMessage($this->getInputFilter()->getMessages());
         }
 
-        // if no problems found, continue to save it
+        // If no problems found, continue to save it
         if (empty($this->messages)) {
-            // persist and flush object
+            // Persist and flush object
             try {
                 $this->getObjectManager()->persist($object);
+
+                // Only flush (if permitted, used for bulk mutations)
+                if ($flush === true) {
+                    $this->getObjectManager()->flush();
+                }
+            } catch (Exception $e) {
+                $this->addMessage(['flushException' => $e->getMessage()]);
+            }
+        }
+
+        // Return false if errors were found
+        if (empty($this->messages)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Hydrate object, apply inputfilter, save it, and return result (in bulk)
+     *
+     * @param $records
+     * @param $objects
+     * @return bool
+     */
+    public function filterAndPersistBulk($records, &$objects)
+    {
+        // Iterate data
+        foreach ($records AS $key => $record) {
+            $res = $this->filterAndPersist($record, $objects[$key], false);
+            if (!$res) break;
+        }
+
+        // Flush prepared records
+        if (empty($this->messages)) {
+            try {
                 $this->getObjectManager()->flush();
             } catch (Exception $e) {
                 $this->addMessage(['flushException' => $e->getMessage()]);
             }
         }
 
-        // return false if errors were found
+        // Return false if errors were found
         if (empty($this->messages)) {
             return true;
         } else {
@@ -678,7 +714,7 @@ abstract class AbstractService implements InputFilterAwareInterface
 
         // Return
         if (is_array($id)) {
-            // Get mulitple values
+            // Get multiple values
             $values = [];
             foreach ($records AS $record) {
                 $values[] = $record->{'get' . ucfirst($field)}();
@@ -705,7 +741,7 @@ abstract class AbstractService implements InputFilterAwareInterface
 
         // Return
         if (is_array($value)) {
-            // Get mulitple ids
+            // Get multiple ids
             $ids = [];
             foreach ($records AS $record) {
                 $ids[] = $record->getId();
@@ -730,7 +766,7 @@ abstract class AbstractService implements InputFilterAwareInterface
         // Reset errors
         $this->resetErrors();
 
-        // create object instance
+        // Create object instance
         $object = new $this->objectName();
 
         // Prepare data
@@ -741,7 +777,7 @@ abstract class AbstractService implements InputFilterAwareInterface
         if (property_exists($object, 'created')) $this->inputData['created'] = new \DateTime();
         if (property_exists($object, 'deleted')) $this->inputData['deleted'] = false;
 
-        // hydrate object, apply inputfilter, and save it
+        // Hydrate object, apply inputfilter, and save it
         if ($this->filterAndPersist($this->inputData, $object)) {
             if ($output == 'array') {
                 // Return result
@@ -750,6 +786,55 @@ abstract class AbstractService implements InputFilterAwareInterface
                 else return $record;
             } else {
                 return $object;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Create new objects (in bulk)
+     *
+     * @param $data
+     * @param $output
+     * @param $overrule
+     * @return array
+     */
+    public function createBulk($data, $output = 'object', $overrule = [])
+    {
+        // Reset errors
+        $this->resetErrors();
+
+        // Iterate data
+        $objects = [];
+        $recordData = [];
+        foreach ($data AS $key => $value) {
+            // Create object instance
+            $objects[$key] = new $this->objectName();
+
+            // Prepare data
+            $this->prepareInputDataDefault($value, $overrule);
+            $this->prepareInputData();
+
+            // Set default data (if not available)
+            if (property_exists($objects[$key], 'created')) $this->inputData['created'] = new \DateTime();
+            if (property_exists($objects[$key], 'deleted')) $this->inputData['deleted'] = false;
+            $recordData[$key] = $this->inputData;
+        }
+
+        // Hydrate object, apply inputfilter, and save it
+        if ($this->filterAndPersistBulk($recordData, $objects)) {
+            if ($output == 'array') {
+                // Return results
+                $records = [];
+                foreach ($objects AS $key => $object) {
+                    $record = $this->getHydrator()->extract($object);
+                    if (method_exists($this, 'transformData')) $records[$key] = $this->transformData($record);
+                    else $records[$key] = $record;
+                }
+                return $records;
+            } else {
+                return $objects;
             }
         } else {
             return false;
@@ -770,12 +855,12 @@ abstract class AbstractService implements InputFilterAwareInterface
         // Reset errors
         $this->resetErrors();
 
-        // get existing object
+        // Get existing object
         $object = $this->getObjectManager()
             ->getRepository($this->getObjectName())
             ->find($id);
 
-        // refresh entity (clear all local changes)
+        // Refresh entity (clear all local changes)
         if ($refresh === true) {
             $this->om->refresh($object);
         }
@@ -801,6 +886,67 @@ abstract class AbstractService implements InputFilterAwareInterface
                 else return $record;
             } else {
                 return $object;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Update existing objects (in bulk)
+     *
+     * @param $data
+     * @param $output
+     * @param $refresh
+     * @return array
+     */
+    public function updateBulk($data, $output = 'object', $refresh = false)
+    {
+        // Reset errors
+        $this->resetErrors();
+
+        // Iterate data
+        $objects = [];
+        $recordData = [];
+        foreach ($data AS $id => $value) {
+            // Get existing object
+            $object = $this->getObjectManager()
+                ->getRepository($this->getObjectName())
+                ->find($id);
+
+            // Refresh entity (clear all local changes)
+            if ($refresh === true) {
+                $this->om->refresh($object);
+            }
+
+            if ($object == null) {
+                $this->setMessages(['notFound' => $this->objectName. ' not found']);
+                return false;
+            }
+
+            // Prepare data
+            $this->prepareInputDataDefault($value);
+            $this->prepareInputData();
+
+            // Set default data (if not available)
+            if (property_exists($object, 'lastUpdated')) $this->inputData['lastUpdated'] = new \DateTime();
+            $recordData[$id] = $this->inputData;
+            $objects[$id] = $object;
+        }
+
+        // Hydrate object, apply inputfilter, and save it
+        if ($this->filterAndPersistBulk($recordData, $objects)) {
+            if ($output == 'array') {
+                // Return results
+                $records = [];
+                foreach ($objects AS $key => $object) {
+                    $record = $this->getHydrator()->extract($object);
+                    if (method_exists($this, 'transformData')) $records[] = $this->transformData($record);
+                    else $records[] = $record;
+                }
+                return $records;
+            } else {
+                return $objects;
             }
         } else {
             return false;
