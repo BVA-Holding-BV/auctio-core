@@ -395,6 +395,32 @@ class Api
         }
     }
 
+    public function updateAuction(\AuctioCore\Api\Auctio\Entity\Auction $auction)
+    {
+        // Prepare request
+        $requestHeader = $this->clientHeaders;
+
+        // Execute request
+        $result = $this->client->request('POST', 'ext123/auction', ["headers"=>$requestHeader, "body"=>$auction->encode()]);
+        if ($result->getStatusCode() == 200) {
+            $response = json_decode((string) $result->getBody());
+
+            // Return
+            if (!isset($response->errors)) {
+                return $response;
+            } else {
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
+            }
+        } else {
+            $response = json_decode((string) $result->getBody());
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
+        }
+    }
+
     public function getAuction($auctionId)
     {
         // Prepare request
