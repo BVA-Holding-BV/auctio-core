@@ -447,6 +447,58 @@ class Api
         }
     }
 
+    public function getAuctionCollectionDays($auctionId)
+    {
+        // Prepare request
+        $requestHeader = $this->clientHeaders;
+
+        // Execute request
+        $result = $this->client->request('GET', 'ext123/auction/' . $auctionId . "/lotcollectiondays", ["headers"=>$requestHeader]);
+        if ($result->getStatusCode() == 200) {
+            $response = json_decode((string) $result->getBody());
+
+            // Return
+            if (!isset($response->errors)) {
+                return $response;
+            } else {
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
+            }
+        } else {
+            $response = json_decode((string) $result->getBody());
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
+        }
+    }
+
+    public function getAuctionDisplayDays($auctionId)
+    {
+        // Prepare request
+        $requestHeader = $this->clientHeaders;
+
+        // Execute request
+        $result = $this->client->request('GET', 'ext123/auction/' . $auctionId . "/lotdisplaydays", ["headers"=>$requestHeader]);
+        if ($result->getStatusCode() == 200) {
+            $response = json_decode((string) $result->getBody());
+
+            // Return
+            if (!isset($response->errors)) {
+                return $response;
+            } else {
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
+            }
+        } else {
+            $response = json_decode((string) $result->getBody());
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
+        }
+    }
+
     public function getAuctionLocations($auctionId)
     {
         // Prepare request
