@@ -499,6 +499,32 @@ class Api
         }
     }
 
+    public function getAuctionCollectionDay($dayId)
+    {
+        // Prepare request
+        $requestHeader = $this->clientHeaders;
+
+        // Execute request
+        $result = $this->client->request('GET', 'ext123/lotcollectionday/' . $dayId, ["headers"=>$requestHeader]);
+        if ($result->getStatusCode() == 200) {
+            $response = json_decode((string) $result->getBody());
+
+            // Return
+            if (!isset($response->errors)) {
+                return $response;
+            } else {
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
+            }
+        } else {
+            $response = json_decode((string) $result->getBody());
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
+        }
+    }
+
     public function getAuctionDisplayDays($auctionId)
     {
         // Prepare request
@@ -506,6 +532,32 @@ class Api
 
         // Execute request
         $result = $this->client->request('GET', 'ext123/auction/' . $auctionId . "/lotdisplaydays", ["headers"=>$requestHeader]);
+        if ($result->getStatusCode() == 200) {
+            $response = json_decode((string) $result->getBody());
+
+            // Return
+            if (!isset($response->errors)) {
+                return $response;
+            } else {
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
+            }
+        } else {
+            $response = json_decode((string) $result->getBody());
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
+        }
+    }
+
+    public function getAuctionDisplayDay($dayId)
+    {
+        // Prepare request
+        $requestHeader = $this->clientHeaders;
+
+        // Execute request
+        $result = $this->client->request('GET', 'ext123/lotdisplayday/' . $dayId, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
