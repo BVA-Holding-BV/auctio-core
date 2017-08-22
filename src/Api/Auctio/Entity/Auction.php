@@ -17,6 +17,12 @@ class Auction extends Base {
     /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $auctionClosedText;
     /** @var Api\Auctio\Entity\Custom\LocaleMessage */
+    public $privateAuctionText;
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
+    public $privateAuctionEmailText;
+    /** var string */
+    public $privateAuctionApplicationEmail;
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $bidRestrictionExplanationText;
     /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $extraExplanationText;
@@ -29,8 +35,6 @@ class Auction extends Base {
     /** @var string */
     public $countryId;
     /** @var Api\Auctio\Entity\Custom\DateTime */
-    public $creationDate;
-    /** @var Api\Auctio\Entity\Custom\DateTime */
     public $startDate;
     /** @var Api\Auctio\Entity\Custom\DateTime */
     public $endDate;
@@ -40,10 +44,6 @@ class Auction extends Base {
     public $onlyLocalCustomersCanBid;
     /** @var bool */
     public $privateAuction;
-    /** @ReadOnly */
-    public $privateAuctionText;
-    /** @ReadOnly */
-    public $privateAuctionApplicationEmail;
     /** @var bool */
     public $showPrivateAuctionOnHomepage;
     /** @var bool */
@@ -60,11 +60,11 @@ class Auction extends Base {
     public $bidLimitRequired;
     /** @var bool */
     public $active;
-    /** * @ReadOnly */
+    /** @ReadOnly */
     public $termsUrl;
-    /** * @ReadOnly */
+    /** @var string */
     public $leafletURL;
-    /** * @ReadOnly */
+    /** @var string */
     public $remark;
     /** @var int */
     public $disableBidding;
@@ -82,9 +82,16 @@ class Auction extends Base {
     public $channelCodes;
     /** @var int */
     public $reverseBidRangeId;
+    /** @var int */
+    public $reverseAuctionStartOffset;
+    /** @var string */
+    public $currencyCode;
+    /** @var string */
+    public $createdBy;
     /**
-     * @var string
+     * @var Api\Auctio\Entity\Custom\DateTime
      * @ReadOnly
      */
-    public $createdBy;
+    public $creationDate;
+
 }
