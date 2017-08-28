@@ -1,6 +1,6 @@
 <?php
 
-namespace AuctioCore\Zf\Service;
+namespace AuctioCore\Zf\Repository;
 
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
@@ -8,9 +8,9 @@ use Doctrine\ORM\EntityManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 
 /**
- * Class AbstractService
+ * Class AbstractRepository
  */
-abstract class AbstractService implements InputFilterAwareInterface
+abstract class AbstractRepository implements InputFilterAwareInterface
 {
     /**
      * @var \Doctrine\ORM\EntityManager
