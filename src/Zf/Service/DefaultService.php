@@ -16,27 +16,52 @@ class DefaultService
 
     public function get($id, $output = 'object', $refresh = false)
     {
-        return $this->repository->get($id, $output, $refresh);
+        $res = $this->repository->get($id, $output, $refresh);
+        if ($res === false) {
+            $this->setMessages($this->repository->getMessages());
+            $this->setErrorData($this->repository->getErrorData());
+        }
+        return $res;
     }
 
     public function getList($output = 'object', $filter = NULL, $groupBy = null, $having = null, $orderBy = NULL, $limitRecords = 25, $offset = 0, $paginator = false, $debug = false)
     {
-        return $this->repository->getList($output, $filter, $groupBy, $having, $orderBy, $limitRecords, $offset, $paginator, $debug);
+        $res = $this->repository->getList($output, $filter, $groupBy, $having, $orderBy, $limitRecords, $offset, $paginator, $debug);
+        if ($res === false) {
+            $this->setMessages($this->repository->getMessages());
+            $this->setErrorData($this->repository->getErrorData());
+        }
+        return $res;
     }
 
     public function create($data, $output = 'object', $overrule = [])
     {
-        return $this->repository->create($data, $output, $overrule);
+        $res = $this->repository->create($data, $output, $overrule);
+        if ($res === false) {
+            $this->setMessages($this->repository->getMessages());
+            $this->setErrorData($this->repository->getErrorData());
+        }
+        return $res;
     }
 
     public function update($id, $data, $output = 'object', $refresh = false)
     {
-        return $this->repository->update($id, $data, $output, $refresh);
+        $res = $this->repository->update($id, $data, $output, $refresh);
+        if ($res === false) {
+            $this->setMessages($this->repository->getMessages());
+            $this->setErrorData($this->repository->getErrorData());
+        }
+        return $res;
     }
 
     public function delete($id, $remove = false, $refresh = false)
     {
-        return $this->repository->delete($id, $remove, $refresh);
+        $res = $this->repository->delete($id, $remove, $refresh);
+        if ($res === false) {
+            $this->setMessages($this->repository->getMessages());
+            $this->setErrorData($this->repository->getErrorData());
+        }
+        return $res;
     }
 
     /**
