@@ -65,6 +65,17 @@ class Input
         return is_string($dataString) && is_array(json_decode($dataString, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
     }
 
+    /**
+     * Check if array is associative-array (or sequential)
+     *
+     * @param array $array
+     * @return boolean
+     */
+    public function isAssocArray($array)
+    {
+        if (empty($array)) return false;
+        return (array_keys($array) !== range(0,count($array)-1));
+    }
 
     /**
      * Set parameters by request-object
