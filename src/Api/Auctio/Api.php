@@ -785,6 +785,32 @@ class Api
         }
     }
 
+    public function getAuctionSubCategories($categoryId)
+    {
+        // Prepare request
+        $requestHeader = $this->clientHeaders;
+
+        // Execute request
+        $result = $this->client->request('GET', 'ext123/lotmaincategory/' . $categoryId . "/lotsubcategories", ["headers"=>$requestHeader]);
+        if ($result->getStatusCode() == 200) {
+            $response = json_decode((string) $result->getBody());
+
+            // Return
+            if (!isset($response->errors)) {
+                return $response;
+            } else {
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
+            }
+        } else {
+            $response = json_decode((string) $result->getBody());
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
+        }
+    }
+
     public function getLocation($locationId)
     {
         // Prepare request
