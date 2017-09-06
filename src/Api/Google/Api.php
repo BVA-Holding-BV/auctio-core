@@ -92,7 +92,7 @@ class Api
 
     public function getTranslation($text, $sourceLanguage, $targetLanguage)
     {
-        // Checks
+        // Check input parameters
         if (empty($text)) {
             $this->setMessages(["No source-text set"]);
             return false;
@@ -106,23 +106,47 @@ class Api
             return false;
         }
 
-        // Prepare request
+        // Prepare request-header
         $requestHeader = $this->clientHeaders;
+
+        // Prepare request
         $request = [];
-        $request['key'] = $this->_apiKey;
+        $request['key'] = $this->apiKey;
         $request['source'] = $sourceLanguage;
         $request['target'] = $targetLanguage;
         $request['q'] = urlencode($text);
 
         // Execute request
-        $result = $this->client->request('POST', 'language/translate/v2', ["headers"=>$requestHeader, "body"=>json_encode($request)]);
+        $result = $this->client->request('POST', 'language/translate/v2', ["headers"=>$requestHeader, "form_params"=>$request]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
             // Return
             if (!isset($response->errors)) {
-                return $response;
+                // Check if translation available
+                if (!is_array($response->data->translations)) {
+                    $this->setErrorData($response);
+                    $this->setMessages(["No translation available"]);
+                    return false;
+                } else {
+                    // Get translation (from response)
+                    $translation = current($response->data->translations)->translatedText;
+
+                    // Set whitespaces (before) text in translation (these were filtered)
+                    if (preg_match("/^\s/", $text)) {
+                        $translation = " " . $translation;
+                    }
+
+                    // Return
+                    return $translation;
+                }
             } else {
+                // Wait for x seconds because "user rate limit" exceeded (https://cloud.google.com/translate/quotas)
+                if ($response->errors->error->message == 'User Rate Limit Exceeded') {
+                    sleep(180); // Wait x seconds
+                    return $this->getTranslation($text, $sourceLanguage, $targetLanguage);
+                }
+
                 $this->setErrorData($response);
                 $this->setMessages($response->errors);
                 return false;
