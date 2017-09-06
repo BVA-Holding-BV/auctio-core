@@ -114,7 +114,7 @@ class Api
         $request['key'] = $this->apiKey;
         $request['source'] = $sourceLanguage;
         $request['target'] = $targetLanguage;
-        $request['q'] = urlencode($text);
+        $request['q'] = $text;
 
         // Execute request
         $result = $this->client->request('POST', 'language/translate/v2', ["headers"=>$requestHeader, "form_params"=>$request]);
