@@ -17,7 +17,7 @@ class LocaleMessage extends Base {
 	/**
 	 * @var string
 	 */
-	public $es;
+	public $fr;
 	/**
 	 * @var string
 	 */
@@ -54,7 +54,7 @@ class LocaleMessage extends Base {
 	public function exchangeArray($data) {
 		$this->nl = (!empty($data['nl'])) ? $data['nl'] : null;
 		$this->en = (!empty($data['en'])) ? $data['en'] : null;
-		$this->es = (!empty($data['es'])) ? $data['es'] : null;
+		$this->fr = (!empty($data['fr'])) ? $data['fr'] : null;
 		$this->de = (!empty($data['de'])) ? $data['de'] : null;
 	}
 
