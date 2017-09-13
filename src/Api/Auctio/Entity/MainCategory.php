@@ -11,6 +11,8 @@ class MainCategory extends Base {
     public $auctionId;
     /** @var int */
     public $position;
+    /** @var int */
+    public $lotTopCategoryId;
     /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $name;
     /** @var Api\Auctio\Entity\Custom\LocaleMessage*/
