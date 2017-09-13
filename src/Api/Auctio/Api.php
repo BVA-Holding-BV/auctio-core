@@ -21,6 +21,9 @@ class Api
      */
     public function __construct($hostname, $username = null, $password = null)
     {
+        // Set time-zone to UTC (to avoid time-differences)
+        ini_set('date.timezone', 'UTC');
+
         // Set client
         $this->client = new \GuzzleHttp\Client(['base_uri' => $hostname, 'http_errors' => false]);
 
