@@ -411,6 +411,7 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
+                $response = $this->convertDates($response, ["creationDate", "startDate", "endDate"]);
                 return $response;
             } else {
                 $this->setErrorData($response);
@@ -489,6 +490,7 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
+                $response = $this->convertDates($response, ["startDate", "endDate", "lastBidTime"]);
                 return $response;
             } else {
                 $this->setErrorData($response);
@@ -616,10 +618,10 @@ class Api
         $result = $this->client->request('GET', 'ext123/auction/' . $auctionId, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
-            $response = $this->convertDates($response, ["creationDate", "startDate", "endDate"]);
 
             // Return
             if (!isset($response->errors)) {
+                $response = $this->convertDates($response, ["creationDate", "startDate", "endDate"]);
                 return $response;
             } else {
                 $this->setErrorData($response);
@@ -929,10 +931,10 @@ class Api
         $result = $this->client->request('GET', 'ext123/lot/' . $lotId, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
-            $response = $this->convertDates($response, ["startDate", "endDate", "lastBidTime"]);
 
             // Return
             if (!isset($response->errors)) {
+                $response = $this->convertDates($response, ["startDate", "endDate", "lastBidTime"]);
                 return $response;
             } else {
                 $this->setErrorData($response);
