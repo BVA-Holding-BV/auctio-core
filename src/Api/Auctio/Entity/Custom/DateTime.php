@@ -9,6 +9,9 @@ class DateTime extends \DateTime implements BaseInterface {
     public function populate($data) {
         if ($data instanceof \DateTime) {
             $timestamp = $data->getTimestamp();
+        } elseif (is_array($data)) {
+            $date = new \DateTime($data['date']);
+            $timestamp = $date->getTimestamp();
         } else {
             $date = new \DateTime($data);
             $timestamp = $date->getTimestamp();
