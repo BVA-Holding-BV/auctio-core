@@ -7,6 +7,7 @@ namespace AuctioCore\Api\Auctio;
 class Api
 {
 
+    private $tz;
     private $client;
     private $clientHeaders;
     private $messages;
@@ -23,6 +24,9 @@ class Api
     {
         // Set time-zone to UTC (to avoid time-differences)
         ini_set('date.timezone', 'UTC');
+
+        // Set time-zone for converting "back" from UTC
+        $this->tz = new \DateTimeZone('Europe/Amsterdam');
 
         // Set client
         $this->client = new \GuzzleHttp\Client(['base_uri' => $hostname, 'http_errors' => false]);
@@ -615,6 +619,7 @@ class Api
         $result = $this->client->request('GET', 'ext123/auction/' . $auctionId, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
+            $response = $this->convertDates($response, ["creationDate", "startDate", "endDate"]);
 
             // Return
             if (!isset($response->errors)) {
@@ -927,6 +932,7 @@ class Api
         $result = $this->client->request('GET', 'ext123/lot/' . $lotId, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
+            $response = $this->convertDates($response, ["startDate", "endDate", "lastBidTime"]);
 
             // Return
             if (!isset($response->errors)) {
@@ -1115,4 +1121,22 @@ class Api
         }
     }
 
+    /**
+     * Converting dates (from UTC to local timezone)
+     *
+     * @param object $object
+     * @param array $attributes
+     * @return object
+     */
+    protected function convertDates($object, $attributes = null)
+    {
+        // Iterate attributes for converting dates
+        foreach ($attributes AS $attribute) {
+            if (!empty($object->$attribute)) {
+                $object->$attribute = (new \DateTime($object->$attribute))->setTimezone($this->tz);
+            }
+        }
+
+        return $object;
+    }
 }
