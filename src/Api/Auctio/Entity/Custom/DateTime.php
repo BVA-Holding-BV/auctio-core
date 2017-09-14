@@ -23,6 +23,10 @@ class DateTime extends \DateTime implements BaseInterface {
      * @return string
      */
     public function encode(){
+        // Set timezone to UTC
+        $this->setTimezone(new \DateTimeZone('UTC'));
+
+        // Return
         return $this->format(self::ISO8601);
     }
 }

@@ -22,9 +22,6 @@ class Api
      */
     public function __construct($hostname, $username = null, $password = null)
     {
-        // Set time-zone to UTC (to avoid time-differences)
-        ini_set('date.timezone', 'UTC');
-
         // Set time-zone for converting "back" from UTC
         $this->tz = new \DateTimeZone('Europe/Amsterdam');
 
