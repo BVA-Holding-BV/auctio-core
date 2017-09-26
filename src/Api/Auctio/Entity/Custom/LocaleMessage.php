@@ -24,6 +24,7 @@ class LocaleMessage extends Base {
 	public $de;
 
     public function populate($data) {
+        if (empty($data)) return;
 
         foreach ($data AS $language => $text) {
             if (property_exists($this, $language)) {
