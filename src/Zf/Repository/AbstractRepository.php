@@ -563,11 +563,11 @@ abstract class AbstractRepository implements InputFilterAwareInterface
             $joins = [];
             foreach ($this->getFilterAssociations() AS $filterAssociation) {
                 $match = false;
-                if (stristr($filter['filter'], $filterAssociation['alias'] . ".") && !in_array($joins[$filterAssociation['alias']])) {
+                if (stristr($filter['filter'], $filterAssociation['alias'] . ".") && !in_array($filterAssociation['alias'], $joins)) {
                     $match = true;
                 } elseif (!empty($orderBy)) {
                     foreach ($orderBy AS $orderByField) {
-                        if (stristr($orderByField['field'], $filterAssociation['alias'] . ".") && !in_array($joins[$filterAssociation['alias']])) {
+                        if (stristr($orderByField['field'], $filterAssociation['alias'] . ".") && !in_array($filterAssociation['alias'], $joins)) {
                             $match = true;
                         }
                     }
@@ -581,7 +581,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
                         $alias = current(explode(".", $association['join']));
                         $key = array_search($alias, array_column($this->getFilterAssociations(), 'alias'));
                         $association = $this->getFilterAssociations()[$key];
-                        if (!in_array($joins[$association['alias']])) {
+                        if (!in_array($association['alias'], $joins)) {
                             $joins[] = $association['alias'];
                             $filterAssociationJoins[] = $association;
                         }
