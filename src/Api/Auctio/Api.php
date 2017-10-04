@@ -180,6 +180,7 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
+                $response = $this->convertDates($response, ["creationDate", "startDate", "endDate"]);
                 return $response;
             } else {
                 $this->setErrorData($response);
@@ -206,6 +207,7 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
+                $response = $this->convertDates($response, ["startDate", "endDate"]);
                 return $response;
             } else {
                 $this->setErrorData($response);
@@ -232,6 +234,7 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
+                $response = $this->convertDates($response, ["startDate", "endDate"]);
                 return $response;
             } else {
                 $this->setErrorData($response);
@@ -284,6 +287,7 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
+                $response = $this->convertDates($response, ["startDate", "endDate", "lastBidTime"]);
                 return $response;
             } else {
                 $this->setErrorData($response);
@@ -438,6 +442,7 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
+                $response = $this->convertDates($response, ["startDate", "endDate"]);
                 return $response;
             } else {
                 $this->setErrorData($response);
@@ -464,6 +469,7 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
+                $response = $this->convertDates($response, ["startDate", "endDate"]);
                 return $response;
             } else {
                 $this->setErrorData($response);
@@ -674,6 +680,9 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
+                foreach ($response AS $k => $v) {
+                    $response[$k] = $this->convertDates($v, ["startDate", "endDate"]);
+                }
                 return $response;
             } else {
                 $this->setErrorData($response);
@@ -700,6 +709,7 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
+                $response = $this->convertDates($response, ["startDate", "endDate"]);
                 return $response;
             } else {
                 $this->setErrorData($response);
@@ -726,6 +736,9 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
+                foreach ($response AS $k => $v) {
+                    $response[$k] = $this->convertDates($v, ["startDate", "endDate"]);
+                }
                 return $response;
             } else {
                 $this->setErrorData($response);
@@ -752,6 +765,7 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
+                $response = $this->convertDates($response, ["startDate", "endDate"]);
                 return $response;
             } else {
                 $this->setErrorData($response);
