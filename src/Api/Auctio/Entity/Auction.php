@@ -88,10 +88,7 @@ class Auction extends Base {
     public $currencyCode;
     /** @var string */
     public $createdBy;
-    /**
-     * @var Api\Auctio\Entity\Custom\DateTime
-     * @ReadOnly
-     */
+    /** @var Api\Auctio\Entity\Custom\DateTime */
     public $creationDate;
 
 }
