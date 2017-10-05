@@ -172,6 +172,28 @@ class Api
     }
 
     /**
+     * Get product advertisements
+     *
+     * @param int $stocknumber
+     * @return boolean|array
+     */
+    public function getProductAdvertisments($stocknumber)
+    {
+        $requestHeader = $this->clientHeaders;
+        $result = $this->client->request('GET', 'vehicle/' . $stocknumber . '/ads/', ["headers"=>$requestHeader]);
+        $response = json_decode((string) $result->getBody());
+        if (!isset($response->errors) || empty($response->errors)) {
+            // Return
+            return $response;
+        } else {
+            // Return
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
+        }
+    }
+
+    /**
      * Create advertisement (single product can be advertised on several channels)
      *
      * @param mixed $data
