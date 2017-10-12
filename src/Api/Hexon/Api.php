@@ -201,8 +201,11 @@ class Api
      */
     public function createAdvertisement(\AuctioCore\Api\Hexon\Entity\Advertisement $data)
     {
+        // Convert input-data into body
+        $body = $this->convertInput($data);
+
         $requestHeader = $this->clientHeaders;
-        $result = $this->client->request('POST', 'ads/', ["headers"=>$requestHeader, "body"=>$data->encode()]);
+        $result = $this->client->request('POST', 'ads/', ["headers"=>$requestHeader, "body"=>$body]);
         $response = json_decode((string) $result->getBody());
         if (!isset($response->errors) || empty($response->errors)) {
             // Return
@@ -223,28 +226,36 @@ class Api
      */
     public function createProduct(\AuctioCore\Api\Hexon\Entity\Product $data)
     {
-        // Create JSON-string
-        $body = $data->encode();
-        // Decode JSON-string into array
-        $body = json_decode($body, true);
-        foreach ($body AS $k => $v) {
-            // Get capital characters
-            preg_match_all('/[A-Z]/', $k, $matches, PREG_OFFSET_CAPTURE);
-            if (!empty($matches[0])) {
-                $key = $k;
-                foreach ($matches[0] AS $match) {
-                    // Replace all capital characters into dot-lowercase character (example identificationStocknumber_public -> identification.stocknumber_public)
-                    $key = str_replace($match[0], "." . strtolower($match[0]), $key);
-                }
-                $body[$key] = $v;
-                unset($body[$k]);
-            }
-        }
-        // Encode array into JSON-string
-        $body = json_encode($body);
+        // Convert input-data into body
+        $body = $this->convertInput($data);
 
         $requestHeader = $this->clientHeaders;
         $result = $this->client->request('POST', 'vehicles/', ["headers"=>$requestHeader, "body"=>$body]);
+        $response = json_decode((string) $result->getBody());
+        if (!isset($response->errors) || empty($response->errors)) {
+            // Return
+            return $response;
+        } else {
+            // Return
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
+        }
+    }
+
+    /**
+     * Create product-image
+     *
+     * @param mixed $data
+     * @return boolean|array
+     */
+    public function createProductImage(\AuctioCore\Api\Hexon\Entity\ProductImage $data)
+    {
+        // Convert input-data into body
+        $body = $this->convertInput($data);
+
+        $requestHeader = $this->clientHeaders;
+        $result = $this->client->request('POST', 'vehicleimages/', ["headers"=>$requestHeader, "body"=>$body]);
         $response = json_decode((string) $result->getBody());
         if (!isset($response->errors) || empty($response->errors)) {
             // Return
@@ -290,6 +301,30 @@ class Api
      */
     public function updateProduct($stocknumber, \AuctioCore\Api\Hexon\Entity\Product $data)
     {
+        // Convert input-data into body
+        $body = $this->convertInput($data);
+
+        $requestHeader = $this->clientHeaders;
+        $result = $this->client->request('PUT', 'vehicle/' . $stocknumber, ["headers"=>$requestHeader, "body"=>$body]);
+        $response = json_decode((string) $result->getBody());
+        if (!isset($response->errors) || empty($response->errors)) {
+            // Return
+            return $response;
+        } else {
+            // Return
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
+        }
+    }
+
+    /**
+     * Convert input-data to body
+     *
+     * @param mixed $data
+     * @return mixed
+     */
+    private function convertInput ($data) {
         // Create JSON-string
         $body = $data->encode();
         // Decode JSON-string into array
@@ -310,18 +345,7 @@ class Api
         // Encode array into JSON-string
         $body = json_encode($body);
 
-        $requestHeader = $this->clientHeaders;
-        $result = $this->client->request('PUT', 'vehicle/' . $stocknumber, ["headers"=>$requestHeader, "body"=>$body]);
-        $response = json_decode((string) $result->getBody());
-        if (!isset($response->errors) || empty($response->errors)) {
-            // Return
-            return $response;
-        } else {
-            // Return
-            $this->setErrorData($response);
-            $this->setMessages($response->errors);
-            return false;
-        }
+        return $body;
     }
 
 }
