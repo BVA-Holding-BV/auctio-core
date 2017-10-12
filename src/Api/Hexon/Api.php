@@ -375,7 +375,7 @@ class Api
      * @param mixed $data
      * @return mixed
      */
-    private function convertInput ($data) {
+    public function convertInput ($data) {
         // Create JSON-string
         $body = $data->encode();
         // Decode JSON-string into array
