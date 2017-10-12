@@ -35,7 +35,7 @@ class Product extends Base {
     public $bodyDimensionsWidth;
     public $bodyDimensionsHeight;
     public $bodyMax_roof_load;
-    public $bodyColourPrimary;
+    public $bodyColourPrimary = "other";
     public $bodyColourName;
     public $bodyColourTint;
     public $bodyColourPaint_type;
@@ -145,7 +145,7 @@ class Product extends Base {
     public $classificationClassic;
     public $classificationCe_marking;
     public $classificationEuro_ncap;
-    public $sales_conditionsPricingCurrency;
+    public $sales_conditionsPricingCurrency = "EUR";
     public $sales_conditionsPricingType;
     public $sales_conditionsPricingNew;
     public $sales_conditionsPricingConsumerValue;
@@ -205,12 +205,12 @@ class Product extends Base {
     public $historyConstruction_date;
     public $historyFirst_registrationCountry;
     public $historyFirst_registrationDate;
-    public $historyCurrent_registrationCountry;
+    public $historyCurrent_registrationCountry = "nl";
     public $historyCurrent_registrationFirst_admission;
     public $historyDate_last_ownership_change;
     public $historyMaintenance_booklet;
     public $historyPrevious_owner_count;
-    public $descriptionDefault_remark;
+    public $descriptionDefault_remark = 1;
     public $category_specificCarsBoot_capacitySeats_up;
     public $category_specificCarsBoot_capacitySeats_down;
     public $category_specificBicyclesUser;
