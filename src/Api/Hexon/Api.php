@@ -204,7 +204,7 @@ class Api
     public function getProductImage($stocknumber, $sequence)
     {
         $requestHeader = $this->clientHeaders;
-        $result = $this->client->request('GET', 'vehicleimages/' . $stocknumber . ':' . $sequence, ["headers"=>$requestHeader]);
+        $result = $this->client->request('GET', 'vehicleimage/' . $stocknumber . ':' . $sequence, ["headers"=>$requestHeader]);
         $response = json_decode((string) $result->getBody());
         if (!isset($response->errors) || empty($response->errors)) {
             // Return
