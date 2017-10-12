@@ -194,6 +194,29 @@ class Api
     }
 
     /**
+     * Get product-image
+     *
+     * @param int $stocknumber
+     * @param int $sequence
+     * @return boolean|array
+     */
+    public function getProductImage($stocknumber, $sequence)
+    {
+        $requestHeader = $this->clientHeaders;
+        $result = $this->client->request('GET', 'vehicleimages/' . $stocknumber . ':' . $sequence, ["headers"=>$requestHeader]);
+        $response = json_decode((string) $result->getBody());
+        if (!isset($response->errors) || empty($response->errors)) {
+            // Return
+            return $response;
+        } else {
+            // Return
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
+        }
+    }
+
+    /**
      * Create advertisement (single product can be advertised on several channels)
      *
      * @param mixed $data
@@ -306,6 +329,33 @@ class Api
 
         $requestHeader = $this->clientHeaders;
         $result = $this->client->request('PUT', 'vehicle/' . $stocknumber, ["headers"=>$requestHeader, "body"=>$body]);
+        $response = json_decode((string) $result->getBody());
+        if (!isset($response->errors) || empty($response->errors)) {
+            // Return
+            return $response;
+        } else {
+            // Return
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
+        }
+    }
+
+    /**
+     * Update product-image
+     *
+     * @param int $stocknumber
+     * @param int $sequence
+     * @param mixed $data
+     * @return boolean|array
+     */
+    public function updateProductImage($stocknumber, $sequence, \AuctioCore\Api\Hexon\Entity\ProductImage $data)
+    {
+        // Convert input-data into body
+        $body = $this->convertInput($data);
+
+        $requestHeader = $this->clientHeaders;
+        $result = $this->client->request('PUT', 'vehicleimages/' . $stocknumber . ':' . $sequence, ["headers"=>$requestHeader, "body"=>$body]);
         $response = json_decode((string) $result->getBody());
         if (!isset($response->errors) || empty($response->errors)) {
             // Return
