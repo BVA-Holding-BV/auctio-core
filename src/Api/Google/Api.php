@@ -18,11 +18,12 @@ class Api
      *
      * @param string $hostname
      * @param string $apiKey
+     * @param boolean $debug
      */
-    public function __construct($hostname, $apiKey)
+    public function __construct($hostname, $apiKey, $debug = false)
     {
         // Set client
-        $this->client = new \GuzzleHttp\Client(['base_uri' => $hostname, 'http_errors' => false]);
+        $this->client = new \GuzzleHttp\Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
 
         // Set default header for client-requests
         $this->clientHeaders = [

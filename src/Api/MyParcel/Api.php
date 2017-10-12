@@ -20,13 +20,14 @@ class Api
      * @param string $hostname
      * @param string $apiKey
      * @param array $allowedCountryCodes
+     * @param boolean $debug
      */
-    public function __construct($hostname, $apiKey, $allowedCountryCodes = ["NL","BE"])
+    public function __construct($hostname, $apiKey, $allowedCountryCodes = ["NL","BE"], $debug = false)
     {
         $this->allowedCountryCodes = $allowedCountryCodes;
 
         // Set client
-        $this->client = new \GuzzleHttp\Client(['base_uri'=>$hostname]);
+        $this->client = new \GuzzleHttp\Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
 
         // Set default header for client-requests
         $this->clientHeaders = [
