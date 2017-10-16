@@ -12,16 +12,22 @@ class Product extends Base {
     public $identificationStocknumber_public;
 
     public $identificationReferencenumber;
+    /** @var string */
     public $identificationLicense_plate;
     public $identificationVin;
     public $identificationTypenumber;
     public $identificationSerialnumber;
+    /** @var string */
     public $identificationDirect_link;
+    /** @var string */
     public $generalCategory;
+    /** @var string */
     public $generalBodystyle;
+    /** @var string */
     public $generalMakeName;
     /** @ReadOnly */
     public $generalMakeId;
+    /** @var string */
     public $generalModelName;
     public $generalModelCode;
     public $generalModelStart;

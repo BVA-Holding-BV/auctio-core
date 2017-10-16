@@ -90,6 +90,29 @@ class Api
     }
 
     /**
+     * Get advertisement (single product can be advertised on several channels)
+     *
+     * @param int $stocknumber
+     * $param string $site
+     * @return boolean|array
+     */
+    public function getAdvertisement($stocknumber, $site)
+    {
+        $requestHeader = $this->clientHeaders;
+        $result = $this->client->request('GET', 'ad/' . $stocknumber . urlencode(':') . $site, ["headers"=>$requestHeader]);
+        $response = json_decode((string) $result->getBody());
+        if (!isset($response->errors) || empty($response->errors)) {
+            // Return
+            return $response;
+        } else {
+            // Return
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
+        }
+    }
+
+    /**
      * Get body-styles
      *
      * @param string $language
@@ -128,20 +151,24 @@ class Api
     }
 
     /**
-     * Get advertisement (single product can be advertised on several channels)
+     * Get makes
      *
-     * @param int $stocknumber
-     * $param string $site
      * @return boolean|array
      */
-    public function getAdvertisement($stocknumber, $site)
+    public function getMakes()
     {
         $requestHeader = $this->clientHeaders;
-        $result = $this->client->request('GET', 'ad/' . $stocknumber . urlencode(':') . $site, ["headers"=>$requestHeader]);
+        $result = $this->client->request('GET', 'makes/', ["headers"=>$requestHeader]);
         $response = json_decode((string) $result->getBody());
         if (!isset($response->errors) || empty($response->errors)) {
+            // Populate array of body-style
+            $result = [];
+            foreach ($response->results AS $res) {
+                $result[strtolower($res->name)] = ucfirst($res->name);
+            }
+
             // Return
-            return $response;
+            return $result;
         } else {
             // Return
             $this->setErrorData($response);
