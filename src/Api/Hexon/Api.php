@@ -137,7 +137,7 @@ class Api
     public function getAdvertisement($stocknumber, $site)
     {
         $requestHeader = $this->clientHeaders;
-        $result = $this->client->request('GET', 'ad/' . $stocknumber . ":" . $site, ["headers"=>$requestHeader]);
+        $result = $this->client->request('GET', 'ad/' . $stocknumber . urlencode(':') . $site, ["headers"=>$requestHeader]);
         $response = json_decode((string) $result->getBody());
         if (!isset($response->errors) || empty($response->errors)) {
             // Return
@@ -204,7 +204,7 @@ class Api
     public function getProductImage($stocknumber, $sequence)
     {
         $requestHeader = $this->clientHeaders;
-        $result = $this->client->request('GET', 'vehicleimages/' . $stocknumber . ':' . $sequence, ["headers"=>$requestHeader]);
+        $result = $this->client->request('GET', 'vehicleimages/' . $stocknumber . urlencode(':') . $sequence, ["headers"=>$requestHeader]);
         $response = json_decode((string) $result->getBody());
         if (!isset($response->errors) || empty($response->errors)) {
             // Return
@@ -302,7 +302,7 @@ class Api
     public function deleteAdvertisement($stocknumber, $site)
     {
         $requestHeader = $this->clientHeaders;
-        $result = $this->client->request('DELETE', 'ad/' . $stocknumber . ":" . $site, ["headers"=>$requestHeader]);
+        $result = $this->client->request('DELETE', 'ad/' . $stocknumber . urlencode(':') . $site, ["headers"=>$requestHeader]);
         $response = json_decode((string) $result->getBody());
 
         if (!isset($response->errors) || empty($response->errors) && strtolower($result->getReasonPhrase()) == 'delete ok') {
@@ -356,7 +356,7 @@ class Api
         $body = $this->convertInput($data);
 
         $requestHeader = $this->clientHeaders;
-        $result = $this->client->request('PUT', 'vehicleimages/' . $stocknumber . ':' . $sequence, ["headers"=>$requestHeader, "body"=>$body]);
+        $result = $this->client->request('PUT', 'vehicleimages/' . $stocknumber . urlencode(':') . $sequence, ["headers"=>$requestHeader, "body"=>$body]);
         $response = json_decode((string) $result->getBody());
         if (!isset($response->errors) || empty($response->errors)) {
             // Return
