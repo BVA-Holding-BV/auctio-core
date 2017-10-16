@@ -344,6 +344,29 @@ class Api
     }
 
     /**
+     * Delete product
+     *
+     * @param int $stocknumber
+     * @return boolean|array
+     */
+    public function deleteProduct($stocknumber)
+    {
+        $requestHeader = $this->clientHeaders;
+        $result = $this->client->request('DELETE', 'vehicle/' . $stocknumber, ["headers"=>$requestHeader]);
+        $response = json_decode((string) $result->getBody());
+
+        if (!isset($response->errors) || empty($response->errors) && strtolower($result->getReasonPhrase()) == 'delete ok') {
+            // Return
+            return true;
+        } else {
+            // Return
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
+        }
+    }
+
+    /**
      * Update product
      *
      * @param int $stocknumber
