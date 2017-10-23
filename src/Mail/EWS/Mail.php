@@ -1,6 +1,6 @@
 <?php
 
-namespace Mail\EWS;
+namespace AuctioCore\Mail\EWS;
 
 use \jamesiarmes\PhpEws\Client;
 use \jamesiarmes\PhpEws\Request\SendItemType;
