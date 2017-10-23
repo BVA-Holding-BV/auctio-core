@@ -100,13 +100,13 @@ class Mail
     public function send($recipient, $subject = NULL, $content, $saveToFolder = true)
     {
         // Check input-data
-        if (!empty($recipient)) {
+        if (empty($recipient)) {
             $this->setMessages("No recipient set");
             return false;
-        } elseif (!empty($subject)) {
+        } elseif (empty($subject)) {
             $this->setMessages("No subject set");
             return false;
-        } elseif (!empty($content)) {
+        } elseif (empty($content)) {
             $this->setMessages("No content set");
             return false;
         }
@@ -122,9 +122,10 @@ class Mail
         $message->ToRecipients = new ArrayOfRecipientsType();
 
         // Set the sender.
+        $senderMailAddress = str_ireplace("bva\\", "", $this->username) . "@bva-auctions.com";
         $message->From = new SingleRecipientType();
         $message->From->Mailbox = new EmailAddressType();
-        $message->From->Mailbox->EmailAddress = $this->username;
+        $message->From->Mailbox->EmailAddress = $senderMailAddress;
 
         // Set the recipient.
         $recipient = new EmailAddressType();
