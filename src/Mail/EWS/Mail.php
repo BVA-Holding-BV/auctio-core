@@ -100,6 +100,15 @@ class Mail
         return $this->messages;
     }
 
+    /**
+     * Create/send email by EWS
+     *
+     * @param string $mailRecipient
+     * @param string $subject
+     * @param string $content
+     * @param boolean $saveToFolder
+     * @return boolean
+     */
     public function send($mailRecipient, $subject = NULL, $content, $saveToFolder = true)
     {
         // Check input-data
@@ -162,6 +171,13 @@ class Mail
         }
     }
 
+    /**
+     * Send email by EWS (after creating message)
+     *
+     * @param string $messageId
+     * @param string $changeKey
+     * @return boolean
+     */
     private function sendMail($messageId, $changeKey)
     {
         // Check input-data
