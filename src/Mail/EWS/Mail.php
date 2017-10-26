@@ -109,7 +109,7 @@ class Mail
      * @param boolean $saveToFolder
      * @return boolean
      */
-    public function send($mailRecipient, $subject = NULL, $content, $saveToFolder = true)
+    public function send($mailRecipient, $subject = NULL, $content, $bodyType = 'TEXT', $saveToFolder = true)
     {
         // Check input-data
         if (empty($mailRecipient)) {
@@ -148,8 +148,17 @@ class Mail
 
         // Set the message body
         $message->Body = new BodyType();
-        $message->Body->BodyType = BodyTypeType::TEXT;
-        $message->Body->_ = $content;
+        if (strtoupper($bodyType) == 'HTML') {
+            $message->Body->BodyType = BodyTypeType::HTML;
+            $message->Body->_ = $content;
+        } else {
+            $message->Body->BodyType = BodyTypeType::TEXT;
+            // Set content (warning: Identifier must not be indented!); http://php.net/manual/en/language.types.string.php
+            $message->Body->_ =
+<<<BODY
+$content 
+BODY;
+        }
 
         // Add the message to the request
         $request->Items->Message[] = $message;
