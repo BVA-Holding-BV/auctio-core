@@ -135,9 +135,11 @@ class Product extends Base {
     public $weightsGvw;
     public $weightsTrailer_loadBraked;
     public $weightsTrailer_loadUnbraked;
+    /** @var boolean */
     public $conditionUsed;
     public $conditionOdometerReading;
     public $conditionOdometerUnit;
+    /** @var integer */
     public $conditionOperating_hours;
     public $conditionStateGeneral;
     public $conditionStateTechnical;
@@ -208,6 +210,7 @@ class Product extends Base {
     public $leasingRemaining_balance;
     public $leasingPurchase_possible;
     public $leasingRemarks;
+    /** @var string */
     public $historyConstruction_date;
     public $historyFirst_registrationCountry;
     public $historyFirst_registrationDate;
@@ -216,7 +219,14 @@ class Product extends Base {
     public $historyDate_last_ownership_change;
     public $historyMaintenance_booklet;
     public $historyPrevious_owner_count;
+    /** @var array */
+    public $descriptionRemarks;
+    /** @var array */
+    public $descriptionRemarks_trade;
     public $descriptionDefault_remark = 1;
+    public $descriptionTitle;
+    public $descriptionHighlights;
+    public $descriptionSearch_terms;
     public $category_specificCarsBoot_capacitySeats_up;
     public $category_specificCarsBoot_capacitySeats_down;
     public $category_specificBicyclesUser;
