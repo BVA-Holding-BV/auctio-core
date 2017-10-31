@@ -156,7 +156,7 @@ class Product extends Base {
     public $sales_conditionsPricingCurrency = "EUR";
     public $sales_conditionsPricingType;
     public $sales_conditionsPricingNew;
-    /** @var decimal */
+    /** @var float */
     public $sales_conditionsPricingConsumerValue;
     /** @var boolean */
     public $sales_conditionsPricingConsumerIncl_vat;
