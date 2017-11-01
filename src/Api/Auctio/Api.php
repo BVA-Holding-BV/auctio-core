@@ -19,9 +19,10 @@ class Api
      * @param string $hostname
      * @param string $username
      * @param string $password
+     * @param string $userAgent
      * @param boolean $debug
      */
-    public function __construct($hostname, $username = null, $password = null, $debug = false)
+    public function __construct($hostname, $username = null, $password = null, $userAgent = null, $debug = false)
     {
         // Set time-zone for converting "back" from UTC
         $this->tz = new \DateTimeZone('Europe/Amsterdam');
@@ -33,6 +34,7 @@ class Api
         $this->clientHeaders = [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
+            'User-Agent' => $userAgent,
         ];
 
         if (!empty($username)) {
