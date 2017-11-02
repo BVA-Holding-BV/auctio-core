@@ -16,18 +16,18 @@ class Api
      * Constructor
      *
      * @param string $hostname
-     * @param string $username
-     * @param string $password
+     * @param string $access_key
+     * @param string $secret
      * @param boolean $debug
      */
-    public function __construct($hostname, $username, $password, $debug = false)
+    public function __construct($hostname, $access_key, $secret, $debug = false)
     {
         // Set client
         $this->client = new \GuzzleHttp\Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
 
         // Set default header for client-requests
         $this->clientHeaders = [
-            'Authorization' => 'Basic ' . base64_encode($username . ":" . $password),
+            'Authorization' => 'Basic ' . base64_encode($access_key . ":" . $secret),
             'Content-Type' => 'application/json',
         ];
 
