@@ -122,7 +122,7 @@ class Api
         $field = $options['field'];
         $quality = $options['quality'];
         $options['name'] = $field;
-        
+
         // Prepare request
         $data = [];
         $data['request'] = [$field=>["text"=>$text]];
@@ -132,8 +132,8 @@ class Api
         $requestData = new \AuctioCore\Api\Tolq\Entity\Request($data);
         $requestData->options = new \AuctioCore\Api\Tolq\Entity\RequestOptions($options);
 
-        var_dump($requestData->encode());
-        exit;
+        // Execute request
+        return $this->createRequest($requestData);
     }
 
     /**
