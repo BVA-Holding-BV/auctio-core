@@ -6,7 +6,7 @@ use AuctioCore\Api\Base;
 
 class Request extends Base {
 
-    /** @var string */
+    /** @var array */
     public $request;
     /** @var string */
     public $source_language_code;
