@@ -121,9 +121,8 @@ class Api
         // Get variables from options
         $field = $options['field'];
         $quality = $options['quality'];
-        unset($options['field']);
-        unset($options['quality']);
-
+        $options['name'] = $field;
+        
         // Prepare request
         $data = [];
         $data['request'] = [$field=>["text"=>$text]];
