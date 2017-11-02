@@ -113,7 +113,7 @@ class Api
             $this->setMessages(["No target-language set"]);
             return false;
         }
-        if (empty($quality)) {
+        if (empty($options['quality'])) {
             $this->setMessages(["No quality set"]);
             return false;
         }
