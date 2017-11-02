@@ -91,7 +91,7 @@ class Api
         return $this->messages;
     }
 
-    public function getTranslation($text, $sourceLanguage, $targetLanguage)
+    public function getTranslation($text, $sourceLanguage, $targetLanguage, $options = null)
     {
         // Check input parameters
         if (empty($text)) {

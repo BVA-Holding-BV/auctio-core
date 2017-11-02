@@ -90,7 +90,55 @@ class Api
     }
 
     /**
-     * Create request
+     * Get translation
+     *
+     * @param string $text
+     * @param string $sourceLanguage
+     * @param string $targetLanguage
+     * @param array $options
+     * @return boolean|array
+     */
+    public function getTranslation($text, $sourceLanguage, $targetLanguage, $options = null)
+    {
+        // Check input parameters
+        if (empty($text)) {
+            $this->setMessages(["No source-text set"]);
+            return false;
+        }
+        if (empty($sourceLanguage)) {
+            $this->setMessages(["No source-language set"]);
+            return false;
+        }
+        if (empty($targetLanguage)) {
+            $this->setMessages(["No target-language set"]);
+            return false;
+        }
+        if (empty($quality)) {
+            $this->setMessages(["No quality set"]);
+            return false;
+        }
+
+        // Get variables from options
+        $field = $options['field'];
+        $quality = $options['quality'];
+        unset($options['field']);
+        unset($options['quality']);
+
+        // Prepare request
+        $data = [];
+        $data['request'] = [$field=>["text"=>$text]];
+        $data['source_language_code'] = $sourceLanguage;
+        $data['target_language_codes'] = $targetLanguage;
+        $data['quality'] = $quality;
+        $requestData = new \AuctioCore\Api\Tolq\Entity\Request($data);
+        $requestData->options = new \AuctioCore\Api\Tolq\Entity\RequestOptions($options);
+
+        var_dump($requestData->encode());
+        exit;
+    }
+
+    /**
+     * Create translation-request
      *
      * @param mixed $data
      * @return boolean|array
