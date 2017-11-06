@@ -124,10 +124,20 @@ class Api
 
         // Prepare request
         $data = [];
-        $data['request'] = [$field=>["text"=>$text]];
         $data['source_language_code'] = $sourceLanguage;
         $data['target_language_codes'] = $targetLanguage;
         $data['quality'] = $quality;
+        $data['request'] = [];
+        foreach ($text AS $field => $fieldText) {
+            $data['request'][$field] = ["text"=>$fieldText];
+        }
+
+        // Check input parameters
+        if (empty($data['request'])) {
+            $this->setMessages(["No source-text set"]);
+            return false;
+        }
+        
         $requestData = new \AuctioCore\Api\Tolq\Entity\Request($data);
         $requestData->options = new \AuctioCore\Api\Tolq\Entity\RequestOptions($options);
 
