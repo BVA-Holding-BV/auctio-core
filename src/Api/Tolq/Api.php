@@ -119,7 +119,6 @@ class Api
         }
 
         // Get variables from options
-        $field = $options['field'];
         $quality = $options['quality'];
 
         // Prepare request
@@ -137,7 +136,7 @@ class Api
             $this->setMessages(["No source-text set"]);
             return false;
         }
-        
+
         $requestData = new \AuctioCore\Api\Tolq\Entity\Request($data);
         $requestData->options = new \AuctioCore\Api\Tolq\Entity\RequestOptions($options);
 
