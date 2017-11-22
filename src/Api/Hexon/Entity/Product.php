@@ -215,6 +215,7 @@ class Product extends Base {
     /** @var string */
     public $historyConstruction_date;
     public $historyFirst_registrationCountry;
+    /** @var string */
     public $historyFirst_registrationDate;
     public $historyCurrent_registrationCountry = "nl";
     public $historyCurrent_registrationFirst_admission;
