@@ -992,6 +992,33 @@ class Api
         }
     }
 
+    public function getLotBidData($lotId)
+    {
+        // Prepare request
+        $requestHeader = $this->clientHeaders;
+
+        // Execute request
+        $result = $this->client->request('GET', 'ext123/lot/' . $lotId . '/biddata', ["headers"=>$requestHeader]);
+        if ($result->getStatusCode() == 200) {
+            $response = json_decode((string) $result->getBody());
+
+            // Return
+            if (!isset($response->errors)) {
+                $response = $this->convertDates($response, ["startDate", "endDate", "lastBidTime"]);
+                return $response;
+            } else {
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
+            }
+        } else {
+            $response = json_decode((string) $result->getBody());
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
+        }
+    }
+
     public function getLotMedia($lotId)
     {
         // Prepare request
