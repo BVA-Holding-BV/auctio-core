@@ -24,6 +24,16 @@ class DefaultService
         return $res;
     }
 
+    public function getByParameters($parameters, $output = 'object', $multiple = true)
+    {
+        $res = $this->repository->getByParameters($parameters, $output, $multiple);
+        if ($res === false) {
+            $this->setMessages($this->repository->getMessages());
+            $this->setErrorData($this->repository->getErrorData());
+        }
+        return $res;
+    }
+
     public function getList($output = 'object', $filter = NULL, $groupBy = null, $having = null, $orderBy = NULL, $limitRecords = 25, $offset = 0, $paginator = false, $debug = false)
     {
         $res = $this->repository->getList($output, $filter, $groupBy, $having, $orderBy, $limitRecords, $offset, $paginator, $debug);
