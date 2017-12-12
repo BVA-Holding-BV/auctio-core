@@ -250,6 +250,34 @@ class Api
     }
 
     /**
+     * Get products advertisement
+     *
+     * @param array $stocknumbers
+     * @param string|array $requestedFields
+     * @param boolean $resultWithLinks
+     * @return boolean|array
+     */
+    public function getProductsAdvertisment($stocknumbers, $siteCode, $requestedFields = "*", $resultWithLinks = false)
+    {
+        $requestedFields = (is_array($requestedFields)) ? implode(",", $requestedFields) : $requestedFields;
+        $resultWithLinks = ($resultWithLinks) ? "true" : "false";
+        $uri = "vehicles/?_FIELDS=" . $requestedFields . "&_LINKS=" . $resultWithLinks . "&stocknumber=" . implode(',', $stocknumbers ) . "&site_code=" . $siteCode;
+
+        $requestHeader = $this->clientHeaders;
+        $result = $this->client->request('GET', $uri, ["headers"=>$requestHeader]);
+        $response = json_decode((string) $result->getBody());
+        if (!isset($response->errors) || empty($response->errors)) {
+            // Return
+            return $response;
+        } else {
+            // Return
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
+        }
+    }
+
+    /**
      * Get product-image
      *
      * @param int $stocknumber
