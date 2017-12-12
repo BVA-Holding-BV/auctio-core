@@ -121,7 +121,7 @@ class Api
      * @param boolean $resultWithLinks
      * @return boolean|array
      */
-    public function getAdvertisments($stocknumbers, $site, $requestedFields = "*", $resultWithLinks = false)
+    public function getAdvertisements($stocknumbers, $site, $requestedFields = "*", $resultWithLinks = false)
     {
         $requestedFields = (is_array($requestedFields)) ? implode(",", $requestedFields) : $requestedFields;
         $resultWithLinks = ($resultWithLinks) ? "true" : "false";
@@ -262,7 +262,7 @@ class Api
      * @param int $stocknumber
      * @return boolean|array
      */
-    public function getProductAdvertisments($stocknumber)
+    public function getProductAdvertisements($stocknumber)
     {
         $requestHeader = $this->clientHeaders;
         $result = $this->client->request('GET', 'vehicle/' . $stocknumber . '/ads/', ["headers"=>$requestHeader]);
