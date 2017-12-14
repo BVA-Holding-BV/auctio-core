@@ -112,4 +112,7 @@ class Lot extends Base {
      * @var string
      */
     public $reservationState;
+    /** @var Api\Auctio\Entity\ReverseLotDetail */
+    public $reverseLotDetail;
+
 }
