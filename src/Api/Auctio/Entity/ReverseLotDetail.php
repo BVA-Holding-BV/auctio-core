@@ -5,7 +5,7 @@ use AuctioCore\Api\Base;
 
 class ReverseLotDetail extends Base {
 
-    /** @var int */
+    /** @var string */
     public $reverseAuctionDate;
     /** @var int */
     public $startBidAmount;
