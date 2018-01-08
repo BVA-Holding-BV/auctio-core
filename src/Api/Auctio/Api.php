@@ -998,7 +998,7 @@ class Api
         $requestHeader = $this->clientHeaders;
 
         // Execute request
-        $result = $this->client->request('GET', 'ext123/lot/' . $auctionId . '/' . $lotNumber . '/' . $lotNumberAddition . '/lotbynumber', ["headers"=>$requestHeader]);
+        $result = $this->client->request('GET', 'ext123/lot/' . $auctionId . '/' . $lotNumber . $lotNumberAddition . '/lotbynumber', ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
