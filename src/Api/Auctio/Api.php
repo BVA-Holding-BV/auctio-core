@@ -165,8 +165,10 @@ class Api
                 $this->setMessages($response->errors);
                 return false;
             }
-        } elseif ($result->getStatusCode() == 409 && $retry === true) {
-            return $this->login($username, $password, false);
+        } elseif ($result->getStatusCode() == 409 && $retry !== false) {
+            $retry = (is_bool($retry)) ? 1 : ($retry + 1);
+            if ($retry > 5) $retry = false;
+            return $this->login($username, $password, $retry);
         } else {
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
