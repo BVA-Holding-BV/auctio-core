@@ -37,13 +37,13 @@ class Api
             'User-Agent' => $userAgent,
         ];
 
-        if (!empty($username)) {
-            $this->login($username, $password);
-        }
-
         // Set error-messages
         $this->messages = [];
         $this->errorData = [];
+
+        if (!empty($username)) {
+            $this->login($username, $password);
+        }
     }
 
     /**
@@ -316,9 +316,9 @@ class Api
             $this->setMessages(['File not found: ' . $localFilename]);
             return false;
         } if (!is_readable($localFilename)) {
-        $this->setMessages(['File not readable: ' . $localFilename]);
-        return false;
-    }
+            $this->setMessages(['File not readable: ' . $localFilename]);
+            return false;
+        }
 
         // Set request-body
         $filename = $lotSequence;
