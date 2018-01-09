@@ -127,11 +127,12 @@ class Api
     /**
      * Get access/refresh tokens by login
      *
-     * @param $username
-     * @param $password
-     * @return array|bool
+     * @param string $username
+     * @param string $password
+     * @param boolean $retry
+     * @return array|boolean
      */
-    public function login($username, $password)
+    public function login($username, $password, $retry = true)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -164,6 +165,8 @@ class Api
                 $this->setMessages($response->errors);
                 return false;
             }
+        } elseif ($result->getStatusCode() == 409 && $retry === true) {
+            return $this->login($username, $password, false);
         } else {
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
