@@ -7,11 +7,12 @@ namespace AuctioCore\Api\Auctio;
 class Api
 {
 
-    private $tz;
+    private $errorData;
     private $client;
     private $clientHeaders;
     private $messages;
-    private $errorData;
+    private $token;
+    private $tz;
 
     /**
      * Constructor
@@ -20,9 +21,10 @@ class Api
      * @param string $username
      * @param string $password
      * @param string $userAgent
+     * @param object|array $token
      * @param boolean $debug
      */
-    public function __construct($hostname, $username = null, $password = null, $userAgent = null, $debug = false)
+    public function __construct($hostname, $username = null, $password = null, $userAgent = null, $token = null, $debug = false)
     {
         // Set time-zone for converting "back" from UTC
         $this->tz = new \DateTimeZone('Europe/Amsterdam');
@@ -41,16 +43,19 @@ class Api
         $this->messages = [];
         $this->errorData = [];
 
-        if (!empty($username)) {
+        if (!empty($username) && empty($token)) {
             $this->login($username, $password);
+        } elseif (!empty($token)) {
+            $this->clientHeaders['accessToken'] = (is_object($token)) ? $token->accessToken : $token['accessToken'];
+            $this->clientHeaders['refreshToken'] = (is_object($token)) ? $token->refreshToken : $token['refreshToken'];
+            $this->clientHeaders['X-CSRF-Token'] = (is_object($token)) ? $token->csrfToken : $token['csrfToken'];
         }
     }
 
     /**
      * Set error-data
      *
-     * @param $data
-     * @return array
+     * @param array $data
      */
     public function setErrorData($data)
     {
@@ -100,6 +105,26 @@ class Api
     }
 
     /**
+     * Set token
+     *
+     * @param array $data
+     */
+    public function setToken($data)
+    {
+        $this->token = $data;
+    }
+
+    /**
+     * Get token
+     *
+     * @return array
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
      * Get access/refresh tokens by login
      *
      * @param $username
@@ -122,6 +147,13 @@ class Api
 
             // Return
             if (!isset($response->errors)) {
+                // Save token
+                $this->setToken([
+                    'accessToken' => $response->accessToken,
+                    'refreshToken' => $response->refreshToken,
+                    'csrfToken' => $response->csrfToken
+                ]);
+
                 // Set tokens in headers
                 $this->clientHeaders['accessToken'] = $response->accessToken;
                 $this->clientHeaders['refreshToken'] = $response->refreshToken;
