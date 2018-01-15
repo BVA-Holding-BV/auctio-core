@@ -86,6 +86,8 @@ class Auction extends Base {
     public $reverseAuctionStartOffset;
     /** @var string */
     public $currencyCode;
+    /** @var bool */
+    public $homeDelivery;
     /** @var string */
     public $createdBy;
     /** @var Api\Auctio\Entity\Custom\DateTime */
