@@ -137,7 +137,9 @@ class Product extends Base {
     public $weightsTrailer_loadUnbraked;
     /** @var boolean */
     public $conditionUsed;
+    /** @var integer */
     public $conditionOdometerReading;
+    /** @var string */
     public $conditionOdometerUnit;
     /** @var integer */
     public $conditionOperating_hours;
