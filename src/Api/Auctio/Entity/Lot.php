@@ -126,7 +126,7 @@ class Lot extends Base {
     public $additionalCosts;
     /** @var bool */
     public $buyNowEnabled;
-    /** @var float */
+    /** @var string */
     public $buyNowPrice;
     /** @var Api\Auctio\Entity\ReverseLotDetail */
     public $reverseLotDetail;
