@@ -16,14 +16,16 @@ class Lot extends Base {
     /** @var int */
     public $categoryId;
     /** @var string */
+    public $categoryCode;
+    /** @var string */
     public $dossier;
     /** @var string */
     public $externalDossierNumber;
-    /** @var string */
+    /** @var float */
     public $auctionFeePercentage;
     /** @var string */
     public $bidMethodType;
-    /** @var string */
+    /** @var int */
     public $number;
     /** @var string */
     public $numberAddition;
@@ -37,47 +39,71 @@ class Lot extends Base {
     /** @var Api\Auctio\Entity\Custom\DateTime */
     public $endDate;
     /**
-     * @var string
+     * @var int
      * @ReadOnly
      */
     public $endDateDays;
     /**
-     * @var string
+     * @var int
      * @ReadOnly
      */
     public $endDateHours;
     /**
-     * @var string
+     * @var int
      * @ReadOnly
      */
     public $endDateMinutes;
-    /** @var string */
+    /**
+     * @var int
+     * @ReadOnly
+     */
     public $endDateSeconds;
-    /** @var bool */
+    /**
+     * @var bool
+     * @ReadOnly
+     */
     public $open;
     /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $name;
     /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $description;
-    /** @var string */
+    /**
+     * @var string
+     * @ReadOnly
+     */
     public $thumbnailUrl;
-    /** @var string */
+    /**
+     * @var string
+     * @ReadOnly
+     */
     public $imageUrl;
-    /** @var string */
+    /**
+     * @var string
+     * @ReadOnly
+     */
     public $lotPageUrl;
-    /** @var integer */
+    /** @var int */
     public $startAmount;
-    /** @var integer */
+    /** @var int */
     public $minimumAmount;
-    /** @var string */
+    /**
+     * @var float
+     * @ReadOnly
+     */
     public $latestBidAmount;
-    /** @var string */
+    /**
+     * @var string
+     * @ReadOnly
+     */
     public $lastBidTime;
-    /** @var string */
+    /**
+     * @var int
+     * @ReadOnly
+     */
     public $bidCount;
-    /** @var string */
+    /** @var int */
     public $lotTypeId;
-    /** @var string */
+    /** @var int */
     public $locationId;
     /** @var string */
     public $externalId;
@@ -93,7 +119,7 @@ class Lot extends Base {
     public $approved;
     /** @var bool */
     public $assignedExplicitly;
-    /** @var string */
+    /** @var float */
     public $vehicleTaxAmount;
     /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $extraDownloadName;
@@ -103,17 +129,26 @@ class Lot extends Base {
     public $extraDownload2Name;
     /** @var string */
     public $extraDownload2URL;
-    /** @var string */
+    /** @var int */
     public $combinationLotId;
     /**
-     * @var string
+     * @var array
      * @ReadOnly
      */
     public $lotIds;
     /**
      * @var string
+     * @ReadOnly
      */
     public $reservationState;
+    /** @var string */
+    public $currencyCode;
+    /** @var float */
+    public $additionalCosts;
+    /** @var bool */
+    public $buyNowEnabled;
+    /** @var float */
+    public $buyNowPrice;
     /** @var Api\Auctio\Entity\ReverseLotDetail */
     public $reverseLotDetail;
 

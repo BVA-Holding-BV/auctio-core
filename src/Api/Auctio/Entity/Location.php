@@ -29,7 +29,7 @@ class Location extends Base {
     public $defaultLocation;
     /** @var string */
     public $stateName;
-    /** @var string */
+    /** @var int */
     public $stateId;
     /** @var string */
     public $latitude;

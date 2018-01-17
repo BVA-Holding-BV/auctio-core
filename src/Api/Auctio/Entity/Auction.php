@@ -13,17 +13,13 @@ class Auction extends Base {
     /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $description;
     /** @var Api\Auctio\Entity\Custom\LocaleMessage */
-    //public $keywords;
-    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $auctionClosedText;
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
+    public $bidRestrictionExplanationText;
     /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $privateAuctionText;
     /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $privateAuctionEmailText;
-    /** var string */
-    public $privateAuctionApplicationEmail;
-    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
-    public $bidRestrictionExplanationText;
     /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $extraExplanationText;
     /** @var Api\Auctio\Entity\Custom\LocaleMessage */
@@ -34,8 +30,13 @@ class Auction extends Base {
     public $bidLimitDispensationAmount;
     /** @var string */
     public $countryId;
-    /** @var Api\Auctio\Entity\Custom\DateTime */
-    public $startDate;
+    /** @var string */
+    public $currencyCode;
+    /**
+     * @var Api\Auctio\Entity\Custom\DateTime
+     * @ReadOnly
+     */
+    public $creationDate;
     /** @var Api\Auctio\Entity\Custom\DateTime */
     public $endDate;
     /** @var bool */
@@ -60,13 +61,20 @@ class Auction extends Base {
     public $bidLimitRequired;
     /** @var bool */
     public $active;
-    /** @ReadOnly */
+    /**
+     * @var string
+     * @ReadOnly
+     */
     public $termsUrl;
+    /** @var Api\Auctio\Entity\Custom\DateTime */
+    public $startDate;
     /** @var string */
     public $leafletURL;
+    /** var string */
+    public $privateAuctionApplicationEmail;
     /** @var string */
     public $remark;
-    /** @var int */
+    /** @var bool */
     public $disableBidding;
     /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $themeIntroduction;
@@ -82,15 +90,11 @@ class Auction extends Base {
     public $channelCodes;
     /** @var int */
     public $reverseBidRangeId;
-    /** @var int */
-    public $reverseAuctionStartOffset;
-    /** @var string */
-    public $currencyCode;
-    /** @var bool */
-    public $homeDelivery;
     /** @var string */
     public $createdBy;
-    /** @var Api\Auctio\Entity\Custom\DateTime */
-    public $creationDate;
+    /** @var int */
+    public $reverseAuctionStartOffset;
+    /** @var bool */
+    public $homeDelivery;
 
 }
