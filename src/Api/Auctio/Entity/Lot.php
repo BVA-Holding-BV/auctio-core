@@ -65,8 +65,10 @@ class Lot extends Base {
     public $imageUrl;
     /** @var string */
     public $lotPageUrl;
-    /** @var string */
+    /** @var integer */
     public $startAmount;
+    /** @var integer */
+    public $minimumAmount;
     /** @var string */
     public $latestBidAmount;
     /** @var string */
