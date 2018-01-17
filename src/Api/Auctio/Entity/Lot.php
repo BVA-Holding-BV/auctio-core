@@ -58,48 +58,27 @@ class Lot extends Base {
      * @ReadOnly
      */
     public $endDateSeconds;
-    /**
-     * @var bool
-     * @ReadOnly
-     */
+    /** @var bool */
     public $open;
     /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $name;
     /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $description;
-    /**
-     * @var string
-     * @ReadOnly
-     */
+    /** @var string */
     public $thumbnailUrl;
-    /**
-     * @var string
-     * @ReadOnly
-     */
+    /** @var string */
     public $imageUrl;
-    /**
-     * @var string
-     * @ReadOnly
-     */
+    /** @var string */
     public $lotPageUrl;
     /** @var int */
     public $startAmount;
     /** @var int */
     public $minimumAmount;
-    /**
-     * @var float
-     * @ReadOnly
-     */
+    /** @var float */
     public $latestBidAmount;
-    /**
-     * @var string
-     * @ReadOnly
-     */
+    /** @var string */
     public $lastBidTime;
-    /**
-     * @var int
-     * @ReadOnly
-     */
+    /** @var int */
     public $bidCount;
     /** @var int */
     public $lotTypeId;
