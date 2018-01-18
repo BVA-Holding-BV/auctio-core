@@ -34,6 +34,7 @@ class Mail
      * @param string $hostname
      * @param string $username
      * @param string $password
+     * @param string $senderMailAddress
      * @param string $version
      */
     public function __construct($hostname, $username, $password, $senderMailAddress, $version = 'Exchange2010')
@@ -51,7 +52,6 @@ class Mail
      * Set error-data
      *
      * @param $data
-     * @return array
      */
     public function setErrorData($data)
     {
