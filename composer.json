@@ -1,7 +1,6 @@
 {
   "name": "berrybuitenhuis/auctio-core",
   "type": "library",
-  "license": "Apache2",
   "description": "Auctio-Core - General/basic functions for Auctio",
   "keywords": [],
   "homepage": "",
