@@ -1,6 +1,6 @@
 <?php
 
-namespace AuctioCore\Protocol;
+namespace AuctioCore\Connection;
 
 use \phpseclib\Crypt\RSA;
 use \phpseclib\Net\SFTP AS Net_SFTP;
