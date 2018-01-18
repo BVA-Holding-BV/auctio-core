@@ -1,6 +1,7 @@
 {
   "name": "berrybuitenhuis/auctio-core",
   "type": "library",
+  "license": "MIT",
   "description": "Auctio-Core - General/basic functions for Auctio",
   "keywords": [],
   "homepage": "",
