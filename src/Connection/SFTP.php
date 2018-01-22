@@ -101,6 +101,19 @@ class SFTP
 
 
     /**
+     * Create a directory
+     *
+     * @param string $dir
+     * @param string $mode
+     * @param bool $recursive
+     * @return bool
+     */
+    public function createDirectory($dir, $mode = null, $recursive = false)
+    {
+        return $this->sftp->mkdir($dir, $mode, $recursive);
+    }
+
+    /**
      * Delete (remote) file
      *
      * @param string $remoteFileName
