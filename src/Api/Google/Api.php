@@ -122,7 +122,7 @@ class Api
         $response = json_decode((string) $result->getBody());
         if ($result->getStatusCode() == 200) {
             // Return
-            if (!isset($response->errors)) {
+            if (!isset($response->error)) {
                 // Check if translation available
                 if (!is_array($response->data->translations)) {
                     $this->setErrorData($response);
@@ -142,7 +142,7 @@ class Api
                 }
             } else {
                 // Wait for x seconds because "user rate limit" exceeded (https://cloud.google.com/translate/quotas)
-                if ($response->errors->error->message == 'User Rate Limit Exceeded') {
+                if (strtolower($response->error->message) == 'user rate limit exceeded') {
                     sleep(180); // Wait x seconds
                     return $this->getTranslation($text, $sourceLanguage, $targetLanguage, $options);
                 }
@@ -153,7 +153,7 @@ class Api
             }
         } else {
             // Wait for x seconds because "user rate limit" exceeded (https://cloud.google.com/translate/quotas)
-            if ($response->errors->error->message == 'User Rate Limit Exceeded') {
+            if (strtolower($response->error->message) == 'user rate limit exceeded') {
                 sleep(180); // Wait x seconds
                 return $this->getTranslation($text, $sourceLanguage, $targetLanguage, $options);
             }
