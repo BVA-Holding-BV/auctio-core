@@ -93,5 +93,6 @@ class Auction extends Base {
     public $reverseAuctionStartOffset;
     /** @var bool */
     public $homeDelivery;
-
+    /** @var int */
+    public $businessUnit;
 }
