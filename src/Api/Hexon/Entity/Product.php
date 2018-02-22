@@ -58,6 +58,7 @@ class Product extends Base {
     public $powertrainEngineDisplacement;
     public $powertrainEnginePowerValue;
     public $powertrainEnginePowerUnit;
+    /** @var string */
     public $powertrainEngineEnergyType;
     public $powertrainEngineEnergyFuelConsumptionCombined;
     public $powertrainEngineEnergyFuelConsumptionUrban;
