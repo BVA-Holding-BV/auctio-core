@@ -64,6 +64,16 @@ class DefaultService
         return $res;
     }
 
+    public function updateBulk($data, $output = 'object', $refresh = false)
+    {
+        $res = $this->repository->updateBulk($data, $output, $refresh);
+        if ($res === false) {
+            $this->setMessages($this->repository->getMessages());
+            $this->setErrorData($this->repository->getErrorData());
+        }
+        return $res;
+    }
+
     public function delete($id, $remove = false, $refresh = false)
     {
         $res = $this->repository->delete($id, $remove, $refresh);
