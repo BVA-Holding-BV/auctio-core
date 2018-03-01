@@ -76,7 +76,7 @@ class Lot extends Base {
     public $minimumAmount;
     /** @var float */
     public $latestBidAmount;
-    /** @var string */
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
     public $lastBidTime;
     /** @var int */
     public $bidCount;
