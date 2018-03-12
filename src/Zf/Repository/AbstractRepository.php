@@ -794,6 +794,8 @@ abstract class AbstractRepository implements InputFilterAwareInterface
                 $record = $this->getHydrator()->extract($object);
                 if (method_exists($this, 'transformData')) return $this->transformData($record);
                 else return $record;
+            } elseif ($output == 'boolean') {
+                return true;
             } else {
                 return $object;
             }
@@ -843,6 +845,8 @@ abstract class AbstractRepository implements InputFilterAwareInterface
                     else $records[$key] = $record;
                 }
                 return $records;
+            } elseif ($output == 'boolean') {
+                return true;
             } else {
                 return $objects;
             }
@@ -894,6 +898,8 @@ abstract class AbstractRepository implements InputFilterAwareInterface
                 $record = $this->getHydrator()->extract($object);
                 if (method_exists($this, 'transformData')) return $this->transformData($record);
                 else return $record;
+            } elseif ($output == 'boolean') {
+                return true;
             } else {
                 return $object;
             }
@@ -955,6 +961,8 @@ abstract class AbstractRepository implements InputFilterAwareInterface
                     else $records[] = $record;
                 }
                 return $records;
+            } elseif ($output == 'boolean') {
+                return true;
             } else {
                 return $objects;
             }
