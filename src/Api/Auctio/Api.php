@@ -898,13 +898,13 @@ class Api
         }
     }
 
-    public function getAuctionMainCategories($auctionId)
+    public function getAuctionMainCategories($auctionId, $showEmptySubCategories = "true")
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
 
         // Execute request
-        $result = $this->client->request('GET', 'ext123/auction/' . $auctionId . "/lotmaincategories", ["headers"=>$requestHeader]);
+        $result = $this->client->request('GET', 'ext123/auction/' . $auctionId . "/lotmaincategories/" . $showEmptySubCategories, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
