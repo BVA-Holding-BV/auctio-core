@@ -1161,6 +1161,35 @@ class Api
         }
     }
 
+    public function getLotMetaData($lotId, $language = null)
+    {
+        // Prepare request
+        $requestHeader = $this->clientHeaders;
+        if (!empty($language)) {
+            $requestHeader['Accept-language'] = $language;
+        }
+
+        // Execute request
+        $result = $this->client->request('GET', 'lot-metadata?ids=' . $lotId, ["headers"=>$requestHeader]);
+        if ($result->getStatusCode() == 200) {
+            $response = json_decode((string) $result->getBody());
+
+            // Return
+            if (!isset($response->errors)) {
+                return $response;
+            } else {
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
+            }
+        } else {
+            $response = json_decode((string) $result->getBody());
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
+        }
+    }
+
     /**
      * Get (all) lots by auction-id, for example indexedBy by lot-number (by default sequantial numeric key)
      *
