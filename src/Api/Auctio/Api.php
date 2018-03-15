@@ -352,7 +352,7 @@ class Api
         if (!file_exists($localFilename)) {
             $this->setMessages(['File not found: ' . $localFilename]);
             return false;
-        } if (!is_readable($localFilename)) {
+        } elseif (!is_readable($localFilename)) {
             $this->setMessages(['File not readable: ' . $localFilename]);
             return false;
         }
@@ -382,6 +382,32 @@ class Api
                 $this->setMessages($response->errors);
                 return false;
 
+            }
+        } else {
+            $response = json_decode((string) $result->getBody());
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
+        }
+    }
+
+    private function createLotMetaData(\AuctioCore\Api\Auctio\Entity\LotMetaData $lotMetaData)
+    {
+        // Prepare request
+        $requestHeader = $this->clientHeaders;
+
+        // Execute request
+        $result = $this->client->request('POST', 'lot-metadata', ["headers"=>$requestHeader, "body"=>$lotMetaData->encode()]);
+        if ($result->getStatusCode() == 200) {
+            $response = json_decode((string) $result->getBody());
+
+            // Return
+            if (!isset($response->errors)) {
+                return $response;
+            } else {
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
             }
         } else {
             $response = json_decode((string) $result->getBody());
@@ -553,8 +579,61 @@ class Api
 
     public function updateLotMetaData(\AuctioCore\Api\Auctio\Entity\LotMetaData $lotMetaData)
     {
-        var_dump($lotMetaData);
-        exit;
+        // Check for current lot-metadata (because lot-metadata will be totally overwritten)
+        $current = $this->getLotMetaData($lotMetaData->id);
+
+        // If current lot-metadata not available, create else update lot-metadata
+        if ($current === false) {
+            // Create lot-metadata
+            return $this->createLotMetaData($lotMetaData);
+        } else {
+            // Update lot-metadata (merge current with new data)
+            foreach ($current[0]->metadata AS $metaDataElement) {
+                // Iterate new lot-metadata elements
+                $exists = false;
+                foreach ($lotMetaData->metadata AS $k => $newMetaDataElement) {
+                    // Check if element exists in new lot-metadata
+                    if ($newMetaDataElement->key == $metaDataElement->key) {
+                        // Iterate translations of meta-data element (value)
+                        $exists = true;
+                        foreach (get_object_vars($metaDataElement->value) AS $key => $value) {
+                            // Check if translation available in new lot-metadata element, else merge value
+                            if (!empty($value) && empty($newMetaDataElement->value->$key)) {
+                                $lotMetaData->metadata[$k]->value->$key = $value;
+                            }
+                        }
+                    }
+                }
+
+                // Add element if not exists
+                if ($exists === false) {
+                    $lotMetaData->metadata[] = new \AuctioCore\Api\Auctio\Entity\MetaData(["key"=>$metaDataElement->key, "value"=>$metaDataElement->value]);
+                }
+            }
+
+            // Prepare request
+            $requestHeader = $this->clientHeaders;
+
+            // Execute request
+            $result = $this->client->request('PUT', 'lot-metadata', ["headers"=>$requestHeader, "body"=>$lotMetaData->encode()]);
+            if ($result->getStatusCode() == 200) {
+                $response = json_decode((string) $result->getBody());
+
+                // Return
+                if (!isset($response->errors)) {
+                    return $response;
+                } else {
+                    $this->setErrorData($response);
+                    $this->setMessages($response->errors);
+                    return false;
+                }
+            } else {
+                $response = json_decode((string) $result->getBody());
+                $this->setErrorData($response);
+                $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+                return false;
+            }
+        }
     }
 
     public function updateMainCategory(\AuctioCore\Api\Auctio\Entity\MainCategory $mainCategory)
