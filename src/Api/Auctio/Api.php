@@ -551,6 +551,12 @@ class Api
         }
     }
 
+    public function updateLotMetaData(\AuctioCore\Api\Auctio\Entity\LotMetaData $lotMetaData)
+    {
+        var_dump($lotMetaData);
+        exit;
+    }
+
     public function updateMainCategory(\AuctioCore\Api\Auctio\Entity\MainCategory $mainCategory)
     {
         // Prepare request
