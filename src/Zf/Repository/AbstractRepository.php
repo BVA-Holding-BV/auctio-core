@@ -167,7 +167,6 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * Set error-data
      *
      * @param $data
-     * @return array
      */
     public function setErrorData($data)
     {

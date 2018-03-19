@@ -88,7 +88,6 @@ class DefaultService
      * Set error-data
      *
      * @param $data
-     * @return array
      */
     public function setErrorData($data)
     {
