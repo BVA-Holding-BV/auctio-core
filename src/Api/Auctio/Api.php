@@ -598,7 +598,7 @@ class Api
                         $exists = true;
                         foreach (get_object_vars($metaDataElement->value) AS $key => $value) {
                             // Check if translation available in new lot-metadata element, else merge value
-                            if (!empty($value) && empty($newMetaDataElement->value->$key)) {
+                            if (!isset($newMetaDataElement->value->$key)) {
                                 $lotMetaData->metadata[$k]->value->$key = $value;
                             }
                         }
