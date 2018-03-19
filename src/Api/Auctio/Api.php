@@ -1254,6 +1254,9 @@ class Api
             $requestHeader['Accept-language'] = $language;
         }
 
+        // Implode multiple ids to string (comma-separated)
+        if (is_array($lotId)) $lotId = implode(",", $lotId);
+
         // Execute request
         $result = $this->client->request('GET', 'lot-metadata?ids=' . $lotId, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
