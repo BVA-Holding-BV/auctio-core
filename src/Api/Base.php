@@ -116,7 +116,6 @@ abstract class Base implements BaseInterface
             }
         }
 
-
         // Set values inside entity and populate if custom entity
         foreach(get_object_vars($data) as $name => $value) {
             // only set properties that exist (are public)
@@ -126,7 +125,9 @@ abstract class Base implements BaseInterface
                 // if default type, parse it to that type (unless stdClass)
                 if(in_array($type, Defaults::$basicTypes)) {
                     if(!( $value instanceof \stdClass) ) {
-                        settype($value, $type);
+                        if (!is_null($value)) {
+                            settype($value, $type);
+                        }
                     }
                     $this->$name = $value;
                 }  else {
