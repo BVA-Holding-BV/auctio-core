@@ -32,6 +32,7 @@ class Product extends Base {
     public $generalModelCode;
     public $generalModelStart;
     public $generalModelEnd;
+    /** @var string */
     public $generalTypeName;
     public $generalApplicationField;
     public $generalApplicationMaterial;
@@ -41,6 +42,7 @@ class Product extends Base {
     public $bodyDimensionsWidth;
     public $bodyDimensionsHeight;
     public $bodyMax_roof_load;
+    /** @var string */
     public $bodyColourPrimary = "other";
     public $bodyColourName;
     public $bodyColourTint;
@@ -56,7 +58,9 @@ class Product extends Base {
     public $powertrainEngineModel;
     public $powertrainEngineCylinder_count;
     public $powertrainEngineDisplacement;
+    /** @var integer */
     public $powertrainEnginePowerValue;
+    /** @var string */
     public $powertrainEnginePowerUnit;
     /** @var string */
     public $powertrainEngineEnergyType;
@@ -71,6 +75,7 @@ class Product extends Base {
     public $powertrainEngineEnergyElectricityConsumptionExtra_urban;
     public $powertrainEngineEnergyRange;
     public $powertrainTransmissionGear_count;
+    /** @var string */
     public $powertrainTransmissionType;
     public $powertrainTransmissionMake;
     public $powertrainTransmissionModel;
@@ -176,6 +181,7 @@ class Product extends Base {
     public $sales_conditionsBiddingMinimumValue;
     public $sales_conditionsBiddingMinimumUnit;
     public $sales_conditionsBiddingReserve;
+    /** @var boolean */
     public $sales_conditionsMargin_scheme;
     public $sales_conditionsDelivery_costs;
     public $sales_conditionsExpected;
@@ -281,6 +287,7 @@ class Product extends Base {
     public $category_specificBoatsDepth;
     public $category_specificBoatsHull_material;
     public $category_specificBoatsBerth;
+    /** @var Api\Hexon\Entity\Custom\Date */
     public $region_specificNlApk_date;
     public $region_specificNlApk_delivery;
     public $region_specificNlBpm_amount;
