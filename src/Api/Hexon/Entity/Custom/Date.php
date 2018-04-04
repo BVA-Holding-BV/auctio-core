@@ -17,8 +17,11 @@ class Date extends Base implements BaseInterface {
             $date = new \DateTime($data);
             $timestamp = $date->getTimestamp();
         }
-        $this->setTimestamp($timestamp);
-        return $this;
+
+        // Set new date-time object
+        $this->date = new \DateTime();
+        $this->date->setTimestamp($timestamp);
+        return $this->date;
     }
 
     /**
