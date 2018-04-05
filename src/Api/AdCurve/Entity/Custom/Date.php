@@ -9,8 +9,13 @@ class Date extends Base implements BaseInterface {
 
     public function populate($data) {
         // Get timestamp of data
-        if ($data instanceof \DateTime) {
+        if (empty($data)) {
+            return;
+        } elseif ($data instanceof \DateTime) {
             $timestamp = $data->getTimestamp();
+        } elseif (is_array($data)) {
+            $date = new \DateTime($data['date']);
+            $timestamp = $date->getTimestamp();
         } else {
             $date = new \DateTime($data);
             $timestamp = $date->getTimestamp();
@@ -28,7 +33,13 @@ class Date extends Base implements BaseInterface {
      * @return string
      */
     public function encode(){
-        $data = $this->date->format('Y-m-d');
-        return json_encode($data);
+        // Return if empty
+        if (empty($this)) return null;
+
+        // Set timezone to UTC
+        $this->setTimezone(new \DateTimeZone('UTC'));
+
+        // Return
+        return $this->format("Y-m-d");
     }
 }

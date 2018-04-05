@@ -8,7 +8,10 @@ use AuctioCore\Api\BaseInterface;
 class Date extends Base implements BaseInterface {
 
     public function populate($data) {
-        if ($data instanceof \DateTime) {
+        // Get timestamp of data
+        if (empty($data)) {
+            return;
+        } elseif ($data instanceof \DateTime) {
             $timestamp = $data->getTimestamp();
         } elseif (is_array($data)) {
             $date = new \DateTime($data['date']);
@@ -30,6 +33,9 @@ class Date extends Base implements BaseInterface {
      * @return string
      */
     public function encode(){
+        // Return if empty
+        if (empty($this)) return null;
+
         // Set timezone to UTC
         $this->setTimezone(new \DateTimeZone('UTC'));
 
