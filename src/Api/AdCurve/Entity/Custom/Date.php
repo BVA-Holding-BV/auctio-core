@@ -24,7 +24,7 @@ class Date extends Base implements BaseInterface {
         // Set new date-time object
         $this->date = new \DateTime();
         $this->date->setTimestamp($timestamp);
-        return $this->date;
+        return $this;
     }
 
     /**
@@ -34,12 +34,12 @@ class Date extends Base implements BaseInterface {
      */
     public function encode(){
         // Return if empty
-        if (empty($this)) return null;
+        if (!isset($this->date) || empty($this->date)) return null;
 
         // Set timezone to UTC
-        $this->setTimezone(new \DateTimeZone('UTC'));
+        $this->date->setTimezone(new \DateTimeZone('UTC'));
 
         // Return
-        return $this->format("Y-m-d");
+        return $this->date->format("Y-m-d");
     }
 }
