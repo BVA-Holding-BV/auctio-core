@@ -24,7 +24,7 @@ class Date extends Base implements BaseInterface {
         // Set new date-time object
         $this->date = new \DateTime();
         $this->date->setTimestamp($timestamp);
-        return $this;
+        return $this->date;
     }
 
     /**
