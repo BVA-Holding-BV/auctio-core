@@ -40,6 +40,6 @@ class Date extends Base implements BaseInterface {
         $this->date->setTimezone(new \DateTimeZone('UTC'));
 
         // Return
-        return $this->date->format("Y-m-d");
+        return $this->date->format("c");
     }
 }
