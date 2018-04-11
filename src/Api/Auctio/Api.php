@@ -583,7 +583,7 @@ class Api
         $current = $this->getLotMetaData($lotMetaData->id);
 
         // If current lot-metadata not available, create else update lot-metadata
-        if ($current === false) {
+        if ($current === false || empty($current)) {
             // Create lot-metadata
             return $this->createLotMetaData($lotMetaData);
         } else {
