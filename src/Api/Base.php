@@ -55,7 +55,10 @@ abstract class Base implements BaseInterface
         foreach($vars as $varName => $var) {
             if(is_object($var) && !($var instanceof \stdClass) ) {
                 if($var instanceof Base) {
-                    $var = json_decode($var->encode());
+                    $var = $var->encode();
+                    if (\AuctioCore\Input::isJson($var)) {
+                        $var = json_decode($var);
+                    }
                 }
                 elseif($var instanceof \DateTime) {
                     $var = $var->format(\Datetime::ISO8601);

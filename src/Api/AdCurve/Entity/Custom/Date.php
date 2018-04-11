@@ -36,8 +36,8 @@ class Date extends Base implements BaseInterface {
         // Return if empty
         if (!isset($this->date) || empty($this->date)) return null;
 
-        // Set timezone to UTC
-        $this->date->setTimezone(new \DateTimeZone('UTC'));
+        // Set timezone to Europe/Amsterdam
+        $this->date->setTimezone(new \DateTimeZone('Europe/Amsterdam'));
 
         // Return
         return $this->date->format("Y-m-d");
