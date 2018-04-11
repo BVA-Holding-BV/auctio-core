@@ -226,7 +226,7 @@ class Product extends Base {
     public $lease_contractRemaining_balance;
     public $lease_contractPurchase_possible;
     public $lease_contractRemarks;
-    /** @var integer */
+    /** @var string */
     public $historyConstruction_date;
     public $historyFirst_registrationCountry;
     /** @var Api\Hexon\Entity\Custom\Date */
