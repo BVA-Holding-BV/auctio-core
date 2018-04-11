@@ -257,6 +257,28 @@ class Api
     }
 
     /**
+     * Get product accessories
+     *
+     * @param int $stocknumber
+     * @return boolean|array
+     */
+    public function getProductAccessories($stocknumber)
+    {
+        $requestHeader = $this->clientHeaders;
+        $result = $this->client->request('GET', 'vehicle/' . $stocknumber . '/vehicleaccessories/', ["headers"=>$requestHeader]);
+        $response = json_decode((string) $result->getBody());
+        if (!isset($response->errors) || empty($response->errors)) {
+            // Return
+            return $response;
+        } else {
+            // Return
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
+        }
+    }
+
+    /**
      * Get product advertisements
      *
      * @param int $stocknumber
@@ -352,6 +374,31 @@ class Api
     }
 
     /**
+     * Create product-accessory
+     *
+     * @param mixed $data
+     * @return boolean|array
+     */
+    public function createProductAccessory(\AuctioCore\Api\Hexon\Entity\ProductAccessory $data)
+    {
+        // Convert input-data into body
+        $body = $this->convertInput($data);
+
+        $requestHeader = $this->clientHeaders;
+        $result = $this->client->request('POST', 'vehicleaccessories/', ["headers"=>$requestHeader, "body"=>$body]);
+        $response = json_decode((string) $result->getBody());
+        if (!isset($response->errors) || empty($response->errors)) {
+            // Return
+            return $response;
+        } else {
+            // Return
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
+        }
+    }
+
+    /**
      * Create product-image
      *
      * @param mixed $data
@@ -424,6 +471,30 @@ class Api
     }
 
     /**
+     * Delete product-accessory
+     *
+     * @param int $stocknumber
+     * @param int $number
+     * @return boolean|array
+     */
+    public function deleteProductAccessory($stocknumber, $number)
+    {
+        $requestHeader = $this->clientHeaders;
+        $result = $this->client->request('DELETE', 'vehicleaccessory/' . $stocknumber . urlencode(':') . $number, ["headers"=>$requestHeader]);
+        $response = json_decode((string) $result->getBody());
+
+        if (!isset($response->errors) || empty($response->errors) && strtolower($result->getReasonPhrase()) == 'delete ok') {
+            // Return
+            return true;
+        } else {
+            // Return
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
+        }
+    }
+
+    /**
      * Update product
      *
      * @param int $stocknumber
@@ -437,6 +508,33 @@ class Api
 
         $requestHeader = $this->clientHeaders;
         $result = $this->client->request('PUT', 'vehicle/' . $stocknumber, ["headers"=>$requestHeader, "body"=>$body]);
+        $response = json_decode((string) $result->getBody());
+        if (!isset($response->errors) || empty($response->errors)) {
+            // Return
+            return $response;
+        } else {
+            // Return
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
+        }
+    }
+
+    /**
+     * Update product-accessory
+     *
+     * @param int $stocknumber
+     * @param int $number
+     * @param mixed $data
+     * @return boolean|array
+     */
+    public function updateProductAccessory($stocknumber, $number, \AuctioCore\Api\Hexon\Entity\ProductAccessory $data)
+    {
+        // Convert input-data into body
+        $body = $this->convertInput($data);
+
+        $requestHeader = $this->clientHeaders;
+        $result = $this->client->request('PUT', 'vehicleaccessory/' . $stocknumber . urlencode(':') . $number, ["headers"=>$requestHeader, "body"=>$body]);
         $response = json_decode((string) $result->getBody());
         if (!isset($response->errors) || empty($response->errors)) {
             // Return
