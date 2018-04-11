@@ -10,7 +10,6 @@ class Product extends Base {
     public $stocknumber;
     /** @var boolean */
     public $identificationStocknumber_public;
-
     public $identificationReferencenumber;
     /** @var string */
     public $identificationLicense_plate;
@@ -37,6 +36,7 @@ class Product extends Base {
     public $generalApplicationField;
     public $generalApplicationMaterial;
     public $generalApplicationScale;
+    /** @var integer */
     public $bodyDoor_count;
     public $bodyDimensionsLength;
     public $bodyDimensionsWidth;
@@ -50,6 +50,7 @@ class Product extends Base {
     public $bodyCabinLength;
     public $bodyCabinSleeper_cab;
     public $bodyCabinModel;
+    /** @var integer */
     public $interiorSeat_count;
     public $interiorBed_count;
     public $interiorColour;
@@ -138,9 +139,13 @@ class Product extends Base {
     public $superstructureCranePosition;
     public $weightsMass_empty;
     public $weightsPayload;
+    /** @var integer */
     public $weightsGvw;
     public $weightsTrailer_loadBraked;
     public $weightsTrailer_loadUnbraked;
+    /** @var integer */
+    public $conditionKey_count;
+    public $conditionHand_transmitter_count;
     /** @var boolean */
     public $conditionUsed;
     /** @var integer */
@@ -153,6 +158,8 @@ class Product extends Base {
     public $conditionStateTechnical;
     public $conditionStateOptical;
     public $conditionDamageState;
+    /** @var array */
+    public $conditionDamageRemarks;
     public $conditionDamageRepair_costs;
     public $classificationDemonstrator;
     public $classificationRental;
@@ -161,6 +168,7 @@ class Product extends Base {
     public $classificationClassic;
     public $classificationCe_marking;
     public $classificationEuro_ncap;
+    /** @var string */
     public $sales_conditionsPricingCurrency = "EUR";
     public $sales_conditionsPricingType;
     public $sales_conditionsPricingNew;
@@ -218,12 +226,14 @@ class Product extends Base {
     public $lease_contractRemaining_balance;
     public $lease_contractPurchase_possible;
     public $lease_contractRemarks;
-    /** @var string */
+    /** @var integer */
     public $historyConstruction_date;
     public $historyFirst_registrationCountry;
-    /** @var string */
+    /** @var Api\Hexon\Entity\Custom\Date */
     public $historyFirst_registrationDate;
+    /** @var string */
     public $historyCurrent_registrationCountry = "nl";
+    /** @var Api\Hexon\Entity\Custom\Date */
     public $historyCurrent_registrationFirst_admission;
     public $historyDate_last_ownership_change;
     public $historyMaintenance_booklet;
@@ -232,6 +242,7 @@ class Product extends Base {
     public $descriptionRemarks;
     /** @var array */
     public $descriptionRemarks_trade;
+    /** @var integer */
     public $descriptionDefault_remark = 1;
     public $descriptionTitle;
     public $descriptionHighlights;
@@ -290,6 +301,7 @@ class Product extends Base {
     /** @var Api\Hexon\Entity\Custom\Date */
     public $region_specificNlApk_date;
     public $region_specificNlApk_delivery;
+    /** @var integer */
     public $region_specificNlBpm_amount;
     public $region_specificNlPrice_consumer_incl_bpm;
     public $region_specificNlPrice_discounted_incl_bpm;
