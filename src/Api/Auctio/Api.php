@@ -1301,6 +1301,7 @@ class Api
             $result = $this->client->request('GET', 'ext123/lots/byauction/' . $auctionId . '/' . $pageSize . '/' . $pageNumber . '?enddate=ASC', ["headers"=>$requestHeader]);
             if ($result->getStatusCode() == 200) {
                 $response = json_decode((string) $result->getBody());
+                if (empty($response)) mail("b.buitenhuis@bva-auctions.com", "ERROR AuctioCore-API-getLotsByAuction", "Response: \r\n" . $response . "\r\n\r\nBody:\r\n" . (string) $result->getBody());
 
                 // Reset total pages of auction
                 $pages = (int) ceil($response->totalLotCount / $response->pageSize);
