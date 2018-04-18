@@ -357,6 +357,14 @@ class Api
             return false;
         }
 
+        // Set file extension
+        $mimeType = mime_content_type($localFilename);
+        if ($mimeType == 'video/mp4') {
+            $extension = "mp4";
+        } elseif ($mimeType == 'image/jpeg') {
+            $extension = "jpg";
+        }
+
         // Set request-body
         $filename = $lotSequence;
         if ($imageSequence) $filename .= '-' . $imageSequence;
@@ -366,7 +374,7 @@ class Api
             'contents' => fopen($localFilename, 'r')
         ],[
             'name' => 'fileName',
-            'contents' => $filename . '.jpg'
+            'contents' => $filename . '.' . $extension
         ]];
 
         // Execute request
