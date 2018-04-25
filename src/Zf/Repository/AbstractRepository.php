@@ -749,7 +749,9 @@ abstract class AbstractRepository implements InputFilterAwareInterface
         $records = $this->getByParameters([$field=>$value], "object", $multiple);
 
         // Return
-        if (is_array($value)) {
+        if (is_bool($records)) {
+            return false;
+        } elseif (is_array($records)) {
             // Get multiple ids
             $ids = [];
             foreach ($records AS $record) {
