@@ -173,7 +173,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: tokenlogin\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return true;
         }
     }
@@ -205,7 +204,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: logout\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -233,7 +231,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: PUT ext123/auction\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -261,7 +258,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: PUT ext123/lotcollectionday\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -289,7 +285,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: PUT ext123/lotdisplayday\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -316,7 +311,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: PUT ext123/location\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -344,7 +338,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: PUT ext123/lot\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -402,7 +395,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: POST ext123/lotmedia/" . $lotId . "\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -429,7 +421,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: POST lot-metadata\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -456,7 +447,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: PUT ext123/lotmaincategory\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -483,7 +473,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: PUT ext123/lotsubcategory\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -511,7 +500,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: POST ext123/auction\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -539,7 +527,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: POST ext123/lotcollectionday\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -567,7 +554,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: POST ext123/lotdisplayday\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -595,7 +581,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: POST ext123/lot\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -654,7 +639,6 @@ class Api
                 $response = json_decode((string) $result->getBody());
                 $this->setErrorData($response);
                 $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-                @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: PUT lot-metadata\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
                 return false;
             }
         }
@@ -682,7 +666,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: POST ext123/lotmaincategory\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -709,7 +692,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: POST ext123/lotsubcategory\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -736,7 +718,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: DELETE ext123/lotcollectionday/" . $dayId . "\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -763,7 +744,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: DELETE ext123/lotdisplayday/" . $dayId . "\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -790,7 +770,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: DELETE ext123/lotmedia/" . $lotId . "\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -818,7 +797,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/auction/" . $auctionId . "\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -845,7 +823,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/auction/" . $auctionId . "/nl/lotcategories/true/true\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -875,7 +852,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/auction/" . $auctionId . "/lotcollectiondays\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -903,7 +879,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/lotcollectionday/" . $dayId . "\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -933,7 +908,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/auction/" . $auctionId . "/lotdisplaydays\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -961,7 +935,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/lotdisplayday/" . $dayId . "\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -988,7 +961,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/auction/" . $auctionId . "/locations\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -1015,7 +987,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/location/" . $locationId ."\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -1042,7 +1013,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/auction/" . $auctionId . "/lotmaincategories/" . $showEmptySubCategories . "\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -1069,7 +1039,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/lotmaincategory/" . $categoryId . "/lotsubcategories\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -1096,7 +1065,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/auctions/bycurrent/paged?page=" . $pageNumber . "&pageSize=" . $pageSize . "\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -1123,7 +1091,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/auctions/byfuture/paged?page=" . $pageNumber . "&pageSize=" . $pageSize . "\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -1150,7 +1117,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/location/" . $locationId . "\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -1178,7 +1144,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/lot/" . $lotId . "\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -1206,7 +1171,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/lot/" . $auctionId . "/" . $lotNumber . $lotNumberAddition . "/lotbynumber\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -1234,7 +1198,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/lot/" . $lotId . "/biddata\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -1261,7 +1224,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/lot/" . $lotId . "/media\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -1288,7 +1250,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/lotmedia/" . $lotId . "\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -1321,7 +1282,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET lot-metadata?ids=" . $lotId. "\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -1389,7 +1349,6 @@ class Api
         } else {
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/lots/byauction/" . $auctionId . "/" . $pageSize . "/" . $pageNumber . "?enddate=ASC\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -1416,7 +1375,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/lots/byauction/" . $auctionId . "/" . $pageSize . "/" . $pageNumber . "/\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -1443,7 +1401,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/lotmaincategory/" . $categoryId . "\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
@@ -1470,7 +1427,6 @@ class Api
             $response = json_decode((string) $result->getBody());
             $this->setErrorData($response);
             $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            @mail("b.buitenhuis@bva-auctions.com", "Error API-class (" . $this->client->getConfig()['base_uri']->getHost() . ")", "URI: GET ext123/lotsubcategory/" . $subCategoryId . "\n Status-code: " . $result->getStatusCode() . "\n Reason: " . $result->getReasonPhrase());
             return false;
         }
     }
