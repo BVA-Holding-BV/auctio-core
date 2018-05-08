@@ -5,14 +5,18 @@ namespace AuctioCore\Mail\EWS;
 use \jamesiarmes\PhpEws\Client;
 use \jamesiarmes\PhpEws\Request\CreateAttachmentType;
 use \jamesiarmes\PhpEws\Request\CreateItemType;
+use \jamesiarmes\PhpEws\Request\GetItemType;
 use \jamesiarmes\PhpEws\Request\SendItemType;
 
 use \jamesiarmes\PhpEws\ArrayType\ArrayOfRecipientsType;
 use \jamesiarmes\PhpEws\ArrayType\NonEmptyArrayOfAllItemsType;
 use \jamesiarmes\PhpEws\ArrayType\NonEmptyArrayOfAttachmentsType;
 use \jamesiarmes\PhpEws\ArrayType\NonEmptyArrayOfBaseItemIdsType;
+use \jamesiarmes\PhpEws\ArrayType\NonEmptyArrayOfPathsToElementType;
 
 use \jamesiarmes\PhpEws\Enumeration\BodyTypeType;
+use \jamesiarmes\PhpEws\Enumeration\DefaultShapeNamesType;
+use \jamesiarmes\PhpEws\Enumeration\MapiPropertyTypeType;
 use \jamesiarmes\PhpEws\Enumeration\MessageDispositionType;
 use \jamesiarmes\PhpEws\Enumeration\ResponseClassType;
 
@@ -20,7 +24,9 @@ use \jamesiarmes\PhpEws\Type\BodyType;
 use \jamesiarmes\PhpEws\Type\EmailAddressType;
 use \jamesiarmes\PhpEws\Type\FileAttachmentType;
 use \jamesiarmes\PhpEws\Type\ItemIdType;
+use \jamesiarmes\PhpEws\Type\ItemResponseShapeType;
 use \jamesiarmes\PhpEws\Type\MessageType;
+use \jamesiarmes\PhpEws\Type\PathToExtendedFieldType;
 use \jamesiarmes\PhpEws\Type\SingleRecipientType;
 
 class Mail
@@ -209,6 +215,26 @@ BODY;
                             if ($response_message->ResponseClass != ResponseClassType::SUCCESS) {
                                 $this->setMessages($response_message->ResponseCode . ": " . $response_message->MessageText);
                                 return false;
+                            } else {
+                                // Build the request for getting updated message-item
+                                $request = new GetItemType();
+                                $request->ItemShape = new ItemResponseShapeType();
+                                $request->ItemShape->BaseShape = DefaultShapeNamesType::ALL_PROPERTIES;
+                                $request->ItemShape->AdditionalProperties = new NonEmptyArrayOfPathsToElementType();
+                                $request->ItemIds = new NonEmptyArrayOfBaseItemIdsType();
+                                // Add an extended property to the request
+                                $property = new PathToExtendedFieldType();
+                                $property->PropertyTag = '0x1081';
+                                $property->PropertyType = MapiPropertyTypeType::INTEGER;
+                                $request->ItemShape->AdditionalProperties->ExtendedFieldURI[] = $property;
+
+                                $itemId = new ItemIdType();
+                                $itemId->Id = $item->ItemId->Id;
+                                $request->ItemIds->ItemId[] = $itemId;
+                                $response = $this->client->GetItem($request);
+
+                                // Get message-item
+                                $item = $response->ResponseMessages->GetItemResponseMessage[0]->Items->Message[0];
                             }
                         }
                     }
