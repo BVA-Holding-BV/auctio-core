@@ -3,11 +3,13 @@
 namespace AuctioCore\Mail\EWS;
 
 use \jamesiarmes\PhpEws\Client;
+use \jamesiarmes\PhpEws\Request\CreateAttachmentType;
 use \jamesiarmes\PhpEws\Request\CreateItemType;
 use \jamesiarmes\PhpEws\Request\SendItemType;
 
 use \jamesiarmes\PhpEws\ArrayType\ArrayOfRecipientsType;
 use \jamesiarmes\PhpEws\ArrayType\NonEmptyArrayOfAllItemsType;
+use \jamesiarmes\PhpEws\ArrayType\NonEmptyArrayOfAttachmentsType;
 use \jamesiarmes\PhpEws\ArrayType\NonEmptyArrayOfBaseItemIdsType;
 
 use \jamesiarmes\PhpEws\Enumeration\BodyTypeType;
@@ -16,6 +18,7 @@ use \jamesiarmes\PhpEws\Enumeration\ResponseClassType;
 
 use \jamesiarmes\PhpEws\Type\BodyType;
 use \jamesiarmes\PhpEws\Type\EmailAddressType;
+use \jamesiarmes\PhpEws\Type\FileAttachmentType;
 use \jamesiarmes\PhpEws\Type\ItemIdType;
 use \jamesiarmes\PhpEws\Type\MessageType;
 use \jamesiarmes\PhpEws\Type\SingleRecipientType;
@@ -107,9 +110,10 @@ class Mail
      * @param string $subject
      * @param string $content
      * @param boolean $saveToFolder
+     * @param boolean|array $attachments
      * @return boolean
      */
-    public function send($mailRecipient, $subject = NULL, $content, $bodyType = 'TEXT', $saveToFolder = true)
+    public function send($mailRecipient, $subject = NULL, $content, $bodyType = 'TEXT', $saveToFolder = true, $attachments = false)
     {
         // Check input-data
         if (empty($mailRecipient)) {
@@ -173,8 +177,44 @@ BODY;
                 return false;
             }
 
-            // Iterate over the created messages, printing the id for each.
+            // Iterate over the created messages, sending for each.
             foreach ($response_message->Items->Message as $item) {
+                // Add attachments (if available)
+                if (is_array($attachments) && count($attachments) > 0) {
+                    foreach ($attachments AS $attachment) {
+                        // Open file handlers.
+                        $file = new \SplFileObject($attachment);
+                        $finfo = finfo_open();
+
+                        // Build the request,
+                        $request = new CreateAttachmentType();
+                        $request->ParentItemId = new ItemIdType();
+                        $request->ParentItemId->Id = $item->ItemId->Id;
+                        $request->Attachments = new NonEmptyArrayOfAttachmentsType();
+
+                        // Build the file attachment.
+                        $attachment = new FileAttachmentType();
+                        $attachment->Content = $file->openFile()->fread($file->getSize());
+                        $attachment->Name = $file->getBasename();
+                        $attachment->ContentType = finfo_file($finfo, $attachment);
+                        $request->Attachments->FileAttachment[] = $attachment;
+
+                        // Add attachment to message
+                        $response = $this->client->CreateAttachment($request);
+
+                        // Iterate over the results, printing any error messages or the id of the new attachment.
+                        $response_messages = $response->ResponseMessages->CreateAttachmentResponseMessage;
+                        foreach ($response_messages as $response_message) {
+                            // Make sure the request succeeded.
+                            if ($response_message->ResponseClass != ResponseClassType::SUCCESS) {
+                                $this->setMessages($response_message->ResponseCode . ": " . $response_message->MessageText);
+                                return false;
+                            }
+                        }
+                    }
+                }
+
+                // Send mail
                 return $this->sendMail($item->ItemId->Id, $item->ItemId->ChangeKey);
             }
         }
