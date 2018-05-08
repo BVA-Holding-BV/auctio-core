@@ -189,7 +189,8 @@ BODY;
                 if (is_array($attachments) && count($attachments) > 0) {
                     foreach ($attachments AS $attachmentFile) {
                         // Open file handlers.
-                        $file = new \SplFileObject($attachmentFile);
+                        $attachmentFilePath = (isset($attachmentFile['path'])) ? $attachmentFile['path'] : $attachmentFile;
+                        $file = new \SplFileObject($attachmentFilePath);
                         $finfo = finfo_open();
 
                         // Build the request,
@@ -201,8 +202,8 @@ BODY;
                         // Build the file attachment.
                         $attachment = new FileAttachmentType();
                         $attachment->Content = $file->openFile()->fread($file->getSize());
-                        $attachment->Name = $file->getBasename();
-                        $attachment->ContentType = finfo_file($finfo, $attachmentFile);
+                        $attachment->Name = (isset($attachmentFile['name'])) ? $attachmentFile['name'] : $file->getBasename();
+                        $attachment->ContentType = finfo_file($finfo, $attachmentFilePath);
                         $request->Attachments->FileAttachment[] = $attachment;
 
                         // Add attachment to message
