@@ -17,8 +17,13 @@ class Date extends Base implements BaseInterface {
             $date = new \DateTime($data['date']);
             $timestamp = $date->getTimestamp();
         } else {
-            $date = new \DateTime($data);
-            $timestamp = $date->getTimestamp();
+            // Avoid invalid date-strings
+            try {
+                $date = new \DateTime($data);
+                $timestamp = $date->getTimestamp();
+            } catch (\Exception $e) {
+                return;
+            }
         }
 
         // Set new date-time object

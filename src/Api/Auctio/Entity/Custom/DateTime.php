@@ -7,15 +7,24 @@ use AuctioCore\Api\BaseInterface;
 class DateTime extends \DateTime implements BaseInterface {
 
     public function populate($data) {
-        if ($data instanceof \DateTime) {
+        // Get timestamp of data
+        if (empty($data)) {
+            return;
+        } elseif ($data instanceof \DateTime) {
             $timestamp = $data->getTimestamp();
         } elseif (is_array($data)) {
             $date = new \DateTime($data['date']);
             $timestamp = $date->getTimestamp();
         } else {
-            $date = new \DateTime($data);
-            $timestamp = $date->getTimestamp();
+            // Avoid invalid date-strings
+            try {
+                $date = new \DateTime($data);
+                $timestamp = $date->getTimestamp();
+            } catch (\Exception $e) {
+                return;
+            }
         }
+
         $this->setTimestamp($timestamp);
         return $this;
     }
