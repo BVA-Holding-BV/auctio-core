@@ -102,6 +102,17 @@ class FTP
     }
 
     /**
+     * Delete a directory
+     *
+     * @param string $dir
+     * @return bool
+     */
+    public function deleteDirectory($dir)
+    {
+        return ftp_rmdir($this->ftp, $dir);
+    }
+
+    /**
      * Download (remote) file
      *
      * @param string $remoteFileName
