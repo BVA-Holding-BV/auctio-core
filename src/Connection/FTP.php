@@ -122,7 +122,7 @@ class FTP
      */
     public function getFiles($path = null)
     {
-        return ftp_mlsd($this->ftp, $path);
+        return ftp_nlist($this->ftp, $path);
     }
 
     /**
