@@ -132,6 +132,11 @@ class FTP
      */
     public function exists($remoteFileName)
     {
+        // Check if directory exists
+        $res = ftp_nlist($this->ftp, $remoteFileName);
+        if (is_array($res)) return true;
+
+        // Check if file exists
         $res = ftp_size($this->ftp, $remoteFileName);
         return ($res >= 0) ? true : false;
     }
