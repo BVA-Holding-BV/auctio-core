@@ -91,6 +91,17 @@ class FTP
 
 
     /**
+     * Create a directory
+     *
+     * @param string $dir
+     * @return bool
+     */
+    public function createDirectory($dir)
+    {
+        return ftp_mkdir($this->ftp, $dir);
+    }
+
+    /**
      * Download (remote) file
      *
      * @param string $remoteFileName
