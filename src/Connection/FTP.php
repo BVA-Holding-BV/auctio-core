@@ -113,6 +113,17 @@ class FTP
     }
 
     /**
+     * Delete a file
+     *
+     * @param string $file
+     * @return bool
+     */
+    public function deleteFile($file)
+    {
+        return ftp_delete($this->ftp, $file);
+    }
+
+    /**
      * Download (remote) file
      *
      * @param string $remoteFileName
