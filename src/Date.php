@@ -15,6 +15,8 @@ class Date
      */
     public function format($dateObject, $format, $language)
     {
+        if (empty($dateObject)) return;
+
         // Convert date-object to format
         $date = $dateObject->format($format);
 
