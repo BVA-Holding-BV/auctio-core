@@ -35,6 +35,7 @@ class Api
         // Set default header for client-requests
         $this->clientHeaders = [
             'Accept' => 'application/json',
+            'Accept-Encoding' => 'gzip',
             'Content-Type' => 'application/json',
             'User-Agent' => $userAgent,
         ];
