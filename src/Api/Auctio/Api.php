@@ -405,6 +405,18 @@ class Api
         // Prepare request
         $requestHeader = $this->clientHeaders;
 
+        // Check empty lot-metadata keys (unset them to avoid error "Metadata body cannot be empty")
+        if (is_array($lotMetaData->metadata)) {
+            foreach ($lotMetaData->metadata AS $k => $v) {
+                if (empty($v->value)) {
+                    unset($lotMetaData->metadata[$k]);
+                }
+            }
+
+            // Reset array-keys
+            $lotMetaData->metadata = array_values($lotMetaData->metadata);
+        }
+
         // Execute request
         $result = $this->client->request('POST', 'lot-metadata', ["headers"=>$requestHeader, "body"=>$lotMetaData->encode()]);
         if ($result->getStatusCode() == 200) {
