@@ -419,7 +419,7 @@ class Api
 
         // Execute request
         $result = $this->client->request('POST', 'lot-metadata', ["headers"=>$requestHeader, "body"=>$lotMetaData->encode()]);
-        if ($result->getStatusCode() == 200) {
+        if (in_array($result->getStatusCode(), [200,201])) {
             $response = json_decode((string) $result->getBody());
 
             // Return
