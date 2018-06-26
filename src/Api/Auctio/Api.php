@@ -343,7 +343,7 @@ class Api
         }
     }
 
-    public function createLotMedia($lotId, $lotSequence, $localFilename, $imageSequence)
+    public function createLotMedia($lotId, $lotSequence, $localFilename, $imageSequence, $uploadFile = null)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -358,8 +358,13 @@ class Api
             return false;
         }
 
-        // Set file extension
+        // Get mime-type
         $mimeType = mime_content_type($localFilename);
+        if ($mimeType == 'application/octet-stream' && !empty($uploadFile)) {
+            $mimeType = $uploadFile['type'];
+        }
+
+        // Set file extension
         if ($mimeType == 'video/mp4') {
             $extension = "mp4";
         } elseif ($mimeType == 'image/jpeg') {
