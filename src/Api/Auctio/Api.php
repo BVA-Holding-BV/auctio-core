@@ -364,6 +364,9 @@ class Api
             $extension = "mp4";
         } elseif ($mimeType == 'image/jpeg') {
             $extension = "jpg";
+        } else {
+            $this->setMessages(['Unknown mime-type: ' . $mimeType]);
+            return false;
         }
 
         // Set request-body
