@@ -1423,7 +1423,14 @@ class Api
                 $pageNumber++;
 
                 // Merge lots of different calls (because of while-loop)
-                if (strtolower($indexedBy) == 'lotnumber') {
+                if (strtolower($indexedBy) == 'lotid') {
+                    // Set lots-array
+                    if (!isset($lots)) $lots = [];
+                    // Reset index of lots-array to lot-id
+                    foreach ($response->lots AS $lot) {
+                        $lots[$lot->id] = $lot;
+                    }
+                } elseif (strtolower($indexedBy) == 'lotnumber') {
                     // Set lots-array
                     if (!isset($lots)) $lots = [];
                     // Reset index of lots-array to lot-number
