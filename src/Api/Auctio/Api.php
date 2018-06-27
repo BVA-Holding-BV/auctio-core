@@ -131,7 +131,8 @@ class Api
      * @param string $username
      * @param string $password
      * @param boolean $retry
-     * @return array|boolean
+     * @return boolean
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function login($username, $password, $retry = true)
     {
@@ -181,7 +182,8 @@ class Api
     /**
      * Logout token(s)
      *
-     * @return array|bool
+     * @return boolean
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function logout()
     {
@@ -209,6 +211,13 @@ class Api
         }
     }
 
+    /**
+     * Create auction
+     *
+     * @param Entity\Auction $auction
+     * @return bool|object
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function createAuction(\AuctioCore\Api\Auctio\Entity\Auction $auction)
     {
         // Prepare request
@@ -236,6 +245,13 @@ class Api
         }
     }
 
+    /**
+     * Create auction collection-day
+     *
+     * @param Entity\CollectionDay $day
+     * @return bool|object
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function createCollectionDay(\AuctioCore\Api\Auctio\Entity\CollectionDay $day)
     {
         // Prepare request
@@ -263,6 +279,13 @@ class Api
         }
     }
 
+    /**
+     * Create auction display-day
+     *
+     * @param Entity\DisplayDay $day
+     * @return bool|object
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function createDisplayDay(\AuctioCore\Api\Auctio\Entity\DisplayDay $day)
     {
         // Prepare request
@@ -290,6 +313,13 @@ class Api
         }
     }
 
+    /**
+     * Create auction-location
+     *
+     * @param Entity\Location $location
+     * @return bool|object
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function createLocation(\AuctioCore\Api\Auctio\Entity\Location $location)
     {
         // Prepare request
@@ -316,6 +346,13 @@ class Api
         }
     }
 
+    /**
+     * Create lot
+     *
+     * @param Entity\Lot $lot
+     * @return bool|object
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function createLot(\AuctioCore\Api\Auctio\Entity\Lot $lot)
     {
         // Prepare request
@@ -343,6 +380,17 @@ class Api
         }
     }
 
+    /**
+     * Upload lot-media
+     *
+     * @param int $lotId
+     * @param int $lotSequence
+     * @param string $localFilename
+     * @param int $imageSequence
+     * @param array $uploadFile
+     * @return bool|object
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function createLotMedia($lotId, $lotSequence, $localFilename, $imageSequence, $uploadFile = null)
     {
         // Prepare request
@@ -1209,6 +1257,45 @@ class Api
             // Return
             if (!isset($response->errors)) {
                 $response = $this->convertDates($response, ["startDate", "endDate", "lastBidTime"]);
+                return $response;
+            } else {
+                $this->setErrorData($response);
+                $this->setMessages($response->errors);
+                return false;
+            }
+        } else {
+            $response = json_decode((string) $result->getBody());
+            $this->setErrorData($response);
+            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+            return false;
+        }
+    }
+
+    public function getLotDetails($lotId)
+    {
+        // Prepare request
+        $requestHeader = $this->clientHeaders;
+
+        // Implode multiple ids to string (comma-separated)
+        if (is_array($lotId)) {
+            $pageSize = count($lotId);
+            $lotId = implode(",", $lotId);
+        } else {
+            $pageSize = 1;
+        }
+
+        // Execute request
+        $result = $this->client->request('GET', 'lot-details/?ids=' . $lotId . '&pageNumber=1&pageSize=' . $pageSize, ["headers"=>$requestHeader]);
+        if ($result->getStatusCode() == 200) {
+            $response = json_decode((string) $result->getBody());
+
+            // Return
+            if (!isset($response->errors)) {
+                if (!empty($response->restLotDetailsList)) {
+                    foreach ($response->restLotDetailsList AS $k => $v) {
+                        $response->restLotDetailsList[$k] = $this->convertDates($v, ["endDate"]);
+                    }
+                }
                 return $response;
             } else {
                 $this->setErrorData($response);
