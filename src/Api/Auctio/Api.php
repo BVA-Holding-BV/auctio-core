@@ -1434,7 +1434,7 @@ class Api
 
         // Execute request
         if ($new === false) $result = $this->client->request('GET', 'ext123/lotmaincategory/' . $categoryId, ["headers"=>$requestHeader]);
-        else $result = $this->client->request('GET', 'standard-categories/' . $categoryId, ["headers"=>$requestHeader]);
+        else $result = $this->client->request('GET', 'categories/' . $categoryId, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
@@ -1464,7 +1464,7 @@ class Api
 
         // Execute request
         if ($new === false) $result = $this->client->request('GET', 'ext123/lotsubcategory/' . $subCategoryId, ["headers"=>$requestHeader]);
-        else $result = $this->client->request('GET', 'standard-sub-categories/' . $subCategoryId, ["headers"=>$requestHeader]);
+        else $result = $this->client->request('GET', 'categories/' . $subCategoryId, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
