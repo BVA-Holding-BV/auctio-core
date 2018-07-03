@@ -494,58 +494,6 @@ class Api
         }
     }
 
-    public function createMainCategory(\AuctioCore\Api\Auctio\Entity\MainCategory $mainCategory)
-    {
-        // Prepare request
-        $requestHeader = $this->clientHeaders;
-
-        // Execute request
-        $result = $this->client->request('PUT', 'ext123/lotmaincategory', ["headers"=>$requestHeader, "body"=>$mainCategory->encode()]);
-        if ($result->getStatusCode() == 200) {
-            $response = json_decode((string) $result->getBody());
-
-            // Return
-            if (!isset($response->errors)) {
-                return $response;
-            } else {
-                $this->setErrorData($response);
-                $this->setMessages($response->errors);
-                return false;
-            }
-        } else {
-            $response = json_decode((string) $result->getBody());
-            $this->setErrorData($response);
-            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            return false;
-        }
-    }
-
-    public function createSubCategory(\AuctioCore\Api\Auctio\Entity\SubCategory $subCategory)
-    {
-        // Prepare request
-        $requestHeader = $this->clientHeaders;
-
-        // Execute request
-        $result = $this->client->request('PUT', 'ext123/lotsubcategory', ["headers"=>$requestHeader, "body"=>$subCategory->encode()]);
-        if ($result->getStatusCode() == 200) {
-            $response = json_decode((string) $result->getBody());
-
-            // Return
-            if (!isset($response->errors)) {
-                return $response;
-            } else {
-                $this->setErrorData($response);
-                $this->setMessages($response->errors);
-                return false;
-            }
-        } else {
-            $response = json_decode((string) $result->getBody());
-            $this->setErrorData($response);
-            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            return false;
-        }
-    }
-
     public function updateAuction(\AuctioCore\Api\Auctio\Entity\Auction $auction)
     {
         // Prepare request
@@ -713,39 +661,13 @@ class Api
         }
     }
 
-    public function updateMainCategory(\AuctioCore\Api\Auctio\Entity\MainCategory $mainCategory)
+    public function updateCategory($categoryId, \AuctioCore\Api\Auctio\Entity\Category $category)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
 
         // Execute request
-        $result = $this->client->request('POST', 'ext123/lotmaincategory', ["headers"=>$requestHeader, "body"=>$mainCategory->encode()]);
-        if ($result->getStatusCode() == 200) {
-            $response = json_decode((string) $result->getBody());
-
-            // Return
-            if (!isset($response->errors)) {
-                return $response;
-            } else {
-                $this->setErrorData($response);
-                $this->setMessages($response->errors);
-                return false;
-            }
-        } else {
-            $response = json_decode((string) $result->getBody());
-            $this->setErrorData($response);
-            $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
-            return false;
-        }
-    }
-
-    public function updateSubCategory(\AuctioCore\Api\Auctio\Entity\SubCategory $subCategory)
-    {
-        // Prepare request
-        $requestHeader = $this->clientHeaders;
-
-        // Execute request
-        $result = $this->client->request('POST', 'ext123/lotsubcategory', ["headers"=>$requestHeader, "body"=>$subCategory->encode()]);
+        $result = $this->client->request('PUT', 'categories/' . $categoryId, ["headers"=>$requestHeader, "body"=>$category->encode()]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
@@ -870,13 +792,21 @@ class Api
         }
     }
 
-    public function getAuctionCategories($auctionId)
+    /**
+     * Get main/sub-categories in specific auction
+     *
+     * @param integer $auctionId
+     * @param string $language
+     * @return bool|object
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getAuctionCategories($auctionId, $language = "nl")
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
 
         // Execute request
-        $result = $this->client->request('GET', 'auction-categories?auctionId=' . $auctionId, ["headers"=>$requestHeader]);
+        $result = $this->client->request('GET', 'ext123/auction/' . $auctionId . "/" . $language . "/lotcategories/true/true", ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
@@ -1494,13 +1424,16 @@ class Api
         }
     }
 
-    public function getMainCategory($categoryId)
+    public function getMainCategory($categoryId, $language = null)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
+        if (!empty($language)) {
+            $requestHeader['Accept-language'] = $language;
+        }
 
         // Execute request
-        $result = $this->client->request('GET', 'ext123/lotmaincategory/' . $categoryId, ["headers"=>$requestHeader]);
+        $result = $this->client->request('GET', 'standard-categories/' . $categoryId, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
@@ -1520,13 +1453,16 @@ class Api
         }
     }
 
-    public function getSubCategory($subCategoryId)
+    public function getSubCategory($subCategoryId, $language = null)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
+        if (!empty($language)) {
+            $requestHeader['Accept-language'] = $language;
+        }
 
         // Execute request
-        $result = $this->client->request('GET', 'ext123/lotsubcategory/' . $subCategoryId, ["headers"=>$requestHeader]);
+        $result = $this->client->request('GET', 'standard-sub-categories/' . $subCategoryId, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
