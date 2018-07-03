@@ -1424,7 +1424,7 @@ class Api
         }
     }
 
-    public function getMainCategory($categoryId, $language = null)
+    public function getMainCategory($categoryId, $language = null, $new = true)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -1433,7 +1433,8 @@ class Api
         }
 
         // Execute request
-        $result = $this->client->request('GET', 'standard-categories/' . $categoryId, ["headers"=>$requestHeader]);
+        if ($new === false) $result = $this->client->request('GET', 'ext123/lotmaincategory/' . $categoryId, ["headers"=>$requestHeader]);
+        else $result = $this->client->request('GET', 'standard-categories/' . $categoryId, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
@@ -1453,7 +1454,7 @@ class Api
         }
     }
 
-    public function getSubCategory($subCategoryId, $language = null)
+    public function getSubCategory($subCategoryId, $language = null, $new = true)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -1462,7 +1463,8 @@ class Api
         }
 
         // Execute request
-        $result = $this->client->request('GET', 'standard-sub-categories/' . $subCategoryId, ["headers"=>$requestHeader]);
+        if ($new === false) $result = $this->client->request('GET', 'ext123/lotsubcategory/' . $subCategoryId, ["headers"=>$requestHeader]);
+        else $result = $this->client->request('GET', 'standard-sub-categories/' . $subCategoryId, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
