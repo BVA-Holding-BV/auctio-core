@@ -668,7 +668,7 @@ class Api
 
         // Execute request
         $result = $this->client->request('PUT', 'categories/' . $categoryId, ["headers"=>$requestHeader, "body"=>$category->encode()]);
-        if ($result->getStatusCode() == 200) {
+        if (in_array($result->getStatusCode(), [200,201,204])) {
             $response = json_decode((string) $result->getBody());
 
             // Return
