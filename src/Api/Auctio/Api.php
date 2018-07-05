@@ -800,13 +800,16 @@ class Api
      * @return bool|object
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getAuctionCategories($auctionId, $language = "nl")
+    public function getAuctionCategories($auctionId, $language = null)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
+        if (!empty($language)) {
+            $requestHeader['Accept-language'] = $language;
+        }
 
         // Execute request
-        $result = $this->client->request('GET', 'ext123/auction/' . $auctionId . "/" . $language . "/lotcategories/true/true", ["headers"=>$requestHeader]);
+        $result = $this->client->request('GET', 'auction-categories?auctionId=' . $auctionId, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
