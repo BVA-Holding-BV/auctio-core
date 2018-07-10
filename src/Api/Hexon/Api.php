@@ -236,11 +236,12 @@ class Api
      * @param boolean $resultWithLinks
      * @return boolean|array
      */
-    public function getProducts($stocknumbers, $requestedFields = "*", $resultWithLinks = false)
+    public function getProducts($stocknumbers = "", $requestedFields = "*", $resultWithLinks = false, $limit = 1000, $offset = 0)
     {
         $requestedFields = (is_array($requestedFields)) ? implode(",", $requestedFields) : $requestedFields;
         $resultWithLinks = ($resultWithLinks) ? "true" : "false";
-        $uri = "vehicles/?_FIELDS=" . $requestedFields . "&_LINKS=" . $resultWithLinks . "&stocknumber=" . implode(',', $stocknumbers );
+        if (!empty($stocknumbers)) $uri = "vehicles/?_FIELDS=" . $requestedFields . "&_LINKS=" . $resultWithLinks . "&stocknumber=" . implode(',', $stocknumbers);
+        else $uri = "vehicles/?_FIELDS=" . $requestedFields . "&_LINKS=" . $resultWithLinks . "&_METADATA=true&_LIMIT=" . $limit . "&_OFFSET=" . $offset;
 
         $requestHeader = $this->clientHeaders;
         $result = $this->client->request('GET', $uri, ["headers"=>$requestHeader]);
