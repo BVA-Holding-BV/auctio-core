@@ -1301,6 +1301,8 @@ class Api
         $requestHeader = $this->clientHeaders;
         if (!empty($language)) {
             $requestHeader['Accept-language'] = $language;
+        } else {
+            $requestHeader['Accept-language'] = "none";
         }
 
         // Implode multiple ids to string (comma-separated)
