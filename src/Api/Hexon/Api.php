@@ -241,7 +241,7 @@ class Api
         $requestedFields = (is_array($requestedFields)) ? implode(",", $requestedFields) : $requestedFields;
         $resultWithLinks = ($resultWithLinks) ? "true" : "false";
         if (!empty($stocknumbers)) $uri = "vehicles/?_FIELDS=" . $requestedFields . "&_LINKS=" . $resultWithLinks . "&stocknumber=" . implode(',', $stocknumbers);
-        else $uri = "vehicles/?_FIELDS=" . $requestedFields . "&_LINKS=" . $resultWithLinks . "&_METADATA=true&_LIMIT=" . $limit . "&_OFFSET=" . $offset;
+        else $uri = "vehicles/?_FIELDS=" . $requestedFields . "&_LINKS=" . $resultWithLinks . "&_METADATA=true&_LIMIT=" . $limit . "&_OFFSET=" . $offset . "&_ORDER=stocknumber";
 
         $requestHeader = $this->clientHeaders;
         $result = $this->client->request('GET', $uri, ["headers"=>$requestHeader]);
