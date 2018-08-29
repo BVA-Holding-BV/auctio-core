@@ -557,7 +557,7 @@ class Api
         $result = $this->client->request('POST', 'ext123/lotdisplayday', ["headers"=>$requestHeader, "body"=>$day->encode()]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
-var_dump($response);
+
             // Return
             if (!isset($response->errors)) {
                 $response = $this->convertDates($response, ["startDate", "endDate"]);
@@ -1501,7 +1501,18 @@ var_dump($response);
         // Iterate attributes for converting dates
         foreach ($attributes AS $attribute) {
             if (!empty($object->$attribute)) {
-                $object->$attribute = (new \DateTime($object->$attribute))->setTimezone($this->tz);
+                // Check if date in format 2018-01-01T00:00:00.000+0000
+                if (!is_numeric($object->$attribute)) {
+                    $object->$attribute = (new \DateTime($object->$attribute))->setTimezone($this->tz);
+                }
+                // Check if date in format 1514782800000 (microseconds since Unix Epoch)
+                elseif (is_numeric($object->$attribute) && strlen($object->$attribute) >= 10) {
+                    $object->$attribute = (new \DateTime('@' .($object->$attribute / 1000)))->setTimezone($this->tz);
+                }
+                // Check if date in format 1514782800 (seconds since Unix Epoch)
+                elseif (is_numeric($object->$attribute) && strlen($object->$attribute) <= 10) {
+                    $object->$attribute = (new \DateTime('@' .$object->$attribute))->setTimezone($this->tz);
+                }
             }
         }
 
