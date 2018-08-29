@@ -557,7 +557,7 @@ class Api
         $result = $this->client->request('POST', 'ext123/lotdisplayday', ["headers"=>$requestHeader, "body"=>$day->encode()]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
-var_dump($response); 
+var_dump($response);
             // Return
             if (!isset($response->errors)) {
                 $response = $this->convertDates($response, ["startDate", "endDate"]);
