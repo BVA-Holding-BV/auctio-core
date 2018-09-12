@@ -1363,6 +1363,7 @@ class Api
                     if (!isset($lots)) $lots = [];
                     // Reset index of lots-array to lot-id
                     foreach ($response->lots AS $lot) {
+                        $lot = $this->convertDates($lot, ["startDate", "endDate"]);
                         $lots[$lot->id] = $lot;
                     }
                 } elseif (strtolower($indexedBy) == 'lotnumber') {
@@ -1370,9 +1371,16 @@ class Api
                     if (!isset($lots)) $lots = [];
                     // Reset index of lots-array to lot-number
                     foreach ($response->lots AS $lot) {
+                        $lot = $this->convertDates($lot, ["startDate", "endDate"]);
                         $lots[$lot->fullNumber] = $lot;
                     }
                 } else {
+                    // Convert lot-dates
+                    foreach ($response->lots AS $k => $lot) {
+                        $lot = $this->convertDates($lot, ["startDate", "endDate"]);
+                        $response->lots[$k] = $lot;
+                    }
+
                     // Merge lots
                     $lots = (isset($lots) && !empty($lots)) ? array_merge($lots, $response->lots) : $response->lots;
                 }
