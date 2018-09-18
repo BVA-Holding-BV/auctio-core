@@ -54,6 +54,11 @@ abstract class AbstractRepository implements InputFilterAwareInterface
     private $errorData;
 
     /**
+     * @var Cache-folder
+     */
+    private $cacheFolder;
+
+    /**
      * Constructor
      *
      * @param EntityManager $objectManager
@@ -65,6 +70,9 @@ abstract class AbstractRepository implements InputFilterAwareInterface
         }
         $this->messages = [];
         $this->errorData = [];
+
+        // Set cache-folder
+        $this->cacheFolder = getcwd() . "/data/cache/Entity/";
     }
 
     /**
@@ -534,6 +542,31 @@ abstract class AbstractRepository implements InputFilterAwareInterface
     }
 
     /**
+     * Return result by cache(file)
+     *
+     * @param string $cacheFile
+     * @param string $output
+     * @return array/object
+     */
+    public function getByCache($cacheFile, $output = 'object')
+    {
+        // Check if cache-file exists
+        if (is_file($cacheFile)) {
+            $result = file_get_contents($cacheFile);
+            if (strtolower($output) == 'array') {
+                $result = json_decode($result, true);
+            } else {
+                $result = json_decode($result);
+            }
+        } else {
+            $result = false;
+        }
+
+        // Return
+        return $result;
+    }
+
+    /**
      * Return objects by filter
      *
      * @param $filter
@@ -670,42 +703,67 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param array $parameters
      * @param string $output [object, array]
      * @param boolean $multiple
+     * @param boolean $cache
      * @return array/object
      */
-    public function getByParameters($parameters, $output = 'object', $multiple = true)
+    public function getByParameters($parameters, $output = 'object', $multiple = true, $cache = false)
     {
-        // get object from the repository specified by primary key
-        $objects = $this->om
-            ->getRepository($this->objectName)
-            ->findBy($parameters);
+        if (empty($output)) $output = 'object';
 
-        // return error if object not found
-        if ($objects == null) {
-            $this->setMessages(['notFound' => $this->objectName. ' not found']);
-            return false;
+        // Check if cache available (if enabled)
+        if ($cache === true) {
+            $objectCacheFolder = $this->cacheFolder . str_replace("\\", "_", str_replace("\Entity\\", "\\", $this->objectName)) . "/";
+            $objectCacheFile = $objectCacheFolder . base64_encode(json_encode($parameters) . "_" . strtolower($output) . "_" . $multiple);
+            $result = $this->getByCache($objectCacheFile, $output);
         }
 
-        // convert objects to arrays
-        if ($output == 'array') {
-            $data = [];
-            $hydrator = $this->getHydrator();
-            foreach ($objects as $object) {
-                $data[] = $hydrator->extract($object);
+        if ($cache !== true || ($cache === true && $result === false)) {
+            // Get object from the repository specified by primary key
+            $objects = $this->om
+                ->getRepository($this->objectName)
+                ->findBy($parameters);
+
+            // Return error if object not found
+            if ($objects == null) {
+                $this->setMessages(['notFound' => $this->objectName . ' not found']);
+                return false;
             }
 
-            // return
-            if ($multiple === false) {
-                return current($data);
+            // Convert objects to arrays
+            if (strtolower($output) == 'array') {
+                $data = [];
+                $hydrator = $this->getHydrator();
+                foreach ($objects as $object) {
+                    $data[] = $hydrator->extract($object);
+                }
+
+                if ($multiple === false) {
+                    $result = current($data);
+                } else {
+                    $result = $data;
+                }
             } else {
-                return $data;
+                if ($multiple === false) {
+                    $result = current($objects);
+                } else {
+                    $result = $objects;
+                }
             }
-        } else {
-            if ($multiple === false) {
-                return current($objects);
-            } else {
-                return $objects;
+
+            // Save cache (if enabled)
+            if ($cache === true) {
+                // Create cache-folder (if not exists)
+                if (!is_dir($objectCacheFolder)) {
+                    mkdir($objectCacheFolder, 0777, true);
+                }
+
+                // Save result to cache-file
+                file_put_contents($objectCacheFile, json_encode($result));
             }
         }
+
+        // Return
+        return $result;
     }
 
     /**
