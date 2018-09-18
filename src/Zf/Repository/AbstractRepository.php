@@ -798,13 +798,14 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      *
      * @param string $field
      * @param string|array $value
+     * @param boolean $cache
      * @return string|array
      */
-    public function getIdByField($field, $value)
+    public function getIdByField($field, $value, $cache = false)
     {
         // Find records by field-value parameters
         $multiple = (is_array($value)) ? true : false;
-        $records = $this->getByParameters([$field=>$value], "object", $multiple);
+        $records = $this->getByParameters([$field=>$value], "object", $multiple, $cache);
 
         // Return
         if (is_bool($records)) {
