@@ -545,19 +545,14 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * Return result by cache(file)
      *
      * @param string $cacheFile
-     * @param string $output
      * @return array/object
      */
-    public function getByCache($cacheFile, $output = 'object')
+    public function getByCache($cacheFile)
     {
         // Check if cache-file exists
         if (is_file($cacheFile)) {
             $result = file_get_contents($cacheFile);
-            if (strtolower($output) == 'array') {
-                $result = json_decode($result, true);
-            } else {
-                $result = json_decode($result);
-            }
+            $result = unserialize($result);
         } else {
             $result = false;
         }
@@ -713,8 +708,8 @@ abstract class AbstractRepository implements InputFilterAwareInterface
         // Check if cache available (if enabled)
         if ($cache === true) {
             $objectCacheFolder = $this->cacheFolder . str_replace("\\", "_", str_replace("\Entity\\", "\\", $this->objectName)) . "/";
-            $objectCacheFile = $objectCacheFolder . base64_encode(json_encode($parameters) . "_" . strtolower($output) . "_" . $multiple);
-            $result = $this->getByCache($objectCacheFile, $output);
+            $objectCacheFile = $objectCacheFolder . __FUNCTION__ . "_" . base64_encode(json_encode($parameters) . "_" . strtolower($output) . "_" . $multiple);
+            $result = $this->getByCache($objectCacheFile);
         }
 
         if ($cache !== true || ($cache === true && $result === false)) {
@@ -758,7 +753,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
                 }
 
                 // Save result to cache-file
-                file_put_contents($objectCacheFile, json_encode($result));
+                file_put_contents($objectCacheFile, serialize($result));
             }
         }
 
