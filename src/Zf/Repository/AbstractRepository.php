@@ -56,7 +56,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
     /**
      * @var Cache-folder
      */
-    private $cacheFolder;
+    protected $cacheFolder;
 
     /**
      * Constructor
