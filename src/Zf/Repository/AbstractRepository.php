@@ -747,13 +747,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
 
             // Save cache (if enabled)
             if ($cache === true) {
-                // Create cache-folder (if not exists)
-                if (!is_dir($objectCacheFolder)) {
-                    mkdir($objectCacheFolder, 0777, true);
-                }
-
-                // Save result to cache-file
-                file_put_contents($objectCacheFile, serialize($result));
+                $this->saveCache($objectCacheFolder, $objectCacheFile, $result);
             }
         }
 
@@ -1072,4 +1066,15 @@ abstract class AbstractRepository implements InputFilterAwareInterface
         }
     }
 
+    public function saveCache($objectCacheFolder, $objectCacheFile, $data)
+    {
+        // Create cache-folder (if not exists)
+        if (!is_dir($objectCacheFolder)) {
+            mkdir($objectCacheFolder, 0777, true);
+        }
+
+        // Save result to cache-file
+        file_put_contents($objectCacheFile, serialize($data));
+        chmod($objectCacheFile, 0777);
+    }
 }
