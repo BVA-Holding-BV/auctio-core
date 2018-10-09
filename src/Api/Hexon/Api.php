@@ -437,7 +437,7 @@ class Api
         $result = $this->client->request('DELETE', 'ad/' . $stocknumber . urlencode(':') . $site, ["headers"=>$requestHeader]);
         $response = json_decode((string) $result->getBody());
 
-        if (!isset($response->errors) || empty($response->errors) && strtolower($result->getReasonPhrase()) == 'delete ok') {
+        if ((!isset($response->errors) || empty($response->errors)) && strtolower($result->getReasonPhrase()) == 'delete ok') {
             // Return
             return true;
         } else {
@@ -460,7 +460,7 @@ class Api
         $result = $this->client->request('DELETE', 'vehicle/' . $stocknumber, ["headers"=>$requestHeader]);
         $response = json_decode((string) $result->getBody());
 
-        if (!isset($response->errors) || empty($response->errors) && strtolower($result->getReasonPhrase()) == 'delete ok') {
+        if ((!isset($response->errors) || empty($response->errors)) && strtolower($result->getReasonPhrase()) == 'delete ok') {
             // Return
             return true;
         } else {
@@ -484,7 +484,7 @@ class Api
         $result = $this->client->request('DELETE', 'vehicleaccessory/' . $stocknumber . urlencode(':') . $number, ["headers"=>$requestHeader]);
         $response = json_decode((string) $result->getBody());
 
-        if (!isset($response->errors) || empty($response->errors) && strtolower($result->getReasonPhrase()) == 'delete ok') {
+        if ((!isset($response->errors) || empty($response->errors)) && strtolower($result->getReasonPhrase()) == 'delete ok') {
             // Return
             return true;
         } else {
