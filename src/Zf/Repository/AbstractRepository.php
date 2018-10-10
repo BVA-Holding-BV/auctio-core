@@ -553,6 +553,9 @@ abstract class AbstractRepository implements InputFilterAwareInterface
         if (is_file($cacheFile)) {
             $result = file_get_contents($cacheFile);
             $result = unserialize($result);
+            if ($result instanceof \__PHP_Incomplete_Class) {
+                $result = false;
+            }
         } else {
             $result = false;
         }
