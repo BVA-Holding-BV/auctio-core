@@ -142,6 +142,49 @@ class Api
     }
 
     /**
+     * Get auction
+     *
+     * @param int $auctionId
+     * @return boolean|array
+     */
+    public function getAuction($auctionId)
+    {
+        $requestHeader = $this->clientHeaders;
+        $result = $this->client->request('GET', 'auction/' . $auctionId, ["headers"=>$requestHeader]);
+        $response = json_decode((string) $result->getBody());
+        if (!isset($response->errors) || empty($response->errors)) {
+            // Return
+            return $response;
+        } else {
+            // Return
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
+        }
+    }
+
+    /**
+     * Get auctions
+     *
+     * @return boolean|array
+     */
+    public function getAuctions()
+    {
+        $requestHeader = $this->clientHeaders;
+        $result = $this->client->request('GET', 'auctions/', ["headers"=>$requestHeader]);
+        $response = json_decode((string) $result->getBody());
+        if (!isset($response->errors) || empty($response->errors)) {
+            // Return
+            return $response;
+        } else {
+            // Return
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
+        }
+    }
+
+    /**
      * Get body-styles
      *
      * @param string $language
@@ -350,6 +393,31 @@ class Api
     }
 
     /**
+     * Create auction
+     *
+     * @param mixed $data
+     * @return boolean|array
+     */
+    public function createAuction(\AuctioCore\Api\Hexon\Entity\Auction $data)
+    {
+        // Convert input-data into body
+        $body = $this->convertInput($data);
+
+        $requestHeader = $this->clientHeaders;
+        $result = $this->client->request('POST', 'auctions/', ["headers"=>$requestHeader, "body"=>$body]);
+        $response = json_decode((string) $result->getBody());
+        if (!isset($response->errors) || empty($response->errors)) {
+            // Return
+            return $response;
+        } else {
+            // Return
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
+        }
+    }
+
+    /**
      * Create product
      *
      * @param mixed $data
@@ -449,6 +517,29 @@ class Api
     }
 
     /**
+     * Delete auction
+     *
+     * @param int $auctionId
+     * @return boolean|array
+     */
+    public function deleteAuction($auctionId)
+    {
+        $requestHeader = $this->clientHeaders;
+        $result = $this->client->request('DELETE', 'auction/' . $auctionId, ["headers"=>$requestHeader]);
+        $response = json_decode((string) $result->getBody());
+
+        if ((!isset($response->errors) || empty($response->errors)) && strtolower($result->getReasonPhrase()) == 'delete ok') {
+            // Return
+            return true;
+        } else {
+            // Return
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
+        }
+    }
+
+    /**
      * Delete product
      *
      * @param int $stocknumber
@@ -487,6 +578,32 @@ class Api
         if ((!isset($response->errors) || empty($response->errors)) && strtolower($result->getReasonPhrase()) == 'delete ok') {
             // Return
             return true;
+        } else {
+            // Return
+            $this->setErrorData($response);
+            $this->setMessages($response->errors);
+            return false;
+        }
+    }
+
+    /**
+     * Update auction
+     *
+     * @param int $auctionId
+     * @param mixed $data
+     * @return boolean|array
+     */
+    public function updateAuction($auctionId, \AuctioCore\Api\Hexon\Entity\Auction $data)
+    {
+        // Convert input-data into body
+        $body = $this->convertInput($data);
+
+        $requestHeader = $this->clientHeaders;
+        $result = $this->client->request('PUT', 'auction/' . $auctionId, ["headers"=>$requestHeader, "body"=>$body]);
+        $response = json_decode((string) $result->getBody());
+        if (!isset($response->errors) || empty($response->errors)) {
+            // Return
+            return $response;
         } else {
             // Return
             $this->setErrorData($response);
