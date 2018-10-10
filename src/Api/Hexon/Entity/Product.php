@@ -308,5 +308,12 @@ class Product extends Base {
     public $region_specificNlPrice_as_is_incl_bpm;
     public $region_specificNlPrice_trade_incl_bpm;
     public $region_specificNlIncome_tax_addition_percentage;
+    /** @var string */
+    public $auctionId;
+    /** @var string */
+    public $auctionClient_id;
+    /** @var string */
+    public $auctionLink;
+    public $auctionExtra_fields;
 
 }
