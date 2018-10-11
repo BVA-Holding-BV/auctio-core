@@ -314,6 +314,6 @@ class Product extends Base {
     public $auctionClient_id;
     /** @var string */
     public $auctionLink;
-    public $auctionExtra_fields;
+    public $extra_fields;
 
 }
