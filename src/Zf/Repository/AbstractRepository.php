@@ -553,6 +553,8 @@ abstract class AbstractRepository implements InputFilterAwareInterface
         if (is_file($cacheFile)) {
             $result = file_get_contents($cacheFile);
             $result = unserialize($result);
+
+            // Reset result if object is invalid (class not loaded)
             if ($result instanceof \__PHP_Incomplete_Class) {
                 $result = false;
             }
@@ -1073,11 +1075,15 @@ abstract class AbstractRepository implements InputFilterAwareInterface
     {
         // Create cache-folder (if not exists)
         if (!is_dir($objectCacheFolder)) {
-            mkdir($objectCacheFolder, 0777, true);
+            mkdir($objectCacheFolder, 0775, true);
+            chown($objectCacheFolder, "www-data");
+            chgrp($objectCacheFolder, "www-data");
         }
 
         // Save result to cache-file
         file_put_contents($objectCacheFile, serialize($data));
-        chmod($objectCacheFile, 0777);
+        chmod($objectCacheFile, 0775);
+        chown($objectCacheFile, "www-data");
+        chgrp($objectCacheFile, "www-data");
     }
 }
