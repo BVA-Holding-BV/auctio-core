@@ -282,7 +282,7 @@ class Product extends Base {
     public $category_specificMachineryLifting_capacity;
     public $category_specificMachineryTransportationImmobile;
     public $category_specificMachineryTransportationMethod;
-    /** @var string */
+    /** @var array */
     public $category_specificMachineryTransportationPropulsion;
     public $category_specificMachineryTransportationSurface;
     /** @var string */
