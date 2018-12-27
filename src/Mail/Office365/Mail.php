@@ -4,6 +4,8 @@
  */
 namespace AuctioCore\Mail\Office365;
 
+use \AuctioCore\Api\Microsoft;
+
 class Mail
 {
 
@@ -37,19 +39,18 @@ class Mail
             "password" => $password,
         ];
 
-        // Get token
-        $tokenClient = new \GuzzleHttp\Client(['base_uri'=>'https://login.microsoftonline.com/' . $tenant . '/', 'http_errors'=>false]);
-        $result = $tokenClient->request('POST', 'oauth2/token', ["headers"=>["Content-Type"=>"application/x-www-form-urlencoded"], "form_params"=>$parameters]);
-        $response = json_decode((string) $result->getBody());
-        if ($result->getStatusCode() == 200) {
+        // Get token by Azure AD
+        $azureApi = new Microsoft\AzureApi('https://login.microsoftonline.com/' . $tenant . '/', $clientId, $clientSecret);
+        $token = $azureApi->authorize($username, $password);
+        if ($token !== false) {
             // Set token
-            $this->token = $response->token_type . " " . $response->access_token;
+            $this->token = $token->token_type . " " . $token->access_token;
 
             // Set mail-client
             $this->client = new \GuzzleHttp\Client(['base_uri'=>$hostname, 'http_errors'=>false]);
         } else {
-            $this->setMessages("No token available");
-            $this->setErrorData($response);
+            $this->setMessages($azureApi->getMessages());
+            $this->setErrorData($azureApi->getErrorData());
         }
     }
 
