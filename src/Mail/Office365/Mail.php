@@ -144,8 +144,14 @@ class Mail
                 "ToRecipients" => [],
                 "Attachments" => [],
             ],
-            "SaveToSentItems" => "true",
         ];
+
+        // Set option save message to folder
+        if ($saveToFolder === true) {
+            $parameters["SaveToSentItems"] = "true";
+        } else {
+            $parameters["SaveToSentItems"] = "false";
+        }
 
         // Set recipients
         if (!is_array($mailRecipients)) {
