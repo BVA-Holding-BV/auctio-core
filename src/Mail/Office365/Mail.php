@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * API-information: https://docs.microsoft.com/en-us/previous-versions/office/office-365-api/api/version-2.0/mail-rest-operations
+ */
 namespace AuctioCore\Mail\Office365;
 
 class Mail
