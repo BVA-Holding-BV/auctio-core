@@ -15,6 +15,7 @@ class Mail
      * Constructor
      *
      * @param string $hostname
+     * @param string $tenant
      * @param string $clientId
      * @param string $clientSecret
      * @param string $username
