@@ -29,18 +29,8 @@ class Mail
         $this->messages = [];
         $this->errorData = [];
 
-        // Set parameters
-        $parameters = [
-            "grant_type" => "password",
-            "client_id" => $clientId,
-            "client_secret" => $clientSecret,
-            "resource" => "https://outlook.office365.com",
-            "username" => $username,
-            "password" => $password,
-        ];
-
         // Get token by Azure AD
-        $azureApi = new Microsoft\AzureApi('https://login.microsoftonline.com/' . $tenant . '/', $clientId, $clientSecret);
+        $azureApi = new Microsoft\AzureApi('https://login.microsoftonline.com/' . $tenant . '/', $clientId, $clientSecret, "https://outlook.office365.com");
         $token = $azureApi->authorize($username, $password);
         if ($token !== false) {
             // Set token

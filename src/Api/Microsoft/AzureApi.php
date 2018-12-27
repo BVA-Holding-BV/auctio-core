@@ -10,6 +10,7 @@ class AzureApi
     private $client;
     private $clientId;
     private $clientSecret;
+    private $resource;
     private $messages;
     private $errorData;
 
@@ -21,7 +22,7 @@ class AzureApi
      * @param string $clientSecret
      * @param boolean $debug
      */
-    public function __construct($hostname, $clientId, $clientSecret, $debug = false)
+    public function __construct($hostname, $clientId, $clientSecret, $resource = 'https://graph.microsoft.com', $debug = false)
     {
         // Set client
         $this->client = new \GuzzleHttp\Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
@@ -29,6 +30,7 @@ class AzureApi
         // Set client-credentials
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
+        $this->resource = $resource;
 
         // Set error-messages
         $this->messages = [];
@@ -111,7 +113,7 @@ class AzureApi
             "grant_type" => "password",
             "client_id" => $this->clientId,
             "client_secret" => $this->clientSecret,
-            "resource" => "https://graph.microsoft.com",
+            "resource" => $this->resource,
             "username" => $username,
             "password" => $password,
         ];
