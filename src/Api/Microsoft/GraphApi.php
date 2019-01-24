@@ -93,8 +93,12 @@ class GraphApi
      */
     public function getProfile()
     {
+        // Set fields
+        $fields = ["id", "userPrincipalName", "givenName", "surname", "displayName", "companyName", "department",
+            "jobTitle", "mail", "businessPhones", "mobilePhone", "officeLocation", "preferredLanguage"];
+
         // Get profile
-        $result = $this->client->request('GET', 'v1.0/me', ["headers"=>["Authorization"=>$this->token]]);
+        $result = $this->client->request('GET', 'v1.0/me?$select=' . implode(",", $fields), ["headers"=>["Authorization"=>$this->token]]);
         $response = json_decode((string) $result->getBody());
         if ($result->getStatusCode() == 200) {
             // Return response
