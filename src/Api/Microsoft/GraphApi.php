@@ -110,4 +110,23 @@ class GraphApi
         }
     }
 
+    /**
+     * Get roles of authorized user
+     *
+     * @return boolean|object
+     */
+    public function getRoles()
+    {
+        // Get profile
+        $result = $this->client->request('GET', 'v1.0/me/memberOf', ["headers"=>["Authorization"=>$this->token]]);
+        $response = json_decode((string) $result->getBody());
+        if ($result->getStatusCode() == 200) {
+            // Return response
+            return $response;
+        } else {
+            $this->setMessages($response->error->code . ": " . $response->error->message);
+            $this->setErrorData($response);
+            return false;
+        }
+    }
 }
