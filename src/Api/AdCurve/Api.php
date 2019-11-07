@@ -107,7 +107,7 @@ class Api
                     $this->setMessages("No valid input");
                     return false;
                 } else {
-                    $products[$k] = json_decode($product->encode());
+                    $products[$k] = json_decode($product->encode(false));
                 }
             }
         } else {
@@ -115,7 +115,7 @@ class Api
                 $this->setMessages("No valid input");
                 return false;
             } else {
-                $products = [json_decode($products->encode())];
+                $products = [json_decode($products->encode(false))];
             }
         }
 

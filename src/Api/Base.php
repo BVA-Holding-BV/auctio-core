@@ -28,7 +28,7 @@ abstract class Base implements BaseInterface
      * We have filtered out the readOnly elements
      * @return string
      */
-    public function encode() {
+    public function encode($allowNull = true) {
         if(!isset(self::$exportProperties[get_called_class()])) {
             $reflectionObject = new \ReflectionObject($this);
 
@@ -40,17 +40,18 @@ abstract class Base implements BaseInterface
         }
 
         return json_encode(
-            array_intersect_key($this->formatVars(get_object_vars($this)), array_flip(self::$exportProperties[get_called_class()]))
+            array_intersect_key($this->formatVars(get_object_vars($this), $allowNull), array_flip(self::$exportProperties[get_called_class()]))
         );
     }
 
     /**
      * Parse vars so that it can be propery json encoded
-     * @param $array vars
+     * @param array $vars
+     * @param bool $allowNull
      * @return array parsed vars
      * @throws \Exception
      */
-    protected function formatVars(array $vars) {
+    protected function formatVars(array $vars, $allowNull = true) {
         $formattedVars = array();
         foreach($vars as $varName => $var) {
             if(is_object($var) && !($var instanceof \stdClass) ) {
@@ -68,6 +69,8 @@ abstract class Base implements BaseInterface
                     throw new \Exception('Cannot convert object of type ' . get_class($var) . ' to string');
                 }
             }
+
+            if ($var == null && $allowNull === false) continue;
             $formattedVars[$varName] = $var;
         }
 
