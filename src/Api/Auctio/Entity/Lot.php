@@ -130,5 +130,14 @@ class Lot extends Base {
     public $buyNowPrice;
     /** @var Api\Auctio\Entity\ReverseLotDetail */
     public $reverseLotDetail;
-
+    /** @var bool */
+    public $visibleInHotlist;
+    /** @var bool */
+    public $publishOnFacebook;
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
+    public $notificationMessageHeader;
+    /** @var bool */
+    public $publishNotificationMsgDetail;
+    /** @var bool */
+    public $showMessageDetailLink;
 }

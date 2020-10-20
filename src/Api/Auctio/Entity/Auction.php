@@ -95,4 +95,12 @@ class Auction extends Base {
     public $homeDelivery;
     /** @var int */
     public $businessUnit;
+    /** @var string */
+    public $auctionType;
+    /** @var bool */
+    public $sealedBids;
+    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
+    public $keywords;
+    /** @var bool */
+    public $deliveryCosts;
 }
