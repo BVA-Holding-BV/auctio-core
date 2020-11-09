@@ -1234,7 +1234,7 @@ class Api
 
                     if ($response->paginator->hasNext === true) {
                         $pageNumber++;
-                        return $this->getLotDetails($lotId, $pageNumber, $response);
+                        return $this->getLotDetails(explode(",", $lotId), $pageNumber, $response);
                     }
                 }
                 return $response;
