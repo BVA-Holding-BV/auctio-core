@@ -1204,7 +1204,7 @@ class Api
         }
     }
 
-    public function getLotDetails($lotId, $pagedResponse = null)
+    public function getLotDetails($lotId, $pageNumber = 1, $pagedResponse = null)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -1218,7 +1218,7 @@ class Api
         }
 
         // Execute request
-        $result = $this->client->request('GET', 'lot-details/?ids=' . $lotId . '&pageNumber=1&pageSize=' . $pageSize, ["headers"=>$requestHeader]);
+        $result = $this->client->request('GET', 'lot-details/?ids=' . $lotId . '&pageNumber=' . $pageNumber . '&pageSize=' . $pageSize, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
@@ -1233,7 +1233,8 @@ class Api
                         $response->restLotDetailsList = array_merge($response->restLotDetailsList, $pagedResponse->restLotDetailsList);
 
                     if ($response->paginator->hasNext === true) {
-                        return $this->getLotDetails($lotId, $response);
+                        $pageNumber++;
+                        return $this->getLotDetails($lotId, $pageNumber, $response);
                     }
                 }
                 return $response;
