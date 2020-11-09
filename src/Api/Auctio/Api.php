@@ -1204,7 +1204,7 @@ class Api
         }
     }
 
-    public function getLotDetails($lotId)
+    public function getLotDetails($lotId, $pagedResponse = null)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -1227,6 +1227,13 @@ class Api
                 if (!empty($response->restLotDetailsList)) {
                     foreach ($response->restLotDetailsList AS $k => $v) {
                         $response->restLotDetailsList[$k] = $this->convertDates($v, ["endDate"]);
+                    }
+
+                    if (!empty($pagedResponse))
+                        $response->restLotDetailsList = array_merge($response->restLotDetailsList, $pagedResponse->restLotDetailsList);
+
+                    if ($response->paginator->hasNext === true) {
+                        return $this->getLotDetails($lotId, $response);
                     }
                 }
                 return $response;
