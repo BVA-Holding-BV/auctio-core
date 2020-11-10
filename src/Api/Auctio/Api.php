@@ -1204,21 +1204,46 @@ class Api
         }
     }
 
-    public function getLotDetails($lotId, $pageNumber = 1, $pagedResponse = null)
+    public function getLotDetails($lotIds)
+    {
+        // Chunk lot-id list into chuncks of max 150 elements (maximum of single page-response endpoint)
+        if (is_array($lotIds)) {
+            $lotChuncks = array_chunk($lotIds, 150);
+        } else {
+            $lotChuncks = [$lotIds];
+        }
+
+        // Iterate lot-chuncks
+        $output = null;
+        foreach ($lotChuncks AS $lotChunck) {
+            $result = $this->getLotDetailsPaged($lotChunck);
+            if (!empty($output)) {
+                $output->restLotDetailsList = array_merge($result->restLotDetailsList, $output->restLotDetailsList);
+            } else {
+                $output = $result;
+            }
+        }
+
+        // Return
+        return $output;
+    }
+
+    private function getLotDetailsPaged($lotIds, $pageNumber = 1, $pagedResponse = null)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
 
         // Implode multiple ids to string (comma-separated)
-        if (is_array($lotId)) {
-            $pageSize = count($lotId);
-            $lotId = implode(",", $lotId);
+        if (is_array($lotIds)) {
+            $pageSize = count($lotIds);
+            $ids = implode(",", $lotIds);
         } else {
             $pageSize = 1;
+            $ids = $lotIds;
         }
 
         // Execute request
-        $result = $this->client->request('GET', 'lot-details/?ids=' . $lotId . '&pageNumber=' . $pageNumber . '&pageSize=' . $pageSize, ["headers"=>$requestHeader]);
+        $result = $this->client->request('GET', 'lot-details/?ids=' . $ids . '&pageNumber=' . $pageNumber . '&pageSize=' . $pageSize, ["headers"=>$requestHeader]);
         if ($result->getStatusCode() == 200) {
             $response = json_decode((string) $result->getBody());
 
@@ -1234,7 +1259,7 @@ class Api
 
                     if ($response->paginator->hasNext === true) {
                         $pageNumber++;
-                        return $this->getLotDetails(explode(",", $lotId), $pageNumber, $response);
+                        return $this->getLotDetailsPaged($lotIds, $pageNumber, $response);
                     }
                 }
                 return $response;
