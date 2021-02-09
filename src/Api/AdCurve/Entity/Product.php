@@ -16,6 +16,11 @@ class Product extends Base {
      */
     public $variant_id;
     /**
+     * Category id
+     * @var int
+     */
+    public $category_id;
+    /**
      * Category tree of the product split by ‘->’
      * @var string
      */
