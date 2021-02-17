@@ -1229,13 +1229,11 @@ class Api
             if ($result->getStatusCode() == 200) {
                 $response = json_decode((string) $result->getBody());
                 if (empty($response)) continue;
-                
+
                 // Return
                 if (!isset($response->errors)) {
-                    if (!empty($output)) {
-                        $output = array_merge($response, $output);
-                    } else {
-                        $output = $result;
+                    foreach ($response AS $k => $v) {
+                        if (in_array($k, $lotChunk)) $output[$k] = $v;
                     }
                 } else {
                     $this->setErrorData($response);
