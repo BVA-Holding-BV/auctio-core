@@ -1228,7 +1228,8 @@ class Api
             $result = $this->client->request('GET', 'lot-category-attributes?lotIds=' . $lotString, ["headers"=>$requestHeader]);
             if ($result->getStatusCode() == 200) {
                 $response = json_decode((string) $result->getBody());
-
+                if (empty($response)) continue;
+                
                 // Return
                 if (!isset($response->errors)) {
                     if (!empty($output)) {
