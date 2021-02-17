@@ -1204,19 +1204,68 @@ class Api
         }
     }
 
-    public function getLotDetails($lotIds)
+    public function getLotCategoryAttributes($lotIds, $language = null)
     {
-        // Chunk lot-id list into chuncks of max 150 elements (maximum of single page-response endpoint)
-        if (is_array($lotIds)) {
-            $lotChuncks = array_chunk($lotIds, 150);
+        // Prepare request
+        $requestHeader = $this->clientHeaders;
+        if (!empty($language)) {
+            $requestHeader['Accept-language'] = $language;
         } else {
-            $lotChuncks = [$lotIds];
+            $requestHeader['Accept-language'] = "nl";
         }
 
-        // Iterate lot-chuncks
+        // Chunk list into chunks of max 50 elements
+        if (!is_array($lotIds)) $lotIds = [$lotIds];
+        $lotChunks = array_chunk($lotIds, 50);
+
+        // Iterate lot-chunks
+        $output = [];
+        foreach ($lotChunks AS $lotChunk) {
+            // Implode multiple ids to string (comma-separated)
+            $lotString = implode(",", $lotChunk);
+
+            // Execute request
+            $result = $this->client->request('GET', 'lot-category-attributes?lotIds=' . $lotString, ["headers"=>$requestHeader]);
+            if ($result->getStatusCode() == 200) {
+                $response = json_decode((string) $result->getBody());
+
+                // Return
+                if (!isset($response->errors)) {
+                    if (!empty($output)) {
+                        $output = array_merge($response, $output);
+                    } else {
+                        $output = $result;
+                    }
+                } else {
+                    $this->setErrorData($response);
+                    $this->setMessages($response->errors);
+                    return false;
+                }
+            } else {
+                $response = json_decode((string) $result->getBody());
+                $this->setErrorData($response);
+                $this->setMessages([$result->getStatusCode() . ": " . $result->getReasonPhrase()]);
+                return false;
+            }
+        }
+
+        // Return
+        return $output;
+    }
+
+    public function getLotDetails($lotIds)
+    {
+        // Chunk lot-id list into chunks of max 150 elements (maximum of single page-response endpoint)
+        if (is_array($lotIds)) {
+            $lotChunks = array_chunk($lotIds, 150);
+        } else {
+            $lotChunks = [$lotIds];
+        }
+
+        // Iterate lot-chunks
         $output = null;
-        foreach ($lotChuncks AS $lotChunck) {
-            $result = $this->getLotDetailsPaged($lotChunck);
+        foreach ($lotChunks AS $lotChunk) {
+            $result = $this->getLotDetailsPaged($lotChunk);
             if (!empty($output)) {
                 $output->restLotDetailsList = array_merge($result->restLotDetailsList, $output->restLotDetailsList);
             } else {
