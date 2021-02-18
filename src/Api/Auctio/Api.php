@@ -1227,17 +1227,24 @@ class Api
             // Execute request
             $result = $this->client->request('GET', 'lot-category-attributes?lotIds=' . $lotString, ["headers"=>$requestHeader]);
             if ($result->getStatusCode() == 200) {
-                $response = json_decode((string) $result->getBody());
+                $response = json_decode((string) $result->getBody(), true);
                 if (empty($response)) continue;
 
                 // Return
-                if (!isset($response->errors)) {
-                    foreach ($response AS $k => $v) {
-                        if (in_array($k, $lotChunk)) $output[$k] = $v;
+                if (!isset($response['errors'])) {
+                    // Iterate lots
+                    foreach ($lotChunk AS $lotId) {
+                        // Initialize
+                        $output[$lotId] = $response[$lotId];
+                        // Reset attributes (use attribute-id as key)
+                        foreach ($output[$lotId]['attributes'] AS $k => $attribute) {
+                            $output[$lotId]['attributes'][$attribute['attribute']['id']] = $attribute;
+                            unset($output[$lotId]['attributes'][$k]);
+                        }
                     }
                 } else {
                     $this->setErrorData($response);
-                    $this->setMessages($response->errors);
+                    $this->setMessages($response['errors']);
                     return false;
                 }
             } else {
