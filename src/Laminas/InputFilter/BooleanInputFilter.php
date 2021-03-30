@@ -1,8 +1,9 @@
 <?php
 
-namespace AuctioCore\Zf\InputFilter;
+namespace AuctioCore\Laminas\InputFilter;
 
-use Zend\InputFilter\InputFilter;
+use Laminas\InputFilter\InputFilter;
+use Laminas\Validator\InArray;
 
 class BooleanInputFilter
 {
@@ -30,7 +31,7 @@ class BooleanInputFilter
                         'name' => 'InArray',
                         'options' => [
                             'haystack' => [true, false, 1, 0, "1", "0"],
-                            'strict' => \Zend\Validator\InArray::COMPARE_STRICT
+                            'strict' => InArray::COMPARE_STRICT
                         ],
                     ],
                 ],

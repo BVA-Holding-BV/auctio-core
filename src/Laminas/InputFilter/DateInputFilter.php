@@ -1,14 +1,14 @@
 <?php
 
-namespace AuctioCore\Zf\InputFilter;
+namespace AuctioCore\Laminas\InputFilter;
 
-use Zend\InputFilter\InputFilter;
+use Laminas\InputFilter\InputFilter;
 
-class StringInputFilter
+class DateInputFilter
 {
 
     /**
-     * Get InputFilter for a String-type field
+     * Get InputFilter for a Date-type field
      *
      * @param $name
      * @param bool $required
@@ -20,11 +20,10 @@ class StringInputFilter
             return;
         } else {
             $filter = [
-                'name'      => $name,
-                'required'  => $required,
-                'filters'   => [
-                    ['name' => 'StripTags'],
-                    ['name' => 'StringTrim'],
+                'name' => $name,
+                'required' => $required,
+                'validators' => [
+                    ['name' => 'Date'],
                 ],
             ];
 

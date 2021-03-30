@@ -1,8 +1,8 @@
 <?php
 
-namespace AuctioCore\Zf\InputFilter;
+namespace AuctioCore\Laminas\InputFilter;
 
-use Zend\InputFilter\InputFilter;
+use Laminas\InputFilter\InputFilter;
 
 class DecimalInputFilter
 {

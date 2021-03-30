@@ -14,6 +14,8 @@ class Error
      */
     public function convertErrorCode($type, $errorCode)
     {
+        $message = "";
+
         if (strtolower($type) == "upload") {
             switch ($errorCode) {
                 case UPLOAD_ERR_OK:

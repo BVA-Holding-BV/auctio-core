@@ -1,8 +1,9 @@
 <?php
 
-namespace AuctioCore\Zf\InputFilter;
+namespace AuctioCore\Laminas\InputFilter;
 
-use Zend\InputFilter\InputFilter;
+use Laminas\InputFilter\InputFilter;
+use Laminas\Validator\InArray;
 
 class EnumInputFilter
 {
@@ -29,7 +30,7 @@ class EnumInputFilter
                         'name' => 'InArray',
                         'options' => [
                             'haystack' => $enumValues,
-                            'strict' => \Zend\Validator\InArray::COMPARE_STRICT
+                            'strict' => InArray::COMPARE_STRICT
                         ],
                     ],
                 ],

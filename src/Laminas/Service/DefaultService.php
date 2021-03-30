@@ -1,18 +1,19 @@
 <?php
 
-namespace AuctioCore\Zf\Service;
+namespace AuctioCore\Laminas\Service;
 
 class DefaultService
 {
     /**
-     * @var Error-messages
+     * @var array $messages Error-messages
      */
     private $messages = [];
 
     /**
-     * @var Error-data
+     * @var array $errorData Error-data
      */
     private $errorData = [];
+    protected $repository;
 
     public function get($id, $output = 'object', $refresh = false)
     {
@@ -129,7 +130,7 @@ class DefaultService
     /**
      * Get error-messages
      *
-     * @return array|Error
+     * @return array
      */
     public function getMessages()
     {

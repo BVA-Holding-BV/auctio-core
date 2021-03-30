@@ -1,11 +1,16 @@
 <?php
 
-namespace AuctioCore\Zf\Repository;
+namespace AuctioCore\Laminas\Repository;
 
-use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\InputFilter\InputFilterInterface;
+use __PHP_Incomplete_Class;
+use DateTime;
+use Doctrine\ORM\PersistentCollection;
+use Exception;
+use Laminas\InputFilter\InputFilter;
+use Laminas\InputFilter\InputFilterAwareInterface;
+use Laminas\InputFilter\InputFilterInterface;
 use Doctrine\ORM\EntityManager;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
+use Doctrine\Laminas\Hydrator\DoctrineObject;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
@@ -14,47 +19,47 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 abstract class AbstractRepository implements InputFilterAwareInterface
 {
     /**
-     * @var \Doctrine\ORM\EntityManager
+     * @var EntityManager
      */
     protected $om;
 
     /**
-     * @var \DoctrineModule\Stdlib\Hydrator\DoctrineObject
+     * @var DoctrineObject
      */
     private $hydrator;
 
     /**
-     * @var Name of the \Doctrine\ORM\EntityRepository
+     * @var string $objectName Name of the \Doctrine\ORM\EntityRepository
      */
     protected $objectName;
 
     /**
-     * @var List of filter-associations
+     * @var array $filterAssociations List of filter-associations
      */
     protected $filterAssociations;
 
     /**
-     * @var inputData
+     * @var array $inputData
      */
     protected $inputData;
 
     /**
-     * @var InputFilter
+     * @var InputFilter $inputFilter
      */
     protected $inputFilter;
 
     /**
-     * @var Error-messages
+     * @var array $messages Error-messages
      */
     private $messages;
 
     /**
-     * @var Error-data
+     * @var array $errorData Error-data
      */
     private $errorData;
 
     /**
-     * @var Cache-folder
+     * @var string $cacheFolder Cache-folder
      */
     protected $cacheFolder;
 
@@ -194,7 +199,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
     /**
      * Set error-message
      *
-     * @param array $messages
+     * @param array|string $messages
      */
     public function setMessages($messages)
     {
@@ -216,7 +221,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
     /**
      * Get error-messages
      *
-     * @return array|Error
+     * @return array
      */
     public function getMessages()
     {
@@ -237,7 +242,6 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      *
      * @param  array $data
      * @param  array $overrule
-     * @return array
      */
     public function prepareInputDataDefault($data, $overrule = [])
     {
@@ -263,7 +267,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param $object
      * @return bool
      */
-    public function filterAndPersist($data, &$object, $flush = true)
+    public function filterAndPersist($data, $object, $flush = true)
     {
         // Hydrate data to object
         $this->getHydrator()->hydrate($data, $object);
@@ -305,12 +309,12 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param $objects
      * @return bool
      */
-    public function filterAndPersistBulk($records, &$objects)
+    public function filterAndPersistBulk($records, $objects)
     {
         // Iterate data
         foreach ($records AS $key => $record) {
-            $res = $this->filterAndPersist($record, $objects[$key], false);
-            if (!$res) break;
+            $object = $this->filterAndPersist($record, $objects[$key], false);
+            if ($object === false) break;
         }
 
         // Flush prepared records
@@ -366,14 +370,14 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      *
      * @param mixed $data
      * @param array $fields
-     * @return array
+     * @return array|void
      */
     public function transformValues($data, $fields)
     {
         if (empty($fields)) return;
         if (empty($data)) return;
 
-        if ($data instanceof \Doctrine\ORM\PersistentCollection) {
+        if ($data instanceof PersistentCollection) {
             if (count($data) < 1) return;
 
             $values = [];
@@ -428,7 +432,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param $id
      * @param $output
      * @param $refresh
-     * @return object|array
+     * @return false|object|array
      */
     public function get($id, $output = 'object', $refresh = false)
     {
@@ -476,7 +480,9 @@ abstract class AbstractRepository implements InputFilterAwareInterface
 
         // refresh entity (clear all local changes)
         if ($refresh === true) {
-            $this->om->refresh($objects);
+            foreach ($objects AS $object) {
+                $this->om->refresh($object);
+            }
         }
 
         // convert objects to arrays
@@ -555,7 +561,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
             $result = unserialize($result);
 
             // Reset result if object is invalid (class not loaded)
-            if ($result instanceof \__PHP_Incomplete_Class) {
+            if ($result instanceof __PHP_Incomplete_Class) {
                 $result = false;
             }
         } else {
@@ -711,13 +717,14 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param string $output [object, array]
      * @param boolean $multiple
      * @param boolean $cache
-     * @return array/object
+     * @return false|array|object
      */
     public function getByParameters($parameters, $output = 'object', $multiple = true, $cache = false)
     {
         if (empty($output)) $output = 'object';
 
         // Check if cache available (if enabled)
+        $result = null;
         if ($cache === true) {
             $objectCacheFolder = $this->cacheFolder . str_replace("\\", "_", str_replace("\Entity\\", "\\", $this->objectName)) . "/";
             $objectCacheFile = $objectCacheFolder . __FUNCTION__ . "_" . base64_encode(json_encode($parameters) . "_" . strtolower($output) . "_" . $multiple);
@@ -777,7 +784,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
     public function getFieldById($field, $id)
     {
         // Find records by field-value parameters
-        $multiple = (is_array($id)) ? true : false;
+        $multiple = is_array($id);
         $records = $this->getByParameters(['id'=>$id], "object", $multiple);
 
         // Return
@@ -805,7 +812,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
     public function getIdByField($field, $value, $cache = false)
     {
         // Find records by field-value parameters
-        $multiple = (is_array($value)) ? true : false;
+        $multiple = is_array($value);
         $records = $this->getByParameters([$field=>$value], "object", $multiple, $cache);
 
         // Return
@@ -830,7 +837,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param $data
      * @param $output
      * @param $overrule
-     * @return array
+     * @return bool|array
      */
     public function create($data, $output = 'object', $overrule = [])
     {
@@ -845,23 +852,21 @@ abstract class AbstractRepository implements InputFilterAwareInterface
         $this->prepareInputData();
 
         // Set default data (if not available)
-        if (property_exists($object, 'created')) $this->inputData['created'] = new \DateTime();
+        if (property_exists($object, 'created')) $this->inputData['created'] = new DateTime();
         if (property_exists($object, 'deleted')) $this->inputData['deleted'] = false;
 
         // Hydrate object, apply inputfilter, and save it
-        if ($this->filterAndPersist($this->inputData, $object)) {
-            if ($output == 'array') {
-                // Return result
-                $record = $this->getHydrator()->extract($object);
-                if (method_exists($this, 'transformData')) return $this->transformData($record);
-                else return $record;
-            } elseif ($output == 'boolean') {
-                return true;
-            } else {
-                return $object;
-            }
+        $result = $this->filterAndPersist($this->inputData, $object);
+        if ($result === false) return false;
+        if ($output == 'array') {
+            // Return result
+            $record = $this->getHydrator()->extract($object);
+            if (method_exists($this, 'transformData')) return $this->transformData($record);
+            else return $record;
+        } elseif ($output == 'boolean') {
+            return true;
         } else {
-            return false;
+            return $object;
         }
     }
 
@@ -871,7 +876,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param $data
      * @param $output
      * @param $overrule
-     * @return array
+     * @return bool|array
      */
     public function createBulk($data, $output = 'object', $overrule = [])
     {
@@ -890,29 +895,27 @@ abstract class AbstractRepository implements InputFilterAwareInterface
             $this->prepareInputData();
 
             // Set default data (if not available)
-            if (property_exists($objects[$key], 'created')) $this->inputData['created'] = new \DateTime();
+            if (property_exists($objects[$key], 'created')) $this->inputData['created'] = new DateTime();
             if (property_exists($objects[$key], 'deleted')) $this->inputData['deleted'] = false;
             $recordData[$key] = $this->inputData;
         }
 
         // Hydrate object, apply inputfilter, and save it
-        if ($this->filterAndPersistBulk($recordData, $objects)) {
-            if ($output == 'array') {
-                // Return results
-                $records = [];
-                foreach ($objects AS $key => $object) {
-                    $record = $this->getHydrator()->extract($object);
-                    if (method_exists($this, 'transformData')) $records[$key] = $this->transformData($record);
-                    else $records[$key] = $record;
-                }
-                return $records;
-            } elseif ($output == 'boolean') {
-                return true;
-            } else {
-                return $objects;
+        $result = $this->filterAndPersistBulk($recordData, $objects);
+        if ($result === false) return false;
+        if ($output == 'array') {
+            // Return results
+            $records = [];
+            foreach ($objects AS $key => $object) {
+                $record = $this->getHydrator()->extract($object);
+                if (method_exists($this, 'transformData')) $records[$key] = $this->transformData($record);
+                else $records[$key] = $record;
             }
+            return $records;
+        } elseif ($output == 'boolean') {
+            return true;
         } else {
-            return false;
+            return $objects;
         }
     }
 
@@ -923,7 +926,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param $data
      * @param $output
      * @param $refresh
-     * @return array
+     * @return bool|array|object
      */
     public function update($id, $data, $output = 'object', $refresh = false)
     {
@@ -950,22 +953,20 @@ abstract class AbstractRepository implements InputFilterAwareInterface
         $this->prepareInputData();
 
         // Set default data (if not available)
-        if (property_exists($object, 'lastUpdated')) $this->inputData['lastUpdated'] = new \DateTime();
+        if (property_exists($object, 'lastUpdated')) $this->inputData['lastUpdated'] = new DateTime();
 
         // hydrate object, apply inputfilter, save it, and return result
-        if ($this->filterAndPersist($this->inputData, $object)) {
-            if ($output == 'array') {
-                // Return result
-                $record = $this->getHydrator()->extract($object);
-                if (method_exists($this, 'transformData')) return $this->transformData($record);
-                else return $record;
-            } elseif ($output == 'boolean') {
-                return true;
-            } else {
-                return $object;
-            }
+        $result = $this->filterAndPersist($this->inputData, $object);
+        if ($result === false) return false;
+        if ($output == 'array') {
+            // Return result
+            $record = $this->getHydrator()->extract($object);
+            if (method_exists($this, 'transformData')) return $this->transformData($record);
+            else return $record;
+        } elseif ($output == 'boolean') {
+            return true;
         } else {
-            return false;
+            return $object;
         }
     }
 
@@ -975,7 +976,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param $data
      * @param $output
      * @param $refresh
-     * @return array
+     * @return false|array
      */
     public function updateBulk($data, $output = 'object', $refresh = false)
     {
@@ -1006,29 +1007,27 @@ abstract class AbstractRepository implements InputFilterAwareInterface
             $this->prepareInputData();
 
             // Set default data (if not available)
-            if (property_exists($object, 'lastUpdated')) $this->inputData['lastUpdated'] = new \DateTime();
+            if (property_exists($object, 'lastUpdated')) $this->inputData['lastUpdated'] = new DateTime();
             $recordData[$id] = $this->inputData;
             $objects[$id] = $object;
         }
 
         // Hydrate object, apply inputfilter, and save it
-        if ($this->filterAndPersistBulk($recordData, $objects)) {
-            if ($output == 'array') {
-                // Return results
-                $records = [];
-                foreach ($objects AS $key => $object) {
-                    $record = $this->getHydrator()->extract($object);
-                    if (method_exists($this, 'transformData')) $records[] = $this->transformData($record);
-                    else $records[] = $record;
-                }
-                return $records;
-            } elseif ($output == 'boolean') {
-                return true;
-            } else {
-                return $objects;
+        $result = $this->filterAndPersistBulk($recordData, $objects);
+        if ($result === false) return false;
+        if ($output == 'array') {
+            // Return results
+            $records = [];
+            foreach ($objects AS $key => $object) {
+                $record = $this->getHydrator()->extract($object);
+                if (method_exists($this, 'transformData')) $records[] = $this->transformData($record);
+                else $records[] = $record;
             }
+            return $records;
+        } elseif ($output == 'boolean') {
+            return true;
         } else {
-            return false;
+            return $objects;
         }
     }
 
@@ -1038,7 +1037,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param $id
      * @param $remove
      * @param $refresh
-     * @return array
+     * @return false|array
      */
     public function delete($id, $remove = false, $refresh = false)
     {
@@ -1063,8 +1062,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
 
         // check if object really has to move of only update status
         if ($remove === false) {
-            $result = $this->update($id, ['deleted'=>true], 'array');
-            return $result;
+            return $this->update($id, ['deleted'=>true], 'array');
         } else {
             // remove the object from the repository or return error if something went wrong
             try {

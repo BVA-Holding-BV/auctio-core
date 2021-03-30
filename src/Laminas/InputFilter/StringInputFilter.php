@@ -1,14 +1,14 @@
 <?php
 
-namespace AuctioCore\Zf\InputFilter;
+namespace AuctioCore\Laminas\InputFilter;
 
-use Zend\InputFilter\InputFilter;
+use Laminas\InputFilter\InputFilter;
 
-class IbanInputFilter
+class StringInputFilter
 {
 
     /**
-     * Get InputFilter for a IBAN field
+     * Get InputFilter for a String-type field
      *
      * @param $name
      * @param bool $required
@@ -20,10 +20,11 @@ class IbanInputFilter
             return;
         } else {
             $filter = [
-                'name' => $name,
-                'required' => $required,
-                'validators' => [
-                    ['name' => 'Iban'],
+                'name'      => $name,
+                'required'  => $required,
+                'filters'   => [
+                    ['name' => 'StripTags'],
+                    ['name' => 'StringTrim'],
                 ],
             ];
 

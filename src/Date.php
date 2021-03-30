@@ -2,6 +2,8 @@
 
 namespace AuctioCore;
 
+use DateTime;
+
 class Date
 {
 

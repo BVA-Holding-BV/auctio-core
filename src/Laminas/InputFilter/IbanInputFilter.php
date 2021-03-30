@@ -1,14 +1,14 @@
 <?php
 
-namespace AuctioCore\Zf\InputFilter;
+namespace AuctioCore\Laminas\InputFilter;
 
-use Zend\InputFilter\InputFilter;
+use Laminas\InputFilter\InputFilter;
 
-class DateInputFilter
+class IbanInputFilter
 {
 
     /**
-     * Get InputFilter for a Date-type field
+     * Get InputFilter for a IBAN field
      *
      * @param $name
      * @param bool $required
@@ -23,7 +23,7 @@ class DateInputFilter
                 'name' => $name,
                 'required' => $required,
                 'validators' => [
-                    ['name' => 'Date'],
+                    ['name' => 'Iban'],
                 ],
             ];
 
