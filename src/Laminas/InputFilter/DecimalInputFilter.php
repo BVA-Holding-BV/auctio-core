@@ -16,7 +16,7 @@ class DecimalInputFilter
      * @param bool $required
      * @return void|InputFilter
      */
-    public function getFilter($name, $precision, $scale, $required = false)
+    public static function getFilter($name, $precision, $scale, $required = false)
     {
         if ($name == null) {
             return;

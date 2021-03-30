@@ -14,7 +14,7 @@ class DateInputFilter
      * @param bool $required
      * @return void|InputFilter
      */
-    public function getFilter($name, $required = false)
+    public static function getFilter($name, $required = false)
     {
         if ($name == null) {
             return;

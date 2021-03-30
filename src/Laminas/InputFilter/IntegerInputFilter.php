@@ -15,7 +15,7 @@ class IntegerInputFilter
      * @param bool $required
      * @return void|InputFilter
      */
-    public function getFilter($name, $allow_negative_values = false, $required = false)
+    public static function getFilter($name, $allow_negative_values = false, $required = false)
     {
         if ($name == null) {
             return;
