@@ -15,7 +15,7 @@ class Date
      * @param string $language
      * @return mixed|void
      */
-    public function format(DateTime $dateObject, string $format, string $language)
+    public static function format(DateTime $dateObject, string $format, string $language)
     {
         if (empty($dateObject)) return;
 
@@ -39,7 +39,7 @@ class Date
         return $date;
     }
 
-    private function dayName($date, $language)
+    private static function dayName($date, $language)
     {
         if ($language == "nl") {
             $date = str_replace("Monday", "Maandag", $date);
@@ -53,7 +53,7 @@ class Date
         return $date;
     }
 
-    private function dayNameShort($date, $language)
+    private static function dayNameShort($date, $language)
     {
         if ($language == "nl") {
             $date = str_replace("Mon", "Ma", $date);
@@ -67,7 +67,7 @@ class Date
         return $date;
     }
 
-    private function monthName($date, $language)
+    private static function monthName($date, $language)
     {
         if ($language == "nl") {
             $date = str_replace("January", "Januari", $date);
@@ -82,7 +82,7 @@ class Date
         return $date;
     }
 
-    private function monthNameShort($date, $language)
+    private static function monthNameShort($date, $language)
     {
         if ($language == "nl") {
             $date = str_replace("Mar", "Mrt", $date);
