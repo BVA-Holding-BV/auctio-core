@@ -6,7 +6,6 @@ use __PHP_Incomplete_Class;
 use DateTime;
 use Doctrine\ORM\PersistentCollection;
 use Exception;
-use Laminas\InputFilter\InputFilter;
 use Laminas\InputFilter\InputFilterAwareInterface;
 use Laminas\InputFilter\InputFilterInterface;
 use Doctrine\ORM\EntityManager;
@@ -21,7 +20,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
     /**
      * @var EntityManager
      */
-    protected $om;
+    protected EntityManager $om;
 
     /**
      * @var DoctrineObject
@@ -31,42 +30,42 @@ abstract class AbstractRepository implements InputFilterAwareInterface
     /**
      * @var string $objectName Name of the \Doctrine\ORM\EntityRepository
      */
-    protected $objectName;
+    protected string $objectName;
 
     /**
      * @var array $filterAssociations List of filter-associations
      */
-    protected $filterAssociations;
+    protected array $filterAssociations;
 
     /**
      * @var array $inputData
      */
-    protected $inputData;
+    protected array $inputData;
 
     /**
-     * @var InputFilter $inputFilter
+     * @var InputFilterInterface $inputFilter
      */
     protected $inputFilter;
 
     /**
      * @var array $messages Error-messages
      */
-    private $messages;
+    private array $messages;
 
     /**
      * @var array $errorData Error-data
      */
-    private $errorData;
+    private array $errorData;
 
     /**
      * @var string $cacheFolder Cache-folder
      */
-    protected $cacheFolder;
+    protected string $cacheFolder;
 
     /**
      * Constructor
      *
-     * @param EntityManager $objectManager
+     * @param EntityManager|null $objectManager
      */
     public function __construct(EntityManager $objectManager = null)
     {
@@ -85,7 +84,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      *
      * @return EntityManager
      */
-    public function getObjectManager()
+    public function getObjectManager(): EntityManager
     {
         return $this->om;
     }
@@ -105,7 +104,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      *
      * @return mixed
      */
-    public function getObjectName()
+    public function getObjectName(): string
     {
         return $this->objectName;
     }
@@ -115,7 +114,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      *
      * @return DoctrineObject
      */
-    public function getHydrator()
+    public function getHydrator(): DoctrineObject
     {
         // create hydrator if not created yet
         if ($this->hydrator === null) {
@@ -138,10 +137,8 @@ abstract class AbstractRepository implements InputFilterAwareInterface
 
     /**
      * Get input filter
-     *
-     * @return object
      */
-    public abstract function getInputFilter();
+    public abstract function getInputFilter(): InputFilterInterface;
 
     /**
      * Set input filter
@@ -149,7 +146,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param  InputFilterInterface $inputFilter
      * @return object
      */
-    public function setInputFilter(InputFilterInterface $inputFilter)
+    public function setInputFilter(InputFilterInterface $inputFilter): object
     {
         $this->inputFilter = $inputFilter;
 
@@ -161,7 +158,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      *
      * @param array $filterAssociations
      */
-    public function setFilterAssociations($filterAssociations)
+    public function setFilterAssociations(array $filterAssociations)
     {
         $this->filterAssociations = $filterAssociations;
     }
@@ -171,7 +168,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      *
      * @return mixed
      */
-    public function getFilterAssociations()
+    public function getFilterAssociations(): array
     {
         return $this->filterAssociations;
     }
@@ -191,7 +188,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      *
      * @return array
      */
-    public function getErrorData()
+    public function getErrorData(): array
     {
         return $this->errorData;
     }
@@ -210,7 +207,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
     /**
      * Add error-message
      *
-     * @param array $message
+     * @param array|string $message
      */
     public function addMessage($message)
     {
@@ -223,7 +220,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }
@@ -243,7 +240,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param  array $data
      * @param  array $overrule
      */
-    public function prepareInputDataDefault($data, $overrule = [])
+    public function prepareInputDataDefault(array $data, $overrule = [])
     {
         // Unset specific database-fields (if available)
         if (isset($data['id']) && !in_array('id', $overrule)) unset($data['id']);
@@ -258,16 +255,17 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      *
      * @return array
      */
-    public abstract function prepareInputData();
+    public abstract function prepareInputData(): array;
 
     /**
      * Hydrate object, apply inputfilter, save it, and return result
      *
      * @param $data
      * @param $object
+     * @param bool $flush
      * @return bool
      */
-    public function filterAndPersist($data, $object, $flush = true)
+    public function filterAndPersist($data, $object, $flush = true): bool
     {
         // Hydrate data to object
         $this->getHydrator()->hydrate($data, $object);
@@ -309,7 +307,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param $objects
      * @return bool
      */
-    public function filterAndPersistBulk($records, $objects)
+    public function filterAndPersistBulk($records, $objects): bool
     {
         // Iterate data
         foreach ($records AS $key => $record) {
@@ -337,10 +335,10 @@ abstract class AbstractRepository implements InputFilterAwareInterface
     /**
      * Transform object-data into usable data
      *
-     * @param array $data
+     * @param $data
      * @return array
      */
-    public function transformData($data)
+    public function transformData($data): array
     {
         if (isset($data['results']) && is_array($data['results'])) {
             foreach ($data['results'] AS $k => $record) {
@@ -363,7 +361,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @return array
      */
 
-    public abstract function transformRecord($record);
+    public abstract function transformRecord(array $record): array;
 
     /**
      * Transform object-values into usable values
@@ -372,7 +370,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param array $fields
      * @return array|void
      */
-    public function transformValues($data, $fields)
+    public function transformValues($data, array $fields): array
     {
         if (empty($fields)) return;
         if (empty($data)) return;
@@ -411,7 +409,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param $id
      * @return boolean
      */
-    public function exists($id)
+    public function exists($id): bool
     {
         // get object from the repository specified by primary key
         $object = $this->om
@@ -513,14 +511,14 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param integer $offset
      * @param boolean $paginator
      * @param boolean $debug
-     * @return array/object
+     * @return array|object
      */
     public function getList($output = 'object', $filter = NULL, $groupBy = null, $having = null, $orderBy = NULL, $limitRecords = 25, $offset = 0, $paginator = false, $debug = false)
     {
         if (!empty($limitRecords)) $limit['limit'] = (int) $limitRecords;
         else $limit['limit'] = 25;
         $limit['offset'] = $offset;
-        if (!is_array($filter)) $filter = array();
+        if (!is_array($filter)) $filter = [];
 
         // Get results
         $records = $this->getByFilter($filter, $groupBy, $having, $orderBy, $limit, $paginator, $debug);
@@ -551,9 +549,9 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * Return result by cache(file)
      *
      * @param string $cacheFile
-     * @return array/object
+     * @return array|object
      */
-    public function getByCache($cacheFile)
+    public function getByCache(string $cacheFile)
     {
         // Check if cache-file exists
         if (is_file($cacheFile)) {
@@ -582,7 +580,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param $limit
      * @param $paginator
      * @param $debug
-     * @return array/object
+     * @return array|object
      */
     public function getByFilter($filter = NULL, $groupBy = null, $having = null, $orderBy = null, $limit = NULL, $paginator = false, $debug = false)
     {
@@ -687,7 +685,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
 
         // Return DQL (in debug-mode)
         if ($debug) {
-            return array("results"=>array("query"=>$query->getQuery()->getDQL(), "parameters"=>$parameters));
+            return ["results"=>["query"=>$query->getQuery()->getDQL(), "parameters"=>$parameters]];
         }
 
         // Get results
@@ -703,7 +701,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
             $results = $query->getQuery()->getResult();
 
             // Return
-            return array("paginator"=>$paginatorData, "results"=>$results);
+            return ["paginator"=>$paginatorData, "results"=>$results];
         } else {
             // Return
             return $query->getQuery()->getResult();
@@ -719,7 +717,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param boolean $cache
      * @return false|array|object
      */
-    public function getByParameters($parameters, $output = 'object', $multiple = true, $cache = false)
+    public function getByParameters(array $parameters, $output = 'object', $multiple = true, $cache = false)
     {
         if (empty($output)) $output = 'object';
 
@@ -781,7 +779,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param int|array $id
      * @return string|array
      */
-    public function getFieldById($field, $id)
+    public function getFieldById(string $field, $id)
     {
         // Find records by field-value parameters
         $multiple = is_array($id);
@@ -809,7 +807,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param boolean $cache
      * @return string|array
      */
-    public function getIdByField($field, $value, $cache = false)
+    public function getIdByField(string $field, $value, $cache = false)
     {
         // Find records by field-value parameters
         $multiple = is_array($value);
@@ -837,7 +835,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      * @param $data
      * @param $output
      * @param $overrule
-     * @return bool|array
+     * @return bool|array|object
      */
     public function create($data, $output = 'object', $overrule = [])
     {

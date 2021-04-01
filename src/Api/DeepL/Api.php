@@ -4,14 +4,16 @@
  */
 namespace AuctioCore\Api\DeepL;
 
+use GuzzleHttp\Client;
+
 class Api
 {
 
-    private $apiKey;
-    private $client;
-    private $clientHeaders;
-    private $messages;
-    private $errorData;
+    private string $apiKey;
+    private Client $client;
+    private array $clientHeaders;
+    private array $messages;
+    private array $errorData;
 
     /**
      * Constructor
@@ -20,10 +22,10 @@ class Api
      * @param string $apiKey
      * @param boolean $debug
      */
-    public function __construct($hostname, $apiKey, $debug = false)
+    public function __construct(string $hostname, string $apiKey, $debug = false)
     {
         // Set client
-        $this->client = new \GuzzleHttp\Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
+        $this->client = new Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
 
         // Set default header for client-requests
         $this->clientHeaders = [];
@@ -40,7 +42,6 @@ class Api
      * Set error-data
      *
      * @param $data
-     * @return array
      */
     public function setErrorData($data)
     {
@@ -52,7 +53,7 @@ class Api
      *
      * @return array
      */
-    public function getErrorData()
+    public function getErrorData(): array
     {
         return $this->errorData;
     }
@@ -60,7 +61,7 @@ class Api
     /**
      * Set error-message
      *
-     * @param array $messages
+     * @param array|string $messages
      */
     public function setMessages($messages)
     {
@@ -71,7 +72,7 @@ class Api
     /**
      * Add error-message
      *
-     * @param array $message
+     * @param array|string $message
      */
     public function addMessage($message)
     {
@@ -84,7 +85,7 @@ class Api
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }

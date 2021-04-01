@@ -3,25 +3,26 @@
 namespace AuctioCore\Api\Auctio\Entity\Custom;
 
 use AuctioCore\Api\Base;
+use stdClass;
 
 class LocaleMessage extends Base {
 
     /**
-	 * @var string
+	 * @var string|null
 	 */
-	public $nl;
+	public ?string $nl;
 	/**
-	 * @var string
+	 * @var string|null
 	 */
-	public $en;
+	public ?string $en;
 	/**
-	 * @var string
+	 * @var string|null
 	 */
-	public $fr;
+	public ?string $fr;
 	/**
-	 * @var string
+	 * @var string|null
 	 */
-	public $de;
+	public ?string $de;
 
     public function populate($data) {
         if (empty($data)) return;
@@ -36,8 +37,9 @@ class LocaleMessage extends Base {
         return $this;
     }
 
-	public function encode() {
-		$data = array();
+	public function encode($allowNull = true): ?string
+    {
+		$data = [];
 		$encoded = parent::encode();
 
 		foreach(json_decode($encoded) as $language => $value) {
@@ -47,7 +49,7 @@ class LocaleMessage extends Base {
 		}
 
 		if(empty($data)) {
-			$data = new \stdClass();
+			$data = new stdClass();
 		}
 
 		return json_encode($data);

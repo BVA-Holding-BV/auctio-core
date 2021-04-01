@@ -4,13 +4,17 @@
  */
 namespace AuctioCore\Api\Tolq;
 
+use AuctioCore\Api\Tolq\Entity\Request;
+use AuctioCore\Api\Tolq\Entity\RequestOptions;
+use GuzzleHttp\Client;
+
 class Api
 {
 
-    private $client;
-    private $clientHeaders;
-    private $messages;
-    private $errorData;
+    private Client $client;
+    private array $clientHeaders;
+    private array $messages;
+    private array $errorData;
 
     /**
      * Constructor
@@ -20,10 +24,10 @@ class Api
      * @param string $secret
      * @param boolean $debug
      */
-    public function __construct($hostname, $access_key, $secret, $debug = false)
+    public function __construct(string $hostname, string $access_key, string $secret, $debug = false)
     {
         // Set client
-        $this->client = new \GuzzleHttp\Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
+        $this->client = new Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
 
         // Set default header for client-requests
         $this->clientHeaders = [
@@ -40,7 +44,6 @@ class Api
      * Set error-data
      *
      * @param $data
-     * @return array
      */
     public function setErrorData($data)
     {
@@ -52,7 +55,7 @@ class Api
      *
      * @return array
      */
-    public function getErrorData()
+    public function getErrorData(): array
     {
         return $this->errorData;
     }
@@ -60,7 +63,7 @@ class Api
     /**
      * Set error-message
      *
-     * @param array $messages
+     * @param array|string $messages
      */
     public function setMessages($messages)
     {
@@ -71,7 +74,7 @@ class Api
     /**
      * Add error-message
      *
-     * @param array $message
+     * @param array|string $message
      */
     public function addMessage($message)
     {
@@ -84,7 +87,7 @@ class Api
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }
@@ -92,13 +95,13 @@ class Api
     /**
      * Get translation
      *
-     * @param string $text
+     * @param array $text
      * @param string $sourceLanguage
      * @param string $targetLanguage
-     * @param array $options
+     * @param null $options
      * @return boolean|array
      */
-    public function getTranslation($text, $sourceLanguage, $targetLanguage, $options = null)
+    public function getTranslation(array $text, string $sourceLanguage, string $targetLanguage, $options = null)
     {
         // Check input parameters
         if (empty($text)) {
@@ -137,8 +140,8 @@ class Api
             return false;
         }
 
-        $requestData = new \AuctioCore\Api\Tolq\Entity\Request($data);
-        $requestData->options = new \AuctioCore\Api\Tolq\Entity\RequestOptions($options);
+        $requestData = new Request($data);
+        $requestData->options = new RequestOptions($options);
 
         // Execute request
         return $this->createRequest($requestData);
@@ -150,7 +153,7 @@ class Api
      * @param mixed $data
      * @return boolean|array
      */
-    public function createRequest(\AuctioCore\Api\Tolq\Entity\Request $data)
+    public function createRequest(Request $data)
     {
         $requestHeader = $this->clientHeaders;
         $result = $this->client->request('POST', 'requests', ["headers"=>$requestHeader, "body"=>$data->encode()]);

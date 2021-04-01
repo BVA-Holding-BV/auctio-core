@@ -1,21 +1,23 @@
 <?php
 namespace AuctioCore\Api\Auctio\Entity;
 
+use AuctioCore\Api\Auctio\Entity\Custom\DateTime;
+use AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage;
 use AuctioCore\Api\Base;
 
 class CollectionDay extends Base {
 
     /** @var int */
-    public $id;
+    public int $id;
     /** @var int */
-    public $auctionId;
+    public int $auctionId;
     /** @var int */
-    public $locationId;
-    /** @var Api\Auctio\Entity\Custom\DateTime */
-    public $startDate;
-    /** @var Api\Auctio\Entity\Custom\DateTime */
-    public $endDate;
-    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
-    public $description;
+    public int $locationId;
+    /** @var DateTime */
+    public DateTime $startDate;
+    /** @var DateTime */
+    public DateTime $endDate;
+    /** @var LocaleMessage */
+    public LocaleMessage $description;
 
 }

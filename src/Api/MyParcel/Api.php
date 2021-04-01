@@ -2,17 +2,19 @@
 
 namespace AuctioCore\Api\MyParcel;
 
+use GuzzleHttp\Client;
+
 class Api
 {
 
-    private $allowedCountryCodes;
-    private $carrierId = 1; // PostNL
-    private $client;
-    private $clientHeaders;
-    private $parcelOptions = [];
-    private $recipient = [];
-    private $messages;
-    private $errorData;
+    private array $allowedCountryCodes;
+    private int $carrierId = 1; // PostNL
+    private Client $client;
+    private array $clientHeaders;
+    private array $parcelOptions = [];
+    private array $recipient = [];
+    private array $messages;
+    private array $errorData;
 
     /**
      * Constructor
@@ -22,12 +24,12 @@ class Api
      * @param array $allowedCountryCodes
      * @param boolean $debug
      */
-    public function __construct($hostname, $apiKey, $allowedCountryCodes = ["NL","BE"], $debug = false)
+    public function __construct(string $hostname, string $apiKey, $allowedCountryCodes = ["NL","BE"], $debug = false)
     {
         $this->allowedCountryCodes = $allowedCountryCodes;
 
         // Set client
-        $this->client = new \GuzzleHttp\Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
+        $this->client = new Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
 
         // Set default header for client-requests
         $this->clientHeaders = [
@@ -44,7 +46,6 @@ class Api
      * Set error-data
      *
      * @param $data
-     * @return array
      */
     public function setErrorData($data)
     {
@@ -56,7 +57,7 @@ class Api
      *
      * @return array
      */
-    public function getErrorData()
+    public function getErrorData(): array
     {
         return $this->errorData;
     }
@@ -64,7 +65,7 @@ class Api
     /**
      * Set error-message
      *
-     * @param array $messages
+     * @param array|string $messages
      */
     public function setMessages($messages)
     {
@@ -75,7 +76,7 @@ class Api
     /**
      * Add error-message
      *
-     * @param array $message
+     * @param array|string $message
      */
     public function addMessage($message)
     {
@@ -88,7 +89,7 @@ class Api
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }
@@ -134,7 +135,7 @@ class Api
     /**
      * Create shipment
      *
-     * @return array
+     * @return false|array
      */
     public function createShipment()
     {
@@ -177,7 +178,7 @@ class Api
      * @param string $localFilename
      * @return boolean
      */
-    public function getShipmentLabel($id, $localFilename = null)
+    public function getShipmentLabel($id, $localFilename = null): bool
     {
         // Set uri, depending on download single or multiple labels (in one PDF-file)
         if (is_array($id)) {
@@ -261,9 +262,9 @@ class Api
      * @param string $countryCode
      * @return boolean|array
      */
-    public function validateAddress($person, $street, $number, $numberSuffix, $postalCode, $city, $countryCode)
+    public function validateAddress(string $person, string $street, int $number, string $numberSuffix, string $postalCode, string $city, string $countryCode)
     {
-        $errors = array();
+        $errors = [];
         if (empty($person)) $errors['person'] = "Value is required";
         if (empty($street)) $errors['street'] = "Value is required";
         if (empty($number)) $errors['number'] = "Value is required";

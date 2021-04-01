@@ -28,14 +28,15 @@ use \jamesiarmes\PhpEws\Type\ItemResponseShapeType;
 use \jamesiarmes\PhpEws\Type\MessageType;
 use \jamesiarmes\PhpEws\Type\PathToExtendedFieldType;
 use \jamesiarmes\PhpEws\Type\SingleRecipientType;
+use SplFileObject;
 
 class Mail
 {
 
-    private $client;
-    private $sender;
-    private $messages;
-    private $errorData;
+    private Client $client;
+    private string $sender;
+    private array $messages;
+    private array $errorData;
 
     /**
      * Constructor
@@ -46,7 +47,7 @@ class Mail
      * @param string $senderMailAddress
      * @param string $version
      */
-    public function __construct($hostname, $username, $password, $senderMailAddress, $version = 'Exchange2010')
+    public function __construct(string $hostname, string $username, string $password, string $senderMailAddress, $version = 'Exchange2010')
     {
         // Set client
         $this->client = new Client($hostname, $username, $password, $version);
@@ -72,7 +73,7 @@ class Mail
      *
      * @return array
      */
-    public function getErrorData()
+    public function getErrorData(): array
     {
         return $this->errorData;
     }
@@ -80,7 +81,7 @@ class Mail
     /**
      * Set error-message
      *
-     * @param array $messages
+     * @param array|string $messages
      */
     public function setMessages($messages)
     {
@@ -91,7 +92,7 @@ class Mail
     /**
      * Add error-message
      *
-     * @param array $message
+     * @param array|string $message
      */
     public function addMessage($message)
     {
@@ -104,7 +105,7 @@ class Mail
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }
@@ -113,13 +114,14 @@ class Mail
      * Create/send email by EWS
      *
      * @param string $mailRecipient
-     * @param string $subject
+     * @param null $subject
      * @param string $content
+     * @param string $bodyType
      * @param boolean $saveToFolder
      * @param boolean|array $attachments
      * @return boolean
      */
-    public function send($mailRecipient, $subject = NULL, $content, $bodyType = 'TEXT', $saveToFolder = true, $attachments = false)
+    public function send(string $mailRecipient, $subject = NULL, string $content, $bodyType = 'TEXT', $saveToFolder = true, $attachments = false): bool
     {
         // Check input-data
         if (empty($mailRecipient)) {
@@ -190,7 +192,7 @@ BODY;
                     foreach ($attachments AS $attachmentFile) {
                         // Open file handlers.
                         $attachmentFilePath = (isset($attachmentFile['path'])) ? $attachmentFile['path'] : $attachmentFile;
-                        $file = new \SplFileObject($attachmentFilePath);
+                        $file = new SplFileObject($attachmentFilePath);
                         $finfo = finfo_open();
 
                         // Build the request,
@@ -254,7 +256,7 @@ BODY;
      * @param string $changeKey
      * @return boolean
      */
-    private function sendMail($messageId, $changeKey)
+    private function sendMail(string $messageId, string $changeKey): bool
     {
         // Check input-data
         if (empty($messageId)) {

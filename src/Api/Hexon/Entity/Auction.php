@@ -3,25 +3,26 @@
 namespace AuctioCore\Api\Hexon\Entity;
 
 use AuctioCore\Api\Base;
+use AuctioCore\Api\Hexon\Entity\Custom\DateTime;
 
 class Auction extends Base {
 
     /** @var string */
-    public $id;
+    public string $id;
     /** @var array */
-    public $name;
+    public array $name;
     public $type;
     /** @var string */
-    public $location;
+    public string $location;
     /** @var string */
-    public $link;
-    /** @var Api\Hexon\Entity\Custom\DateTime */
-    public $start;
-    /** @var Api\Hexon\Entity\Custom\DateTime */
-    public $end;
+    public string $link;
+    /** @var DateTime */
+    public DateTime $start;
+    /** @var DateTime */
+    public DateTime $end;
     /** @var integer */
-    public $number_of_lots;
+    public int $number_of_lots;
     /** @var array */
-    public $description;
+    public array $description;
 
 }

@@ -15,7 +15,7 @@ class Date
      * @param string $language
      * @return mixed|void
      */
-    public function format($dateObject, $format, $language)
+    public function format(DateTime $dateObject, string $format, string $language)
     {
         if (empty($dateObject)) return;
 

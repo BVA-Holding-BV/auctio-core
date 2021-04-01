@@ -10,12 +10,12 @@ class IntegerInputFilter
     /**
      * Get InputFilter for a Integer-type field
      *
-     * @param $name
+     * @param string $name
      * @param bool $allow_negative_values
      * @param bool $required
      * @return void|InputFilter
      */
-    public static function getFilter($name, $allow_negative_values = false, $required = false)
+    public static function getFilter(string $name, $allow_negative_values = false, $required = false): InputFilter
     {
         if ($name == null) {
             return;

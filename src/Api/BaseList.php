@@ -2,16 +2,26 @@
 
 namespace AuctioCore\Api;
 
-abstract class BaseList implements BaseInterface, \ArrayAccess, \Iterator, \Countable
+use ArrayAccess;
+use BadMethodCallException;
+use Countable;
+use Datetime;
+use Exception;
+use Iterator;
+use ReflectionClass;
+use ReflectionObject;
+use stdClass;
+
+abstract class BaseList implements BaseInterface, ArrayAccess, Iterator, Countable
 {
 
 	/**
 	 * @var array
 	 */
-	public $_items = array();
-	protected $_position = 0;
+	public array $_items = [];
+	protected int $_position = 0;
 
-	public function __construct($data = array()) {
+	public function __construct($data = []) {
 		if(!empty($data)) {
 			$this->populate($data);
 		}
@@ -19,21 +29,24 @@ abstract class BaseList implements BaseInterface, \ArrayAccess, \Iterator, \Coun
 	/**
 	 * @var array
 	 */
-	protected static $populateProperties;
+	protected static array $populateProperties;
 
 	/**
 	 * @var array
 	 */
-	protected static $exportProperties;
+	protected static array $exportProperties;
 
-	/**
-	 * Returns a JSON encoded string with current Entity.
-	 * We have filtered out the readOnly elements
-	 * @return string
-	 */
-	public function encode() {
+    /**
+     * Returns a JSON encoded string with current Entity.
+     * We have filtered out the readOnly elements
+     * @param bool $allowNull
+     * @return string|null
+     * @throws Exception
+     */
+	public function encode($allowNull = true): ?string
+    {
 		if(!isset(self::$exportProperties[get_called_class()])) {
-			$reflectionObject = new \ReflectionObject($this);
+			$reflectionObject = new ReflectionObject($this);
 
 			foreach($reflectionObject->getProperties() as $property) {
 				if(strpos($property->getDocComment(), '@ReadOnly') === false) {
@@ -49,23 +62,24 @@ abstract class BaseList implements BaseInterface, \ArrayAccess, \Iterator, \Coun
 
 	/**
 	 * Parse vars so that it can be propery json encoded
-	 * @param $array vars
+	 * @param array $vars
 	 * @return array parsed vars
-	 * @throws \Exception
+	 * @throws Exception
 	 */
-	protected function formatVars(array $vars) {
-		$formattedVars = array();
+	protected function formatVars(array $vars): array
+    {
+		$formattedVars = [];
 		foreach($vars as $varName => $var) {
 			if(is_object($var) && !($var instanceof stdClass) ) {
 				if($var instanceof Base) {
 					$var = json_decode($var->encode());
 				}
-				elseif($var instanceof \DateTime) {
-						$var = $var->format(\Datetime::ISO8601);
+				elseif($var instanceof DateTime) {
+						$var = $var->format(Datetime::ISO8601);
 				} elseif(method_exists($var, '__toString')) {
 					$var = (string)$var;
 				} else {
-					throw new \Exception('Cannot convert object of type ' . get_class($var) . ' to string');
+					throw new Exception('Cannot convert object of type ' . get_class($var) . ' to string');
 				}
 			}
 			$formattedVars[$varName] = $var;
@@ -75,20 +89,21 @@ abstract class BaseList implements BaseInterface, \ArrayAccess, \Iterator, \Coun
 	}
 
 	public function __call($name, $params) {
-		$matches = array();
+		$matches = [];
 		if(preg_match('/^get(\w+)/', $name, $matches)) {
 			$property = lcfirst($matches[1]);
 			if(property_exists($this, $property) ) {
 				return $this->$property;
 			}
 		}
-		throw new \BadMethodCallException('Unknown method ' . $name);
+		throw new BadMethodCallException('Unknown method ' . $name);
 	}
 
 	/**
 	 * @return string
 	 */
-	function __toString() {
+	function __toString(): string
+    {
 		return $this->encode();
 	}
 
@@ -97,10 +112,10 @@ abstract class BaseList implements BaseInterface, \ArrayAccess, \Iterator, \Coun
 	{
 		static $type;
 		if (!$type) {
-			$class = new \ReflectionClass($this);
+			$class = new ReflectionClass($this);
 
 			if (!preg_match('/@return\s+([a-zA-Z\\\\]+)/s', $class->getDocComment(), $matches)) {
-				throw new \Exception('_item have no Type configured');
+				throw new Exception('_item have no Type configured');
 			}
 			$type = $matches[1];
 		}
@@ -111,8 +126,8 @@ abstract class BaseList implements BaseInterface, \ArrayAccess, \Iterator, \Coun
 	/**
 	 * The return value will be casted to boolean if non-boolean was returned.
 	 */
-	public function offsetExists($offset)
-	{
+	public function offsetExists($offset): bool
+    {
 		return isset($this->_items[$offset]);
 	}
 
@@ -132,7 +147,7 @@ abstract class BaseList implements BaseInterface, \ArrayAccess, \Iterator, \Coun
 	 */
 	public function offsetSet($offset, $value)
 	{
-		$ref = new \ReflectionClass(get_called_class());
+		$ref = new ReflectionClass(get_called_class());
 		$offset = $offset ? : count($this->_items);
 		$className = $ref->getNamespaceName() . '\\' . $this->getItemType();
 
@@ -169,11 +184,13 @@ abstract class BaseList implements BaseInterface, \ArrayAccess, \Iterator, \Coun
 	/**
 	 * @return int
 	 */
-	public function key() {
+	public function key(): int
+    {
 		return $this->_position;
 	}
 
-	public function valid() {
+	public function valid(): bool
+    {
 		return isset($this->_items[$this->_position]);
 	}
 
@@ -188,19 +205,21 @@ abstract class BaseList implements BaseInterface, \ArrayAccess, \Iterator, \Coun
 	/**
 	 * @return int
 	 */
-	public function count() {
+	public function count(): int
+    {
 		return count($this->_items);
 	}
 
-	/**
-	 * Gets a slice of elements
-	 * @param int $offset
-	 * @param int $number
-	 * @return array
-	 */
-	public function slice($offset, $number = null) {
+    /**
+     * Gets a slice of elements
+     * @param int $offset
+     * @param null $number
+     * @return array
+     */
+	public function slice(int $offset, $number = null): array
+    {
 		$number = $number ?: $this->count();
-		$elements = array();
+		$elements = [];
 
 		for($i = $offset; $i < $number; $i++) {
 			$elements[$i] = $this->offsetGet($i);
@@ -209,10 +228,11 @@ abstract class BaseList implements BaseInterface, \ArrayAccess, \Iterator, \Coun
 		return $elements;
 	}
 
-	/**
-	 * @param callable $filter
-	 * @return array|static
-	 */
+    /**
+     * @param callable $filter
+     * @param bool $returnSelf
+     * @return array|static
+     */
 	public function filter(callable $filter, $returnSelf = false) {
 		$elements = array_filter($this->_items, $filter);
 

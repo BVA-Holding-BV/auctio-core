@@ -4,14 +4,17 @@
  */
 namespace AuctioCore\Api\AdCurve;
 
+use AuctioCore\Api\AdCurve\Entity\Product;
+use GuzzleHttp\Client;
+
 class Api
 {
 
-    private $client;
-    private $clientHeaders;
-    private $shopId;
-    private $messages;
-    private $errorData;
+    private Client $client;
+    private array $clientHeaders;
+    private string $shopId;
+    private array $messages;
+    private array $errorData;
 
     /**
      * Constructor
@@ -21,10 +24,10 @@ class Api
      * @param string $shopId
      * @param boolean $debug
      */
-    public function __construct($hostname, $apiKey, $shopId, $debug = false)
+    public function __construct(string $hostname, string $apiKey, string $shopId, $debug = false)
     {
         // Set client
-        $this->client = new \GuzzleHttp\Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
+        $this->client = new Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
 
         // Set default header for client-requests
         $this->clientHeaders = [
@@ -45,7 +48,6 @@ class Api
      * Set error-data
      *
      * @param $data
-     * @return array
      */
     public function setErrorData($data)
     {
@@ -57,7 +59,7 @@ class Api
      *
      * @return array
      */
-    public function getErrorData()
+    public function getErrorData(): array
     {
         return $this->errorData;
     }
@@ -65,7 +67,7 @@ class Api
     /**
      * Set error-message
      *
-     * @param array $messages
+     * @param array|string $messages
      */
     public function setMessages($messages)
     {
@@ -76,7 +78,7 @@ class Api
     /**
      * Add error-message
      *
-     * @param array $message
+     * @param array|string $message
      */
     public function addMessage($message)
     {
@@ -89,21 +91,21 @@ class Api
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }
 
     /**
      * @param object|array $products
-     * @return array
+     * @return bool|array
      */
     public function createProducts($products)
     {
         // Check input
         if (is_array($products) && count($products) > 0) {
             foreach ($products AS $k => $product) {
-                if (!($product instanceof \AuctioCore\Api\AdCurve\Entity\Product)) {
+                if (!($product instanceof Product)) {
                     $this->setMessages("No valid input");
                     return false;
                 } else {
@@ -111,7 +113,7 @@ class Api
                 }
             }
         } else {
-            if (!($products instanceof \AuctioCore\Api\AdCurve\Entity\Product)) {
+            if (!($products instanceof Product)) {
                 $this->setMessages("No valid input");
                 return false;
             } else {

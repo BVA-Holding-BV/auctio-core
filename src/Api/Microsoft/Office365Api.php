@@ -4,26 +4,27 @@
  */
 namespace AuctioCore\Api\Microsoft;
 
+use GuzzleHttp\Client;
+
 class Office365Api
 {
 
-    private $client;
-    private $token;
-    private $messages;
-    private $errorData;
+    private Client $client;
+    private string $token;
+    private array $messages;
+    private array $errorData;
 
     /**
      * Constructor
      *
      * @param string $hostname
-     * @param string $clientId
-     * @param string $clientSecret
+     * @param string $token
      * @param boolean $debug
      */
-    public function __construct($hostname, $token, $debug = false)
+    public function __construct(string $hostname, string $token, $debug = false)
     {
         // Set client
-        $this->client = new \GuzzleHttp\Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
+        $this->client = new Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
 
         // Set token
         $this->token = $token;
@@ -37,7 +38,6 @@ class Office365Api
      * Set error-data
      *
      * @param $data
-     * @return array
      */
     public function setErrorData($data)
     {
@@ -49,7 +49,7 @@ class Office365Api
      *
      * @return array
      */
-    public function getErrorData()
+    public function getErrorData(): array
     {
         return $this->errorData;
     }
@@ -57,7 +57,7 @@ class Office365Api
     /**
      * Set error-message
      *
-     * @param array $messages
+     * @param array|string $messages
      */
     public function setMessages($messages)
     {
@@ -68,7 +68,7 @@ class Office365Api
     /**
      * Add error-message
      *
-     * @param array $message
+     * @param array|string $message
      */
     public function addMessage($message)
     {
@@ -81,7 +81,7 @@ class Office365Api
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }
@@ -97,7 +97,7 @@ class Office365Api
      * @param boolean|array $attachments
      * @return boolean|object
      */
-    public function sendMail($recipients, $subject, $content, $bodyType = 'Text', $saveToFolder = true, $attachments = false)
+    public function sendMail($recipients, string $subject, string $content, $bodyType = 'Text', $saveToFolder = true, $attachments = false)
     {
         // Check input-data
         if (empty($this->token)) {

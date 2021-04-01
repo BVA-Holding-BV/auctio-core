@@ -3,47 +3,48 @@
 namespace AuctioCore\Api\Hexon\Entity;
 
 use AuctioCore\Api\Base;
+use AuctioCore\Api\Hexon\Entity\Custom\Date;
 
 class Product extends Base {
 
     /** @var string */
-    public $stocknumber;
+    public string $stocknumber;
     /** @var boolean */
-    public $identificationStocknumber_public;
+    public bool $identificationStocknumber_public;
     public $identificationReferencenumber;
     /** @var string */
-    public $identificationLicense_plate;
+    public string $identificationLicense_plate;
     public $identificationVin;
     public $identificationTypenumber;
     public $identificationSerialnumber;
     /** @var string */
-    public $identificationDirect_link;
+    public string $identificationDirect_link;
     /** @var string */
-    public $generalCategory;
+    public string $generalCategory;
     /** @var string */
-    public $generalBodystyle;
+    public string $generalBodystyle;
     /** @var string */
-    public $generalMakeName;
+    public string $generalMakeName;
     /** @ReadOnly */
     public $generalMakeId;
     /** @var string */
-    public $generalModelName;
+    public string $generalModelName;
     public $generalModelCode;
     public $generalModelStart;
     public $generalModelEnd;
     /** @var string */
-    public $generalTypeName;
+    public string $generalTypeName;
     public $generalApplicationField;
     public $generalApplicationMaterial;
     public $generalApplicationScale;
     /** @var integer */
-    public $bodyDoor_count;
+    public int $bodyDoor_count;
     public $bodyDimensionsLength;
     public $bodyDimensionsWidth;
     public $bodyDimensionsHeight;
     public $bodyMax_roof_load;
     /** @var string */
-    public $bodyColourPrimary = "other";
+    public string $bodyColourPrimary = "other";
     public $bodyColourName;
     public $bodyColourTint;
     public $bodyColourPaint_type;
@@ -51,7 +52,7 @@ class Product extends Base {
     public $bodyCabinSleeper_cab;
     public $bodyCabinModel;
     /** @var integer */
-    public $interiorSeat_count;
+    public int $interiorSeat_count;
     public $interiorBed_count;
     public $interiorColour;
     public $interiorUpholstery;
@@ -60,11 +61,11 @@ class Product extends Base {
     public $powertrainEngineCylinder_count;
     public $powertrainEngineDisplacement;
     /** @var integer */
-    public $powertrainEnginePowerValue;
+    public int $powertrainEnginePowerValue;
     /** @var string */
-    public $powertrainEnginePowerUnit;
+    public string $powertrainEnginePowerUnit;
     /** @var string */
-    public $powertrainEngineEnergyType;
+    public string $powertrainEngineEnergyType;
     public $powertrainEngineEnergyFuelConsumptionCombined;
     public $powertrainEngineEnergyFuelConsumptionUrban;
     public $powertrainEngineEnergyFuelConsumptionExtra_urban;
@@ -77,7 +78,7 @@ class Product extends Base {
     public $powertrainEngineEnergyRange;
     public $powertrainTransmissionGear_count;
     /** @var string */
-    public $powertrainTransmissionType;
+    public string $powertrainTransmissionType;
     public $powertrainTransmissionMake;
     public $powertrainTransmissionModel;
     public $powertrainEmissionsClass;
@@ -140,26 +141,26 @@ class Product extends Base {
     public $weightsMass_empty;
     public $weightsPayload;
     /** @var integer */
-    public $weightsGvw;
+    public int $weightsGvw;
     public $weightsTrailer_loadBraked;
     public $weightsTrailer_loadUnbraked;
     /** @var integer */
-    public $conditionKey_count;
+    public int $conditionKey_count;
     public $conditionHand_transmitter_count;
     /** @var boolean */
-    public $conditionUsed;
+    public bool $conditionUsed;
     /** @var integer */
-    public $conditionOdometerReading;
+    public int $conditionOdometerReading;
     /** @var string */
-    public $conditionOdometerUnit;
+    public string $conditionOdometerUnit;
     /** @var integer */
-    public $conditionOperating_hours;
+    public int $conditionOperating_hours;
     public $conditionStateGeneral;
     public $conditionStateTechnical;
     public $conditionStateOptical;
     public $conditionDamageState;
     /** @var array */
-    public $conditionDamageRemarks;
+    public array $conditionDamageRemarks;
     public $conditionDamageRepair_costs;
     public $classificationDemonstrator;
     public $classificationRental;
@@ -169,13 +170,13 @@ class Product extends Base {
     public $classificationCe_marking;
     public $classificationEuro_ncap;
     /** @var string */
-    public $sales_conditionsPricingCurrency = "EUR";
+    public string $sales_conditionsPricingCurrency = "EUR";
     public $sales_conditionsPricingType;
     public $sales_conditionsPricingNew;
     /** @var float */
-    public $sales_conditionsPricingConsumerValue;
+    public float $sales_conditionsPricingConsumerValue;
     /** @var boolean */
-    public $sales_conditionsPricingConsumerIncl_vat;
+    public bool $sales_conditionsPricingConsumerIncl_vat;
     public $sales_conditionsPricingDiscountedValue;
     public $sales_conditionsPricingDiscountedIncl_vat;
     public $sales_conditionsPricingAs_isValue;
@@ -190,7 +191,7 @@ class Product extends Base {
     public $sales_conditionsBiddingMinimumUnit;
     public $sales_conditionsBiddingReserve;
     /** @var boolean */
-    public $sales_conditionsMargin_scheme;
+    public bool $sales_conditionsMargin_scheme;
     public $sales_conditionsDelivery_costs;
     public $sales_conditionsExpected;
     public $sales_conditionsReserved;
@@ -227,23 +228,23 @@ class Product extends Base {
     public $lease_contractPurchase_possible;
     public $lease_contractRemarks;
     /** @var string */
-    public $historyConstruction_date;
+    public string $historyConstruction_date;
     public $historyFirst_registrationCountry;
-    /** @var Api\Hexon\Entity\Custom\Date */
-    public $historyFirst_registrationDate;
+    /** @var Date */
+    public Date $historyFirst_registrationDate;
     /** @var string */
-    public $historyCurrent_registrationCountry = "nl";
-    /** @var Api\Hexon\Entity\Custom\Date */
-    public $historyCurrent_registrationFirst_admission;
+    public string $historyCurrent_registrationCountry = "nl";
+    /** @var Date */
+    public Date $historyCurrent_registrationFirst_admission;
     public $historyDate_last_ownership_change;
     public $historyMaintenance_booklet;
     public $historyPrevious_owner_count;
     /** @var array */
-    public $descriptionRemarks;
+    public array $descriptionRemarks;
     /** @var array */
-    public $descriptionRemarks_trade;
+    public array $descriptionRemarks_trade;
     /** @var integer */
-    public $descriptionDefault_remark = 1;
+    public int $descriptionDefault_remark = 1;
     public $descriptionTitle;
     public $descriptionHighlights;
     public $descriptionSearch_terms;
@@ -283,10 +284,10 @@ class Product extends Base {
     public $category_specificMachineryTransportationImmobile;
     public $category_specificMachineryTransportationMethod;
     /** @var array */
-    public $category_specificMachineryTransportationPropulsion;
+    public array $category_specificMachineryTransportationPropulsion;
     public $category_specificMachineryTransportationSurface;
     /** @var string */
-    public $category_specificMachineryTransportationDriver_position;
+    public string $category_specificMachineryTransportationDriver_position;
     public $category_specificMachineryAutonomous;
     public $category_specificMachineryCrusher_type;
     public $category_specificMachineryRollerVibrating;
@@ -300,22 +301,22 @@ class Product extends Base {
     public $category_specificBoatsDepth;
     public $category_specificBoatsHull_material;
     public $category_specificBoatsBerth;
-    /** @var Api\Hexon\Entity\Custom\Date */
-    public $region_specificNlApk_date;
+    /** @var Date */
+    public Date $region_specificNlApk_date;
     public $region_specificNlApk_delivery;
     /** @var integer */
-    public $region_specificNlBpm_amount;
+    public int $region_specificNlBpm_amount;
     public $region_specificNlPrice_consumer_incl_bpm;
     public $region_specificNlPrice_discounted_incl_bpm;
     public $region_specificNlPrice_as_is_incl_bpm;
     public $region_specificNlPrice_trade_incl_bpm;
     public $region_specificNlIncome_tax_addition_percentage;
     /** @var string */
-    public $auctionId;
+    public string $auctionId;
     /** @var string */
-    public $auctionClient_id;
+    public string $auctionClient_id;
     /** @var string */
-    public $auctionLink;
+    public string $auctionLink;
     public $extra_fields;
 
 }

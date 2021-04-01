@@ -7,10 +7,10 @@ use AuctioCore\Api\Base;
 class ProductImage extends Base {
 
     /** @var string */
-    public $stocknumber;
+    public string $stocknumber;
     /** @var integer */
-    public $nr;
+    public int $nr;
     /** @var string */
-    public $image_url;
+    public string $image_url;
 
 }

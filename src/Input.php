@@ -12,7 +12,7 @@ class Input
      * @param string $output
      * @return mixed|void
      */
-    public function convertJson($dataString, $output = "object")
+    public static function convertJson($dataString, $output = "object")
     {
         if (!is_object($dataString) && !is_array($dataString)) {
             $dataString = str_replace("'", '"', $dataString);
@@ -35,16 +35,16 @@ class Input
     /**
      * Decode x-form-encoded data
      *
-     * @param string $dataString, example test=1&test2=3&data=1+2
-     * @param boolean $urlDecode, url-decode value
+     * @param string $dataString , example test=1&test2=3&data=1+2
+     * @param boolean $urlDecode , url-decode value
      * @return array
      */
-    public function formDecode($dataString, $urlDecode = false)
+    public static function formDecode(string $dataString, $urlDecode = false): array
     {
-        if (empty($dataString)) return array();
+        if (empty($dataString)) return [];
         if (self::isJson($dataString)) return json_decode($dataString, true);
 
-        $output = array();
+        $output = [];
         $dataElements = explode("&", $dataString);
         foreach ($dataElements AS $dataElement) {
             $data = explode("=", $dataElement);
@@ -60,7 +60,7 @@ class Input
      * @param string $dataString
      * @return boolean
      */
-    public function isJson($dataString)
+    public static function isJson(string $dataString): bool
     {
         return is_string($dataString) && is_array(json_decode($dataString, true)) && (json_last_error() == JSON_ERROR_NONE);
     }
@@ -71,7 +71,7 @@ class Input
      * @param array $array
      * @return boolean
      */
-    public function isAssocArray($array)
+    public static function isAssocArray(array $array): bool
     {
         if (empty($array)) return false;
         return (array_keys($array) !== range(0,count($array)-1));
@@ -83,9 +83,9 @@ class Input
      * @param $params
      * @return array
      */
-    public function setParams($params)
+    public static function setParams($params): array
     {
-        $output = array();
+        $output = [];
 
         $output['filter'] = (isset($params->filter)) ? json_decode($params->filter, true) : null;
         $output['groupBy'] = (isset($params->groupBy)) ? json_decode($params->groupBy, true) : null;

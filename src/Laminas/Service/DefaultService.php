@@ -2,18 +2,20 @@
 
 namespace AuctioCore\Laminas\Service;
 
+use AuctioCore\Laminas\Repository\AbstractRepository;
+
 class DefaultService
 {
     /**
      * @var array $messages Error-messages
      */
-    private $messages = [];
+    private array $messages = [];
 
     /**
      * @var array $errorData Error-data
      */
-    private $errorData = [];
-    protected $repository;
+    private array $errorData = [];
+    protected AbstractRepository $repository;
 
     public function get($id, $output = 'object', $refresh = false)
     {
@@ -100,7 +102,7 @@ class DefaultService
      *
      * @return array
      */
-    public function getErrorData()
+    public function getErrorData(): array
     {
         return $this->errorData;
     }
@@ -108,7 +110,7 @@ class DefaultService
     /**
      * Set error-message
      *
-     * @param array $messages
+     * @param array|string $messages
      */
     public function setMessages($messages)
     {
@@ -119,7 +121,7 @@ class DefaultService
     /**
      * Add error-message
      *
-     * @param array $message
+     * @param array|string $message
      */
     public function addMessage($message)
     {
@@ -132,7 +134,7 @@ class DefaultService
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }

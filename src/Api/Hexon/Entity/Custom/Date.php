@@ -4,6 +4,8 @@ namespace AuctioCore\Api\Hexon\Entity\Custom;
 
 use AuctioCore\Api\Base;
 use AuctioCore\Api\BaseInterface;
+use DateTimeZone;
+use Exception;
 
 class Date extends Base implements BaseInterface {
 
@@ -21,7 +23,7 @@ class Date extends Base implements BaseInterface {
             try {
                 $date = new \DateTime($data);
                 $timestamp = $date->getTimestamp();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return;
             }
         }
@@ -35,14 +37,16 @@ class Date extends Base implements BaseInterface {
     /**
      * Returns a JSON encoded string with current Entity.
      * We have filtered out the readOnly elements
-     * @return string
+     * @param bool $allowNull
+     * @return string|null
      */
-    public function encode(){
+    public function encode($allowNull = true): ?string
+    {
         // Return if empty
         if (!isset($this->date) || empty($this->date)) return null;
 
         // Set timezone to Europe/Amsterdam
-        $this->date->setTimezone(new \DateTimeZone('Europe/Amsterdam'));
+        $this->date->setTimezone(new DateTimeZone('Europe/Amsterdam'));
 
         // Return
         return $this->date->format("Y-m-d");

@@ -7,30 +7,30 @@ use AuctioCore\Api\Base;
 class ProductAccessory extends Base {
 
     /** @var string */
-    public $stocknumber;
+    public string $stocknumber;
     /** @var integer */
-    public $nr;
+    public int $nr;
     /** @var array */
-    public $name;
+    public array $name;
     /** @var array */
-    public $description;
+    public array $description;
     /** @var string */
-    public $code;
+    public string $code;
     /** @var array */
-    public $factory_designation;
+    public array $factory_designation;
     /** @var string */
-    public $priority;
+    public string $priority;
     /** @var array */
-    public $group;
+    public array $group;
     /** @var boolean */
-    public $is_option_pack;
+    public bool $is_option_pack;
     /** @var integer */
-    public $is_part_of;
+    public int $is_part_of;
     /** @var array */
-    public $hint;
+    public array $hint;
     /** @var string */
-    public $fitment;
+    public string $fitment;
     /** @var float */
-    public $price_new;
+    public float $price_new;
 
 }

@@ -7,12 +7,12 @@ use AuctioCore\Api\Base;
 class RequestOptions extends Base {
 
     /** @var string */
-    public $context_url;
+    public string $context_url;
     /** @var string */
-    public $name;
+    public string $name;
     /** @var boolean */
-    public $auto_client_review;
+    public bool $auto_client_review;
     /** @var string */
-    public $callback_url;
+    public string $callback_url;
 
 }

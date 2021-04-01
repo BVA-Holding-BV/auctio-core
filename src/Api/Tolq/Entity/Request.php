@@ -7,14 +7,14 @@ use AuctioCore\Api\Base;
 class Request extends Base {
 
     /** @var array */
-    public $request;
+    public array $request;
     /** @var string */
-    public $source_language_code;
+    public string $source_language_code;
     /** @var string */
-    public $target_language_codes;
+    public string $target_language_codes;
     /** @var string */
-    public $quality;
-    /** #var Api\Tolq\Entity\RequestOptions */
-    public $options;
+    public string $quality;
+    /** @var RequestOptions */
+    public RequestOptions $options;
 
 }

@@ -4,33 +4,46 @@
  */
 namespace AuctioCore\Api\Auctio;
 
+use AuctioCore\Api\Auctio\Entity\Auction;
+use AuctioCore\Api\Auctio\Entity\Category;
+use AuctioCore\Api\Auctio\Entity\CollectionDay;
+use AuctioCore\Api\Auctio\Entity\DisplayDay;
+use AuctioCore\Api\Auctio\Entity\Location;
+use AuctioCore\Api\Auctio\Entity\Lot;
+use AuctioCore\Api\Auctio\Entity\LotMetaData;
+use AuctioCore\Api\Auctio\Entity\MetaData;
+use DateTime;
+use DateTimeZone;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+
 class Api
 {
 
-    private $errorData;
-    private $client;
-    private $clientHeaders;
-    private $messages;
-    private $token;
-    private $tz;
+    private array $errorData;
+    private Client $client;
+    private array $clientHeaders;
+    private array $messages;
+    private array $token;
+    private DateTimeZone $tz;
 
     /**
      * Constructor
      *
      * @param string $hostname
-     * @param string $username
-     * @param string $password
-     * @param string $userAgent
-     * @param object|array $token
+     * @param null $username
+     * @param null $password
+     * @param null $userAgent
+     * @param null $token
      * @param boolean $debug
      */
-    public function __construct($hostname, $username = null, $password = null, $userAgent = null, $token = null, $debug = false)
+    public function __construct(string $hostname, $username = null, $password = null, $userAgent = null, $token = null, $debug = false)
     {
         // Set time-zone for converting "back" from UTC
-        $this->tz = new \DateTimeZone('Europe/Amsterdam');
+        $this->tz = new DateTimeZone('Europe/Amsterdam');
 
         // Set client
-        $this->client = new \GuzzleHttp\Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
+        $this->client = new Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
 
         // Set default header for client-requests
         $this->clientHeaders = [
@@ -68,7 +81,7 @@ class Api
      *
      * @return array
      */
-    public function getErrorData()
+    public function getErrorData(): array
     {
         return $this->errorData;
     }
@@ -76,7 +89,7 @@ class Api
     /**
      * Set error-message
      *
-     * @param array $messages
+     * @param array|string $messages
      */
     public function setMessages($messages)
     {
@@ -87,7 +100,7 @@ class Api
     /**
      * Add error-message
      *
-     * @param array $message
+     * @param array|string $message
      */
     public function addMessage($message)
     {
@@ -100,7 +113,7 @@ class Api
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }
@@ -110,7 +123,7 @@ class Api
      *
      * @param array $data
      */
-    public function setToken($data)
+    public function setToken(array $data)
     {
         $this->token = $data;
     }
@@ -120,7 +133,7 @@ class Api
      *
      * @return array
      */
-    public function getToken()
+    public function getToken(): array
     {
         return $this->token;
     }
@@ -132,9 +145,9 @@ class Api
      * @param string $password
      * @param boolean $retry
      * @return boolean
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
-    public function login($username, $password, $retry = true)
+    public function login(string $username, string $password, $retry = true): bool
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -183,9 +196,9 @@ class Api
      * Logout token(s)
      *
      * @return boolean
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
-    public function logout()
+    public function logout(): bool
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -216,9 +229,9 @@ class Api
      *
      * @param Entity\Auction $auction
      * @return bool|object
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
-    public function createAuction(\AuctioCore\Api\Auctio\Entity\Auction $auction)
+    public function createAuction(Auction $auction)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -250,9 +263,9 @@ class Api
      *
      * @param Entity\CollectionDay $day
      * @return bool|object
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
-    public function createCollectionDay(\AuctioCore\Api\Auctio\Entity\CollectionDay $day)
+    public function createCollectionDay(CollectionDay $day)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -284,9 +297,9 @@ class Api
      *
      * @param Entity\DisplayDay $day
      * @return bool|object
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
-    public function createDisplayDay(\AuctioCore\Api\Auctio\Entity\DisplayDay $day)
+    public function createDisplayDay(DisplayDay $day)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -318,9 +331,9 @@ class Api
      *
      * @param Entity\Location $location
      * @return bool|object
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
-    public function createLocation(\AuctioCore\Api\Auctio\Entity\Location $location)
+    public function createLocation(Location $location)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -351,9 +364,9 @@ class Api
      *
      * @param Entity\Lot $lot
      * @return bool|object
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
-    public function createLot(\AuctioCore\Api\Auctio\Entity\Lot $lot)
+    public function createLot(Lot $lot)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -387,11 +400,11 @@ class Api
      * @param int $lotSequence
      * @param string $localFilename
      * @param int $imageSequence
-     * @param array $uploadFile
+     * @param null $uploadFile
      * @return bool|object
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
-    public function createLotMedia($lotId, $lotSequence, $localFilename, $imageSequence, $uploadFile = null)
+    public function createLotMedia(int $lotId, int $lotSequence, string $localFilename, int $imageSequence, $uploadFile = null)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -456,7 +469,7 @@ class Api
         }
     }
 
-    private function createLotMetaData(\AuctioCore\Api\Auctio\Entity\LotMetaData $lotMetaData)
+    private function createLotMetaData(LotMetaData $lotMetaData)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -494,7 +507,7 @@ class Api
         }
     }
 
-    public function updateAuction(\AuctioCore\Api\Auctio\Entity\Auction $auction)
+    public function updateAuction(Auction $auction)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -521,7 +534,7 @@ class Api
         }
     }
 
-    public function updateCollectionDay(\AuctioCore\Api\Auctio\Entity\CollectionDay $day)
+    public function updateCollectionDay(CollectionDay $day)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -548,7 +561,7 @@ class Api
         }
     }
 
-    public function updateDisplayDay(\AuctioCore\Api\Auctio\Entity\DisplayDay $day)
+    public function updateDisplayDay(DisplayDay $day)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -575,7 +588,7 @@ class Api
         }
     }
 
-    public function updateLot(\AuctioCore\Api\Auctio\Entity\Lot $lot)
+    public function updateLot(Lot $lot)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -602,7 +615,7 @@ class Api
         }
     }
 
-    public function updateLotMetaData(\AuctioCore\Api\Auctio\Entity\LotMetaData $lotMetaData)
+    public function updateLotMetaData(LotMetaData $lotMetaData)
     {
         // Check for current lot-metadata (because lot-metadata will be totally overwritten)
         $current = $this->getLotMetaData($lotMetaData->id);
@@ -632,7 +645,7 @@ class Api
 
                 // Add element if not exists
                 if ($exists === false) {
-                    $lotMetaData->metadata[] = new \AuctioCore\Api\Auctio\Entity\MetaData(["key"=>$metaDataElement->key, "value"=>$metaDataElement->value]);
+                    $lotMetaData->metadata[] = new MetaData(["key"=>$metaDataElement->key, "value"=>$metaDataElement->value]);
                 }
             }
 
@@ -661,7 +674,7 @@ class Api
         }
     }
 
-    public function updateCategory($categoryId, \AuctioCore\Api\Auctio\Entity\Category $category)
+    public function updateCategory($categoryId, Category $category)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -798,7 +811,7 @@ class Api
      * @param integer $auctionId
      * @param string $language
      * @return bool|object
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function getAuctionCategories($auctionId, $language = null)
     {
@@ -1422,7 +1435,7 @@ class Api
      *
      * @param int $auctionId
      * @param string $indexedBy
-     * @return array
+     * @return false|array
      */
     public function getLotsByAuction($auctionId, $indexedBy = null)
     {
@@ -1599,15 +1612,15 @@ class Api
             if (!empty($object->$attribute)) {
                 // Check if date in format 2018-01-01T00:00:00.000+0000
                 if (!is_numeric($object->$attribute)) {
-                    $object->$attribute = (new \DateTime($object->$attribute))->setTimezone($this->tz);
+                    $object->$attribute = (new DateTime($object->$attribute))->setTimezone($this->tz);
                 }
                 // Check if date in format 1514782800000 (microseconds since Unix Epoch)
                 elseif (is_numeric($object->$attribute) && strlen($object->$attribute) >= 10) {
-                    $object->$attribute = (new \DateTime('@' .($object->$attribute / 1000)))->setTimezone($this->tz);
+                    $object->$attribute = (new DateTime('@' .($object->$attribute / 1000)))->setTimezone($this->tz);
                 }
                 // Check if date in format 1514782800 (seconds since Unix Epoch)
                 elseif (is_numeric($object->$attribute) && strlen($object->$attribute) <= 10) {
-                    $object->$attribute = (new \DateTime('@' .$object->$attribute))->setTimezone($this->tz);
+                    $object->$attribute = (new DateTime('@' .$object->$attribute))->setTimezone($this->tz);
                 }
             }
         }

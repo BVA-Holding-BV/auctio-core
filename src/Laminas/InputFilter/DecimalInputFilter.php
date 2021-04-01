@@ -10,13 +10,13 @@ class DecimalInputFilter
     /**
      * Get InputFilter for a Decimal-type field
      *
-     * @param $name
-     * @param int $precision, total length of value
-     * @param int $scale, length of decimals
+     * @param string $name
+     * @param int $precision total length of value
+     * @param int $scale length of decimals
      * @param bool $required
      * @return void|InputFilter
      */
-    public static function getFilter($name, $precision, $scale, $required = false)
+    public static function getFilter(string $name, int $precision, int $scale, $required = false): InputFilter
     {
         if ($name == null) {
             return;

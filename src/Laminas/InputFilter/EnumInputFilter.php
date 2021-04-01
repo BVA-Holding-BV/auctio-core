@@ -11,12 +11,12 @@ class EnumInputFilter
     /**
      * Get InputFilter for a Enum-type field
      *
-     * @param $name
+     * @param string $name
      * @param bool $required
      * @param array $enumValues
      * @return void|InputFilter
      */
-    public static function getFilter($name, $required = false, $enumValues = [])
+    public static function getFilter(string $name, $required = false, $enumValues = []): InputFilter
     {
         if ($name == null) {
             return;

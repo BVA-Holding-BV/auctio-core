@@ -1,6 +1,8 @@
 <?php
 namespace AuctioCore\Api\Auctio\Entity;
 
+use AuctioCore\Api\Auctio\Entity\Custom\DateTime;
+use AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage;
 use AuctioCore\Api\Base;
 
 class Lot extends Base {
@@ -10,134 +12,134 @@ class Lot extends Base {
     const RESERVATION_STATE_APPROVED = 'APPROVED';
 
     /** @var int */
-    public $id;
+    public int $id;
     /** @var int */
-    public $auctionId;
+    public int $auctionId;
     /** @var int */
-    public $categoryId;
+    public int $categoryId;
     /** @var string */
-    public $categoryCode;
+    public string $categoryCode;
     /** @var string */
-    public $dossier;
+    public string $dossier;
     /** @var string */
-    public $externalDossierNumber;
+    public string $externalDossierNumber;
     /** @var float */
-    public $auctionFeePercentage;
+    public float $auctionFeePercentage;
     /** @var string */
-    public $bidMethodType;
+    public string $bidMethodType;
     /** @var int */
-    public $number;
+    public int $number;
     /** @var string */
-    public $numberAddition;
+    public string $numberAddition;
     /**
      * @var string
      * @ReadOnly
      */
-    public $fullNumber;
-    /** @var Api\Auctio\Entity\Custom\DateTime */
-    public $startDate;
-    /** @var Api\Auctio\Entity\Custom\DateTime */
-    public $endDate;
+    public string $fullNumber;
+    /** @var DateTime */
+    public DateTime $startDate;
+    /** @var DateTime */
+    public DateTime $endDate;
     /**
      * @var int
      * @ReadOnly
      */
-    public $endDateDays;
+    public int $endDateDays;
     /**
      * @var int
      * @ReadOnly
      */
-    public $endDateHours;
+    public int $endDateHours;
     /**
      * @var int
      * @ReadOnly
      */
-    public $endDateMinutes;
+    public int $endDateMinutes;
     /**
      * @var int
      * @ReadOnly
      */
-    public $endDateSeconds;
+    public int $endDateSeconds;
     /** @var bool */
-    public $open;
-    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
-    public $name;
-    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
-    public $description;
+    public bool $open;
+    /** @var LocaleMessage */
+    public LocaleMessage $name;
+    /** @var LocaleMessage */
+    public LocaleMessage $description;
     /** @var string */
-    public $thumbnailUrl;
+    public string $thumbnailUrl;
     /** @var string */
-    public $imageUrl;
+    public string $imageUrl;
     /** @var string */
-    public $lotPageUrl;
+    public string $lotPageUrl;
     /** @var int */
-    public $startAmount;
+    public int $startAmount;
     /** @var int */
-    public $minimumAmount;
+    public int $minimumAmount;
     /** @var float */
-    public $latestBidAmount;
-    /** @var Api\Auctio\Entity\Custom\DateTime */
-    public $lastBidTime;
+    public float $latestBidAmount;
+    /** @var DateTime */
+    public DateTime $lastBidTime;
     /** @var int */
-    public $bidCount;
+    public int $bidCount;
     /** @var int */
-    public $lotTypeId;
+    public int $lotTypeId;
     /** @var int */
-    public $locationId;
+    public int $locationId;
     /** @var string */
-    public $externalId;
+    public string $externalId;
     /** @var string */
-    public $externalURL;
+    public string $externalURL;
     /** @var string */
-    public $externalSMS;
+    public string $externalSMS;
     /** @var string */
-    public $externalEmailBroker;
+    public string $externalEmailBroker;
     /** @var string */
-    public $externalEmailOwner;
+    public string $externalEmailOwner;
     /** @var bool */
-    public $approved;
+    public bool $approved;
     /** @var bool */
-    public $assignedExplicitly;
+    public bool $assignedExplicitly;
     /** @var float */
-    public $vehicleTaxAmount;
-    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
-    public $extraDownloadName;
+    public float $vehicleTaxAmount;
+    /** @var LocaleMessage */
+    public LocaleMessage $extraDownloadName;
     /** @var string */
-    public $extraDownloadURL;
-    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
-    public $extraDownload2Name;
+    public string $extraDownloadURL;
+    /** @var LocaleMessage */
+    public LocaleMessage $extraDownload2Name;
     /** @var string */
-    public $extraDownload2URL;
+    public string $extraDownload2URL;
     /** @var int */
-    public $combinationLotId;
+    public int $combinationLotId;
     /**
      * @var array
      * @ReadOnly
      */
-    public $lotIds;
+    public array $lotIds;
     /**
      * @var string
      * @ReadOnly
      */
-    public $reservationState;
+    public string $reservationState;
     /** @var string */
-    public $currencyCode;
+    public string $currencyCode;
     /** @var float */
-    public $additionalCosts;
+    public float $additionalCosts;
     /** @var bool */
-    public $buyNowEnabled;
+    public bool $buyNowEnabled;
     /** @var string */
-    public $buyNowPrice;
-    /** @var Api\Auctio\Entity\ReverseLotDetail */
-    public $reverseLotDetail;
+    public string $buyNowPrice;
+    /** @var ReverseLotDetail */
+    public ReverseLotDetail $reverseLotDetail;
     /** @var bool */
-    public $visibleInHotlist;
+    public bool $visibleInHotlist;
     /** @var bool */
-    public $publishOnFacebook;
-    /** @var Api\Auctio\Entity\Custom\LocaleMessage */
-    public $notificationMessageHeader;
+    public bool $publishOnFacebook;
+    /** @var LocaleMessage */
+    public LocaleMessage $notificationMessageHeader;
     /** @var bool */
-    public $publishNotificationMsgDetail;
+    public bool $publishNotificationMsgDetail;
     /** @var bool */
-    public $showMessageDetailLink;
+    public bool $showMessageDetailLink;
 }

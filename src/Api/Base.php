@@ -4,11 +4,19 @@ namespace AuctioCore\Api;
 
 use AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage AS AuctioLocaleMessage;
 use AuctioCore\Api\Auctio\Entity\Custom\DateTime AS AuctioDateTime;
+use AuctioCore\Input;
+use BadMethodCallException;
+use Datetime;
+use Exception;
+use InvalidArgumentException;
+use ReflectionObject;
+use ReflectionProperty;
+use stdClass;
 
 abstract class Base implements BaseInterface
 {
 
-    public function __construct($data = array()) {
+    public function __construct($data = []) {
         if(!empty($data)) {
             $this->populate((object)$data);
         }
@@ -16,21 +24,24 @@ abstract class Base implements BaseInterface
     /**
      * @var array
      */
-    protected static $populateProperties;
+    protected static array $populateProperties;
 
     /**
      * @var array
      */
-    protected static $exportProperties;
+    protected static array $exportProperties;
 
     /**
      * Returns a JSON encoded string with current Entity.
      * We have filtered out the readOnly elements
-     * @return string
+     * @param bool $allowNull
+     * @return string|null
+     * @throws Exception
      */
-    public function encode($allowNull = true) {
+    public function encode($allowNull = true): ?string
+    {
         if(!isset(self::$exportProperties[get_called_class()])) {
-            $reflectionObject = new \ReflectionObject($this);
+            $reflectionObject = new ReflectionObject($this);
 
             foreach($reflectionObject->getProperties() as $property) {
                 if(stripos($property->getDocComment(), '@ReadOnly') === false) {
@@ -49,24 +60,25 @@ abstract class Base implements BaseInterface
      * @param array $vars
      * @param bool $allowNull
      * @return array parsed vars
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function formatVars(array $vars, $allowNull = true) {
-        $formattedVars = array();
+    protected function formatVars(array $vars, $allowNull = true): array
+    {
+        $formattedVars = [];
         foreach($vars as $varName => $var) {
-            if(is_object($var) && !($var instanceof \stdClass) ) {
+            if(is_object($var) && !($var instanceof stdClass) ) {
                 if($var instanceof Base) {
                     $var = $var->encode();
-                    if (\AuctioCore\Input::isJson($var)) {
+                    if (Input::isJson($var)) {
                         $var = json_decode($var);
                     }
                 }
-                elseif($var instanceof \DateTime) {
-                    $var = $var->format(\Datetime::ISO8601);
+                elseif($var instanceof DateTime) {
+                    $var = $var->format(Datetime::ISO8601);
                 } elseif(method_exists($var, '__toString')) {
                     $var = (string)$var;
                 } else {
-                    throw new \Exception('Cannot convert object of type ' . get_class($var) . ' to string');
+                    throw new Exception('Cannot convert object of type ' . get_class($var) . ' to string');
                 }
             }
 
@@ -79,7 +91,7 @@ abstract class Base implements BaseInterface
 
     /**
      * Loop over all properties and set them in the entity
-     * @param \stdClass $data
+     * @param stdClass|array $data
      * @return self
      */
     public function populate($data) {
@@ -87,16 +99,16 @@ abstract class Base implements BaseInterface
             return $this;
         }
 
-        if(!($data instanceof \stdClass)) {
-            throw new \InvalidArgumentException('$data should be instance of stdClass');
+        if(!($data instanceof stdClass)) {
+            throw new InvalidArgumentException('$data should be instance of stdClass');
         }
 
         if(!isset(static::$populateProperties[get_called_class()])) {
-            $reflectionObject = new \ReflectionObject($this);
+            $reflectionObject = new ReflectionObject($this);
 
             // loop over all properties looking for custom datatypes
-            foreach($reflectionObject->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
-                $matches = array();
+            foreach($reflectionObject->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
+                $matches = [];
                 // look for @var Classname
                 if(preg_match('/@var\s+([a-zA-Z\\\\]+)(\[])?/s', $property->getDocComment(), $matches) ) {
                     // found type hint
@@ -110,10 +122,10 @@ abstract class Base implements BaseInterface
                     // found a custom data type
                     $className = substr(__NAMESPACE__, 0 , strrpos(__NAMESPACE__, '\\')) . '\\' . $matches[1];
                     if(!class_exists($className)) {
-                        throw new \Exception('Could not find type:' . $className);
+                        throw new Exception('Could not find type:' . $className);
                     }
                     if(!is_subclass_of($className, '\AuctioCore\Api\BaseInterface')) {
-                        throw new \Exception('Type is not known:' . $className);
+                        throw new Exception('Type is not known:' . $className);
                     }
                     static::$populateProperties[get_called_class()][$property->getName()] = $className;
                 } else {
@@ -130,7 +142,7 @@ abstract class Base implements BaseInterface
 
                 // if default type, parse it to that type (unless stdClass)
                 if(in_array($type, Defaults::$basicTypes)) {
-                    if(!( $value instanceof \stdClass) ) {
+                    if(!( $value instanceof stdClass) ) {
                         if (!is_null($value)) {
                             settype($value, $type);
                         }
@@ -145,7 +157,7 @@ abstract class Base implements BaseInterface
                         } elseif($typeObject instanceof AuctioDateTime) {
                             $this->$name = $typeObject->populate($value);
                         } else {
-                            $this->$name = array();
+                            $this->$name = [];
                             foreach ($value as $keyElement => $valueElement) {
                                 array_push($this->$name,
                                     $typeObject->populate($valueElement)
@@ -164,14 +176,14 @@ abstract class Base implements BaseInterface
     }
 
     public function __call($name, $params) {
-        $matches = array();
+        $matches = [];
         if(preg_match('/^get(\w+)/', $name, $matches)) {
             $property = lcfirst($matches[1]);
             if(property_exists($this, $property) ) {
                 return $this->$property;
             }
         }
-        throw new \BadMethodCallException('Unknown method ' . $name);
+        throw new BadMethodCallException('Unknown method ' . $name);
     }
 
     /**
@@ -185,7 +197,8 @@ abstract class Base implements BaseInterface
     /**
      * @return string
      */
-    function __toString() {
+    function __toString(): string
+    {
         return $this->encode();
     }
 

@@ -4,13 +4,20 @@
  */
 namespace AuctioCore\Api\Hexon;
 
+use AuctioCore\Api\Hexon\Entity\Advertisement;
+use AuctioCore\Api\Hexon\Entity\Auction;
+use AuctioCore\Api\Hexon\Entity\Product;
+use AuctioCore\Api\Hexon\Entity\ProductAccessory;
+use AuctioCore\Api\Hexon\Entity\ProductImage;
+use GuzzleHttp\Client;
+
 class Api
 {
 
-    private $client;
-    private $clientHeaders;
-    private $messages;
-    private $errorData;
+    private Client $client;
+    private array $clientHeaders;
+    private array $messages;
+    private array $errorData;
 
     /**
      * Constructor
@@ -20,10 +27,10 @@ class Api
      * @param string $password
      * @param boolean $debug
      */
-    public function __construct($hostname, $username, $password, $debug = false)
+    public function __construct(string $hostname, string $username, string $password, $debug = false)
     {
         // Set client
-        $this->client = new \GuzzleHttp\Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
+        $this->client = new Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
 
         // Set default header for client-requests
         $this->clientHeaders = [
@@ -40,7 +47,6 @@ class Api
      * Set error-data
      *
      * @param $data
-     * @return array
      */
     public function setErrorData($data)
     {
@@ -52,7 +58,7 @@ class Api
      *
      * @return array
      */
-    public function getErrorData()
+    public function getErrorData(): array
     {
         return $this->errorData;
     }
@@ -60,7 +66,7 @@ class Api
     /**
      * Set error-message
      *
-     * @param array $messages
+     * @param array|string $messages
      */
     public function setMessages($messages)
     {
@@ -71,7 +77,7 @@ class Api
     /**
      * Add error-message
      *
-     * @param array $message
+     * @param array|string $message
      */
     public function addMessage($message)
     {
@@ -84,7 +90,7 @@ class Api
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }
@@ -96,7 +102,7 @@ class Api
      * @param string $site
      * @return boolean|array
      */
-    public function getAdvertisement($stocknumber, $site)
+    public function getAdvertisement(int $stocknumber, string $site)
     {
         $requestHeader = $this->clientHeaders;
         $result = $this->client->request('GET', 'ad/' . $stocknumber . urlencode(':') . $site, ["headers"=>$requestHeader]);
@@ -121,7 +127,7 @@ class Api
      * @param boolean $resultWithLinks
      * @return boolean|array
      */
-    public function getAdvertisements($stocknumbers, $site, $requestedFields = "*", $resultWithLinks = false)
+    public function getAdvertisements(array $stocknumbers, string $site, $requestedFields = "*", $resultWithLinks = false)
     {
         $requestedFields = (is_array($requestedFields)) ? implode(",", $requestedFields) : $requestedFields;
         $resultWithLinks = ($resultWithLinks) ? "true" : "false";
@@ -147,7 +153,7 @@ class Api
      * @param int $auctionId
      * @return boolean|array
      */
-    public function getAuction($auctionId)
+    public function getAuction(int $auctionId)
     {
         $requestHeader = $this->clientHeaders;
         $result = $this->client->request('GET', 'auction/' . $auctionId, ["headers"=>$requestHeader]);
@@ -255,7 +261,7 @@ class Api
      * @param int $stocknumber
      * @return boolean|array
      */
-    public function getProduct($stocknumber)
+    public function getProduct(int $stocknumber)
     {
         $requestHeader = $this->clientHeaders;
         $result = $this->client->request('GET', 'vehicle/' . $stocknumber, ["headers"=>$requestHeader]);
@@ -306,7 +312,7 @@ class Api
      * @param int $stocknumber
      * @return boolean|array
      */
-    public function getProductAccessories($stocknumber)
+    public function getProductAccessories(int $stocknumber)
     {
         $requestHeader = $this->clientHeaders;
         $result = $this->client->request('GET', 'vehicle/' . $stocknumber . '/vehicleaccessories/', ["headers"=>$requestHeader]);
@@ -328,7 +334,7 @@ class Api
      * @param int $stocknumber
      * @return boolean|array
      */
-    public function getProductAdvertisements($stocknumber)
+    public function getProductAdvertisements(int $stocknumber)
     {
         $requestHeader = $this->clientHeaders;
         $result = $this->client->request('GET', 'vehicle/' . $stocknumber . '/ads/', ["headers"=>$requestHeader]);
@@ -351,7 +357,7 @@ class Api
      * @param int $sequence
      * @return boolean|array
      */
-    public function getProductImage($stocknumber, $sequence)
+    public function getProductImage(int $stocknumber, int $sequence)
     {
         $requestHeader = $this->clientHeaders;
         $result = $this->client->request('GET', 'vehicleimages/' . $stocknumber . urlencode(':') . $sequence, ["headers"=>$requestHeader]);
@@ -373,7 +379,7 @@ class Api
      * @param mixed $data
      * @return boolean|array
      */
-    public function createAdvertisement(\AuctioCore\Api\Hexon\Entity\Advertisement $data)
+    public function createAdvertisement(Advertisement $data)
     {
         // Convert input-data into body
         $body = $this->convertInput($data);
@@ -398,7 +404,7 @@ class Api
      * @param mixed $data
      * @return boolean|array
      */
-    public function createAuction(\AuctioCore\Api\Hexon\Entity\Auction $data)
+    public function createAuction(Auction $data)
     {
         // Convert input-data into body
         $body = $this->convertInput($data);
@@ -423,7 +429,7 @@ class Api
      * @param mixed $data
      * @return boolean|array
      */
-    public function createProduct(\AuctioCore\Api\Hexon\Entity\Product $data)
+    public function createProduct(Product $data)
     {
         // Convert input-data into body
         $body = $this->convertInput($data);
@@ -448,7 +454,7 @@ class Api
      * @param mixed $data
      * @return boolean|array
      */
-    public function createProductAccessory(\AuctioCore\Api\Hexon\Entity\ProductAccessory $data)
+    public function createProductAccessory(ProductAccessory $data)
     {
         // Convert input-data into body
         $body = $this->convertInput($data);
@@ -473,7 +479,7 @@ class Api
      * @param mixed $data
      * @return boolean|array
      */
-    public function createProductImage(\AuctioCore\Api\Hexon\Entity\ProductImage $data)
+    public function createProductImage(ProductImage $data)
     {
         // Convert input-data into body
         $body = $this->convertInput($data);
@@ -522,7 +528,7 @@ class Api
      * @param int $auctionId
      * @return boolean|array
      */
-    public function deleteAuction($auctionId)
+    public function deleteAuction(int $auctionId)
     {
         $requestHeader = $this->clientHeaders;
         $result = $this->client->request('DELETE', 'auction/' . $auctionId, ["headers"=>$requestHeader]);
@@ -545,7 +551,7 @@ class Api
      * @param int $stocknumber
      * @return boolean|array
      */
-    public function deleteProduct($stocknumber)
+    public function deleteProduct(int $stocknumber)
     {
         $requestHeader = $this->clientHeaders;
         $result = $this->client->request('DELETE', 'vehicle/' . $stocknumber, ["headers"=>$requestHeader]);
@@ -569,7 +575,7 @@ class Api
      * @param int $number
      * @return boolean|array
      */
-    public function deleteProductAccessory($stocknumber, $number)
+    public function deleteProductAccessory(int $stocknumber, int $number)
     {
         $requestHeader = $this->clientHeaders;
         $result = $this->client->request('DELETE', 'vehicleaccessory/' . $stocknumber . urlencode(':') . $number, ["headers"=>$requestHeader]);
@@ -593,7 +599,7 @@ class Api
      * @param mixed $data
      * @return boolean|array
      */
-    public function updateAuction($auctionId, \AuctioCore\Api\Hexon\Entity\Auction $data)
+    public function updateAuction(int $auctionId, Auction $data)
     {
         // Convert input-data into body
         $body = $this->convertInput($data);
@@ -619,7 +625,7 @@ class Api
      * @param mixed $data
      * @return boolean|array
      */
-    public function updateProduct($stocknumber, \AuctioCore\Api\Hexon\Entity\Product $data)
+    public function updateProduct(int $stocknumber, Product $data)
     {
         // Convert input-data into body
         $body = $this->convertInput($data);
@@ -646,7 +652,7 @@ class Api
      * @param mixed $data
      * @return boolean|array
      */
-    public function updateProductAccessory($stocknumber, $number, \AuctioCore\Api\Hexon\Entity\ProductAccessory $data)
+    public function updateProductAccessory(int $stocknumber, int $number, ProductAccessory $data)
     {
         // Convert input-data into body
         $body = $this->convertInput($data);
@@ -673,7 +679,7 @@ class Api
      * @param mixed $data
      * @return boolean|array
      */
-    public function updateProductImage($stocknumber, $sequence, \AuctioCore\Api\Hexon\Entity\ProductImage $data)
+    public function updateProductImage(int $stocknumber, int $sequence, ProductImage $data)
     {
         // Convert input-data into body
         $body = $this->convertInput($data);

@@ -10,9 +10,9 @@ class Error
      *
      * @param string $type
      * @param string $errorCode
-     * @return mixed|void
+     * @return string
      */
-    public function convertErrorCode($type, $errorCode)
+    public static function convertErrorCode(string $type, string $errorCode): string
     {
         $message = "";
 

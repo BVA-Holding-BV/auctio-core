@@ -8,6 +8,6 @@ class Defaults {
 	 * Supported basic types in our entities
 	 * @var array
 	 */
-	public static $basicTypes = array('boolean', 'bool', 'integer', 'int', 'float', 'string', 'array');
+	public static array $basicTypes = ['boolean', 'bool', 'integer', 'int', 'float', 'string', 'array'];
 
 }

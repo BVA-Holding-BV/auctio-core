@@ -11,10 +11,10 @@ class BooleanInputFilter
     /**
      * Get InputFilter for a Boolean-type field
      *
-     * @param $name
+     * @param string $name
      * @return void|InputFilter
      */
-    public static function getFilter($name)
+    public static function getFilter(string $name): InputFilter
     {
         // REQUIRED OPTION IS NOT WORKING, BECAUSE "false" IS NOT A VALID NON-EMPTY VALUE!
         // SO THIS CONSTRAINT HAS TO BE CHECKED AS "NOT NULL" IN TABLE

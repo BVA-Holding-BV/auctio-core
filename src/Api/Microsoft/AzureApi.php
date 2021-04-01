@@ -4,15 +4,17 @@
  */
 namespace AuctioCore\Api\Microsoft;
 
+use GuzzleHttp\Client;
+
 class AzureApi
 {
 
-    private $client;
-    private $clientId;
-    private $clientSecret;
-    private $resource;
-    private $messages;
-    private $errorData;
+    private Client $client;
+    private string $clientId;
+    private string $clientSecret;
+    private string $resource;
+    private array $messages;
+    private array $errorData;
 
     /**
      * Constructor
@@ -20,12 +22,13 @@ class AzureApi
      * @param string $hostname
      * @param string $clientId
      * @param string $clientSecret
+     * @param string $resource
      * @param boolean $debug
      */
-    public function __construct($hostname, $clientId, $clientSecret, $resource = 'https://graph.microsoft.com', $debug = false)
+    public function __construct(string $hostname, string $clientId, string $clientSecret, $resource = 'https://graph.microsoft.com', $debug = false)
     {
         // Set client
-        $this->client = new \GuzzleHttp\Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
+        $this->client = new Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
 
         // Set client-credentials
         $this->clientId = $clientId;
@@ -41,7 +44,6 @@ class AzureApi
      * Set error-data
      *
      * @param $data
-     * @return array
      */
     public function setErrorData($data)
     {
@@ -53,7 +55,7 @@ class AzureApi
      *
      * @return array
      */
-    public function getErrorData()
+    public function getErrorData(): array
     {
         return $this->errorData;
     }
@@ -61,7 +63,7 @@ class AzureApi
     /**
      * Set error-message
      *
-     * @param array $messages
+     * @param array|string $messages
      */
     public function setMessages($messages)
     {
@@ -72,7 +74,7 @@ class AzureApi
     /**
      * Add error-message
      *
-     * @param array $message
+     * @param array|string $message
      */
     public function addMessage($message)
     {
@@ -85,7 +87,7 @@ class AzureApi
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }
@@ -97,7 +99,7 @@ class AzureApi
      * @param string $password
      * @return boolean|object
      */
-    public function authorize($username, $password)
+    public function authorize(string $username, string $password)
     {
         // Check input parameters
         if (empty($username)) {

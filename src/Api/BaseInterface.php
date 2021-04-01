@@ -2,11 +2,13 @@
 
 namespace AuctioCore\Api;
 
+use stdClass;
+
 interface BaseInterface
 {
     /**
      * Loop over all properties and set them in the entity
-     * @param mixed $data
+     * @param stdClass|array $data
      * @return self
      */
     public function populate($data);
@@ -14,7 +16,8 @@ interface BaseInterface
     /**
      * Returns a JSON encoded string with current Entity.
      * We have filtered out the readOnly elements
-     * @return string
+     * @param bool $allowNull
+     * @return string|null
      */
-    public function encode();
+    public function encode($allowNull = true): ?string;
 }

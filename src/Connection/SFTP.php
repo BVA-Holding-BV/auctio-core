@@ -2,11 +2,13 @@
 
 namespace AuctioCore\Connection;
 
+use phpseclib3\Crypt\RSA;
+
 class SFTP
 {
-    private $sftp;
-    private $messages;
-    private $errorData;
+    private \phpseclib3\Net\SFTP $sftp;
+    private array $messages;
+    private array $errorData;
 
     /**
      * Constructor
@@ -14,24 +16,22 @@ class SFTP
      * @param string $hostname
      * @param string $username
      * @param string $password
-     * @param string $privateKeyPath
-     * @param string $privateKeyPassword
+     * @param null $privateKeyPath
+     * @param null $privateKeyPassword
      */
-    public function __construct($hostname, $username, $password, $privateKeyPath = null, $privateKeyPassword = null)
+    public function __construct(string $hostname, string $username, string $password, $privateKeyPath = null, $privateKeyPassword = null)
     {
         // Set error-messages
         $this->messages = [];
         $this->errorData = [];
 
         // Set sftp
-        $this->sftp = new \phpseclib\Net\SFTP($hostname);
+        $this->sftp = new \phpseclib3\Net\SFTP($hostname);
 
         // Login by private-key
         if (!empty($privateKeyPath)) {
             // Set private-key
-            $key = new \phpseclib\Crypt\RSA();
-            $key->setPassword($privateKeyPassword);
-            $key->loadKey(file_get_contents($privateKeyPath));
+            $key = RSA::loadFormat('PKCS1', file_get_contents($privateKeyPath), $privateKeyPassword);
 
             // Login
             $res = $this->sftp->login($username, $key);
@@ -43,7 +43,6 @@ class SFTP
         // Return
         if (!$res) {
             $this->setMessages('Login failed');
-            return false;
         }
     }
 
@@ -62,7 +61,7 @@ class SFTP
      *
      * @return array
      */
-    public function getErrorData()
+    public function getErrorData(): array
     {
         return $this->errorData;
     }
@@ -70,7 +69,7 @@ class SFTP
     /**
      * Set error-message
      *
-     * @param array $messages
+     * @param array|string $messages
      */
     public function setMessages($messages)
     {
@@ -81,7 +80,7 @@ class SFTP
     /**
      * Add error-message
      *
-     * @param array $message
+     * @param array|string $message
      */
     public function addMessage($message)
     {
@@ -94,7 +93,7 @@ class SFTP
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }
@@ -104,11 +103,11 @@ class SFTP
      * Create a directory
      *
      * @param string $dir
-     * @param string $mode
+     * @param null $mode
      * @param bool $recursive
      * @return bool
      */
-    public function createDirectory($dir, $mode = null, $recursive = false)
+    public function createDirectory(string $dir, $mode = null, $recursive = false): bool
     {
         return $this->sftp->mkdir($dir, $mode, $recursive);
     }
@@ -119,7 +118,7 @@ class SFTP
      * @param string $remoteFileName
      * @return bool
      */
-    public function delete($remoteFileName)
+    public function delete(string $remoteFileName): bool
     {
         return $this->sftp->delete($remoteFileName);
     }
@@ -129,9 +128,9 @@ class SFTP
      *
      * @param string $remoteFileName
      * @param string $localFileName
-     * @return bool
+     * @return bool|mixed|string
      */
-    public function download($remoteFileName, $localFileName)
+    public function download(string $remoteFileName, string $localFileName)
     {
         return $this->sftp->get($remoteFileName, $localFileName);
     }
@@ -142,7 +141,7 @@ class SFTP
      * @param string $remoteFileName
      * @return bool
      */
-    public function exists($remoteFileName)
+    public function exists(string $remoteFileName): bool
     {
         return $this->sftp->file_exists($remoteFileName);
     }
@@ -152,7 +151,7 @@ class SFTP
      *
      * @param string $path
      * @param bool $recursive
-     * @return array
+     * @return array|false|mixed
      */
     public function getFiles($path = null, $recursive = false)
     {
@@ -164,9 +163,9 @@ class SFTP
      *
      * @param string $currentFileName
      * @param string $newFileName
-     * @return mixed
+     * @return boolean
      */
-    public function move($currentFileName, $newFileName)
+    public function move(string $currentFileName, string $newFileName): bool
     {
         return $this->sftp->rename($currentFileName, $newFileName);
     }
@@ -176,9 +175,9 @@ class SFTP
      *
      * @param string $remoteFileName
      * @param string $data
-     * @return mixed
+     * @return boolean
      */
-    public function upload($remoteFileName, $data)
+    public function upload(string $remoteFileName, string $data): bool
     {
         return $this->sftp->put($remoteFileName, $data);
     }

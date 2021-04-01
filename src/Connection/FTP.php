@@ -5,8 +5,8 @@ namespace AuctioCore\Connection;
 class FTP
 {
     private $ftp;
-    private $messages;
-    private $errorData;
+    private array $messages;
+    private array $errorData;
 
     /**
      * Constructor
@@ -15,7 +15,7 @@ class FTP
      * @param string $username
      * @param string $password
      */
-    public function __construct($hostname, $username, $password)
+    public function __construct(string $hostname, string $username, string $password)
     {
         // Set error-messages
         $this->messages = [];
@@ -52,7 +52,7 @@ class FTP
      *
      * @return array
      */
-    public function getErrorData()
+    public function getErrorData(): array
     {
         return $this->errorData;
     }
@@ -60,7 +60,7 @@ class FTP
     /**
      * Set error-message
      *
-     * @param array $messages
+     * @param array|string $messages
      */
     public function setMessages($messages)
     {
@@ -71,7 +71,7 @@ class FTP
     /**
      * Add error-message
      *
-     * @param array $message
+     * @param array|string $message
      */
     public function addMessage($message)
     {
@@ -84,7 +84,7 @@ class FTP
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }
@@ -94,9 +94,9 @@ class FTP
      * Create a directory
      *
      * @param string $dir
-     * @return bool
+     * @return false|string
      */
-    public function createDirectory($dir)
+    public function createDirectory(string $dir)
     {
         return ftp_mkdir($this->ftp, $dir);
     }
@@ -107,7 +107,7 @@ class FTP
      * @param string $dir
      * @return bool
      */
-    public function deleteDirectory($dir)
+    public function deleteDirectory(string $dir): bool
     {
         return ftp_rmdir($this->ftp, $dir);
     }
@@ -118,7 +118,7 @@ class FTP
      * @param string $file
      * @return bool
      */
-    public function deleteFile($file)
+    public function deleteFile(string $file): bool
     {
         return ftp_delete($this->ftp, $file);
     }
@@ -130,7 +130,7 @@ class FTP
      * @param string $localFileName
      * @return bool
      */
-    public function download($remoteFileName, $localFileName)
+    public function download(string $remoteFileName, string $localFileName): bool
     {
         return ftp_get($this->ftp, $localFileName, $remoteFileName, FTP_BINARY);
     }
@@ -141,7 +141,7 @@ class FTP
      * @param string $remoteFileName
      * @return bool
      */
-    public function exists($remoteFileName)
+    public function exists(string $remoteFileName): bool
     {
         // Check if directory exists
         $res = ftp_nlist($this->ftp, $remoteFileName);
@@ -149,14 +149,14 @@ class FTP
 
         // Check if file exists
         $res = ftp_size($this->ftp, $remoteFileName);
-        return ($res >= 0) ? true : false;
+        return $res >= 0;
     }
 
     /**
      * Get list of files
      *
      * @param string $path
-     * @return array
+     * @return array|false
      */
     public function getFiles($path = null)
     {
@@ -168,9 +168,9 @@ class FTP
      *
      * @param string $currentFileName
      * @param string $newFileName
-     * @return mixed
+     * @return boolean
      */
-    public function move($currentFileName, $newFileName)
+    public function move(string $currentFileName, string $newFileName): bool
     {
         return ftp_rename($this->ftp, $currentFileName, $newFileName);
     }
@@ -180,7 +180,7 @@ class FTP
      *
      * @return boolean
      */
-    public function close()
+    public function close(): bool
     {
         return ftp_close($this->ftp);
     }

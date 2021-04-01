@@ -2,14 +2,15 @@
 namespace AuctioCore\Mail\Office365;
 
 use \AuctioCore\Api\Microsoft;
+use AuctioCore\Api\Microsoft\Office365Api;
 
 class Mail
 {
 
-    private $office365Api;
-    private $token;
-    private $messages;
-    private $errorData;
+    private Office365Api $office365Api;
+    private string $token;
+    private array $messages;
+    private array $errorData;
 
     /**
      * Constructor
@@ -21,7 +22,7 @@ class Mail
      * @param string $username
      * @param string $password
      */
-    public function __construct($hostname, $tenant, $clientId, $clientSecret, $username, $password)
+    public function __construct(string $hostname, string $tenant, string $clientId, string $clientSecret, string $username, string $password)
     {
         // Set error-messages
         $this->messages = [];
@@ -35,7 +36,7 @@ class Mail
             $this->token = $token->token_type . " " . $token->access_token;
 
             // Set Office365 API
-            $this->office365Api = new \AuctioCore\Api\Microsoft\Office365Api($hostname, $this->token);
+            $this->office365Api = new Office365Api($hostname, $this->token);
         } else {
             $this->setMessages($azureApi->getMessages());
             $this->setErrorData($azureApi->getErrorData());
@@ -57,7 +58,7 @@ class Mail
      *
      * @return array
      */
-    public function getErrorData()
+    public function getErrorData(): array
     {
         return $this->errorData;
     }
@@ -65,7 +66,7 @@ class Mail
     /**
      * Set error-message
      *
-     * @param array $messages
+     * @param array|string $messages
      */
     public function setMessages($messages)
     {
@@ -76,7 +77,7 @@ class Mail
     /**
      * Add error-message
      *
-     * @param array $message
+     * @param array|string $message
      */
     public function addMessage($message)
     {
@@ -89,7 +90,7 @@ class Mail
      *
      * @return array
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }
@@ -98,14 +99,14 @@ class Mail
      * Create/send email by Office365
      *
      * @param string|array $recipients
-     * @param string $subject
+     * @param null $subject
      * @param string $content
      * @param string $bodyType
      * @param boolean $saveToFolder
      * @param boolean|array $attachments
      * @return boolean
      */
-    public function send($recipients, $subject = NULL, $content, $bodyType = 'Text', $saveToFolder = true, $attachments = false)
+    public function send($recipients, $subject = NULL, string $content, $bodyType = 'Text', $saveToFolder = true, $attachments = false): bool
     {
         // Set option save message to folder
         if ($saveToFolder !== true) {

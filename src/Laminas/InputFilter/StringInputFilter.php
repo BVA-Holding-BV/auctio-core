@@ -10,11 +10,11 @@ class StringInputFilter
     /**
      * Get InputFilter for a String-type field
      *
-     * @param $name
+     * @param string $name
      * @param bool $required
      * @return void|InputFilter
      */
-    public static function getFilter($name, $required = false)
+    public static function getFilter(string $name, $required = false): InputFilter
     {
         if ($name == null) {
             return;
