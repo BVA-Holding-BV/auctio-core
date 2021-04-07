@@ -16,7 +16,7 @@ class EnumInputFilter
      * @param array $enumValues
      * @return void|InputFilter
      */
-    public static function getFilter(string $name, $required = false, $enumValues = []): InputFilter
+    public static function getFilter(string $name, $required = false, $enumValues = [])
     {
         if ($name == null) {
             return;

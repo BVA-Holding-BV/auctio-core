@@ -14,7 +14,7 @@ class StringInputFilter
      * @param bool $required
      * @return void|InputFilter
      */
-    public static function getFilter(string $name, $required = false): InputFilter
+    public static function getFilter(string $name, $required = false)
     {
         if ($name == null) {
             return;
