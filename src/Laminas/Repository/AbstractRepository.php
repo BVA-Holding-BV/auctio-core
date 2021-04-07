@@ -368,15 +368,15 @@ abstract class AbstractRepository implements InputFilterAwareInterface
      *
      * @param mixed $data
      * @param array $fields
-     * @return array|void
+     * @return array|null
      */
-    public function transformValues($data, array $fields): array
+    public function transformValues($data, array $fields): ?array
     {
-        if (empty($fields)) return;
-        if (empty($data)) return;
+        if (empty($fields)) return null;
+        if (empty($data)) return null;
 
         if ($data instanceof PersistentCollection) {
-            if (count($data) < 1) return;
+            if (count($data) < 1) return null;
 
             $values = [];
             foreach ($data AS $k => $v) {
