@@ -1,7 +1,6 @@
 <?php
 namespace AuctioCore\Api\AdCurve\Entity;
 
-use AuctioCore\Api\AdCurve\Entity\Custom\Date;
 use AuctioCore\Api\Base;
 
 class Product extends Base {
@@ -108,7 +107,7 @@ class Product extends Base {
     public $promotion_text;
     /**
      * Starting date from when the product will be included in the feed (YYYY-MM-DD)
-     * @var Date
+     * @var \AuctioCore\Api\AdCurve\Entity\Custom\Date
      */
     public $start_date;
     /**
@@ -118,7 +117,7 @@ class Product extends Base {
     public $stock_status;
     /**
      * Starting date from when the product will be NOT included in the feed (YYYY-MM-DD)
-     * @var Date
+     * @var \AuctioCore\Api\AdCurve\Entity\Custom\Date
      */
     public $stop_date;
     /**

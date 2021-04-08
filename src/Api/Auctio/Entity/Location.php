@@ -1,40 +1,39 @@
 <?php
 namespace AuctioCore\Api\Auctio\Entity;
 
-use AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage;
 use AuctioCore\Api\Base;
 
 class Location extends Base {
 
     /** @var int */
-    public int $id;
-    /** @var LocaleMessage */
-    public LocaleMessage $name;
+    public $id;
+    /** @var \AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage */
+    public $name;
     /** @var string */
-    public string $address;
+    public $address;
     /** @var string */
-    public string $address2;
+    public $address2;
     /** @var int */
-    public int $auctionId;
+    public $auctionId;
     /** @var string */
-    public string $city;
+    public $city;
     /** @var string */
-    public string $countryId;
+    public $countryId;
     /** @var string */
-    public string $houseNumber;
+    public $houseNumber;
     /** @var string */
-    public string $houseNumberAddition;
+    public $houseNumberAddition;
     /** @var string */
-    public string $postalCode;
+    public $postalCode;
     /** @var bool */
-    public bool $defaultLocation;
+    public $defaultLocation;
     /** @var string */
-    public string $stateName;
+    public $stateName;
     /** @var int */
-    public int $stateId;
+    public $stateId;
     /** @var string */
-    public string $latitude;
+    public $latitude;
     /** @var string */
-    public string $longitude;
+    public $longitude;
 
 }

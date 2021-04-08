@@ -20,7 +20,7 @@ abstract class AbstractRepository implements InputFilterAwareInterface
     /**
      * @var EntityManager
      */
-    protected EntityManager $om;
+    protected $om;
 
     /**
      * @var DoctrineObject
@@ -30,17 +30,17 @@ abstract class AbstractRepository implements InputFilterAwareInterface
     /**
      * @var string $objectName Name of the \Doctrine\ORM\EntityRepository
      */
-    protected string $objectName;
+    protected $objectName;
 
     /**
      * @var array $filterAssociations List of filter-associations
      */
-    protected array $filterAssociations;
+    protected $filterAssociations;
 
     /**
      * @var array $inputData
      */
-    protected array $inputData;
+    protected $inputData;
 
     /**
      * @var InputFilterInterface $inputFilter
@@ -166,9 +166,9 @@ abstract class AbstractRepository implements InputFilterAwareInterface
     /**
      * Get filter-associations of entity
      *
-     * @return mixed
+     * @return array|null
      */
-    public function getFilterAssociations(): array
+    public function getFilterAssociations(): ?array
     {
         return $this->filterAssociations;
     }

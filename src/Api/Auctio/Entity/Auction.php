@@ -2,107 +2,105 @@
 
 namespace AuctioCore\Api\Auctio\Entity;
 
-use AuctioCore\Api\Auctio\Entity\Custom\DateTime;
-use AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage;
 use AuctioCore\Api\Base;
 
 class Auction extends Base {
 
     /** @var int */
-    public int $id;
-    /** @var LocaleMessage */
-    public LocaleMessage $name;
-    /** @var LocaleMessage */
-    public LocaleMessage $description;
-    /** @var LocaleMessage */
-    public LocaleMessage $auctionClosedText;
-    /** @var LocaleMessage */
-    public LocaleMessage $bidRestrictionExplanationText;
-    /** @var LocaleMessage */
-    public LocaleMessage $privateAuctionText;
-    /** @var LocaleMessage */
-    public LocaleMessage $privateAuctionEmailText;
-    /** @var LocaleMessage */
-    public LocaleMessage $extraExplanationText;
-    /** @var LocaleMessage */
-    public LocaleMessage $importantInformation;
-    /** @var LocaleMessage */
-    public LocaleMessage $auctionAdvertisement;
+    public $id;
+    /** @var \AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage */
+    public $name;
+    /** @var \AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage */
+    public $description;
+    /** @var \AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage */
+    public $auctionClosedText;
+    /** @var \AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage */
+    public $bidRestrictionExplanationText;
+    /** @var \AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage */
+    public $privateAuctionText;
+    /** @var \AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage */
+    public $privateAuctionEmailText;
+    /** @var \AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage */
+    public $extraExplanationText;
+    /** @var \AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage */
+    public $importantInformation;
+    /** @var \AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage */
+    public $auctionAdvertisement;
     /** @var float */
-    public float $bidLimitDispensationAmount;
+    public $bidLimitDispensationAmount;
     /** @var string */
-    public string $countryId;
+    public $countryId;
     /** @var string */
-    public string $currencyCode;
-    /** @var DateTime */
-    public DateTime $creationDate;
-    /** @var DateTime */
-    public DateTime $endDate;
+    public $currencyCode;
+    /** @var \AuctioCore\Api\Auctio\Entity\Custom\DateTime */
+    public $creationDate;
+    /** @var \AuctioCore\Api\Auctio\Entity\Custom\DateTime */
+    public $endDate;
     /** @var bool */
-    public bool $onlyBusinessCustomersCanBid;
+    public $onlyBusinessCustomersCanBid;
     /** @var bool */
-    public bool $onlyLocalCustomersCanBid;
+    public $onlyLocalCustomersCanBid;
     /** @var bool */
-    public bool $privateAuction;
+    public $privateAuction;
     /** @var bool */
-    public bool $showPrivateAuctionOnHomepage;
+    public $showPrivateAuctionOnHomepage;
     /** @var bool */
-    public bool $allowPrivateAuctionApplications;
+    public $allowPrivateAuctionApplications;
     /** @var bool */
-    public bool $allowAutomaticPrivateAuctionAccess;
+    public $allowAutomaticPrivateAuctionAccess;
     /** @var bool */
-    public bool $showBanners;
-    /** @var LocaleMessage */
-    public LocaleMessage $extraTermsText;
+    public $showBanners;
+    /** @var \AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage */
+    public $extraTermsText;
     /** @var bool */
-    public bool $extraTermsRequired;
+    public $extraTermsRequired;
     /** @var bool */
-    public bool $bidLimitRequired;
+    public $bidLimitRequired;
     /** @var bool */
-    public bool $active;
+    public $active;
     /**
      * @var string
      * @ReadOnly
      */
-    public string $termsUrl;
-    /** @var DateTime */
-    public DateTime $startDate;
+    public $termsUrl;
+    /** @var \AuctioCore\Api\Auctio\Entity\Custom\DateTime */
+    public $startDate;
     /** @var string */
-    public string $leafletURL;
+    public $leafletURL;
     /** var string */
-    public string $privateAuctionApplicationEmail;
+    public $privateAuctionApplicationEmail;
     /** @var string */
-    public string $remark;
+    public $remark;
     /** @var bool */
-    public bool $disableBidding;
-    /** @var LocaleMessage */
-    public LocaleMessage $themeIntroduction;
+    public $disableBidding;
+    /** @var \AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage */
+    public $themeIntroduction;
     /** @var bool */
-    public bool $permissionRequired;
+    public $permissionRequired;
     /** @var int */
-    public int $bidRangeId;
+    public $bidRangeId;
     /** @var int */
-    public int $channelId;
+    public $channelId;
     /** @var array */
-    public array $languages;
+    public $languages;
     /** @var array */
-    public array $channelCodes;
+    public $channelCodes;
     /** @var int */
-    public int $reverseBidRangeId;
+    public $reverseBidRangeId;
     /** @var string */
-    public string $createdBy;
+    public $createdBy;
     /** @var int */
-    public int $reverseAuctionStartOffset;
+    public $reverseAuctionStartOffset;
     /** @var bool */
-    public bool $homeDelivery;
+    public $homeDelivery;
     /** @var int */
-    public int $businessUnit;
+    public $businessUnit;
     /** @var string */
-    public string $auctionType;
+    public $auctionType;
     /** @var bool */
-    public bool $sealedBids;
-    /** @var LocaleMessage */
-    public LocaleMessage $keywords;
+    public $sealedBids;
+    /** @var \AuctioCore\Api\Auctio\Entity\Custom\LocaleMessage */
+    public $keywords;
     /** @var bool */
-    public bool $deliveryCosts;
+    public $deliveryCosts;
 }

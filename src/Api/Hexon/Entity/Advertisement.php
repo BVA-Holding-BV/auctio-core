@@ -7,8 +7,8 @@ use AuctioCore\Api\Base;
 class Advertisement extends Base {
 
     /** @var string */
-    public string $stocknumber;
+    public $stocknumber;
     /** @var string */
-    public string $site_code;
+    public $site_code;
 
 }

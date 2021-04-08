@@ -6,8 +6,8 @@ use AuctioCore\Api\Base;
 class LotMetaData extends Base {
 
     /** @var int */
-    public int $id;
+    public $id;
     /** @var array \AuctioCore\Api\Auctio\Entity\MetaData */
-    public array $metadata;
+    public $metadata;
 
 }
