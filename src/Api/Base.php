@@ -120,9 +120,12 @@ abstract class Base implements BaseInterface
                     }
 
                     // found a custom data type
-                    $className = substr(__NAMESPACE__, 0 , strrpos(__NAMESPACE__, '\\')) . '\\' . $matches[1];
+                    $className = $matches[1];
                     if(!class_exists($className)) {
-                        throw new Exception('Could not find type:' . $className);
+                        $className = substr(__NAMESPACE__, 0, strrpos(__NAMESPACE__, '\\')) . '\\' . $matches[1];
+                        if (!class_exists($className)) {
+                            throw new Exception('Could not find type:' . $className);
+                        }
                     }
                     if(!is_subclass_of($className, '\AuctioCore\Api\BaseInterface')) {
                         throw new Exception('Type is not known:' . $className);
