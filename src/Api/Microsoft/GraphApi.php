@@ -37,10 +37,11 @@ class GraphApi
     /**
      * Set error-data
      *
-     * @param $data
+     * @param array|string $data
      */
     public function setErrorData($data)
     {
+        if (!is_array($data)) $data = [$data];
         $this->errorData = $data;
     }
 

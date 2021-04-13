@@ -69,10 +69,11 @@ class Api
     /**
      * Set error-data
      *
-     * @param array $data
+     * @param array|string $data
      */
     public function setErrorData($data)
     {
+        if (!is_array($data)) $data = [$data];
         $this->errorData = $data;
     }
 
