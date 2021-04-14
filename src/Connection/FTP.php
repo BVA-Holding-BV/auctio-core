@@ -103,6 +103,7 @@ class FTP
      */
     public function createDirectory(string $dir)
     {
+        if ($this->ftp === false) return false;
         return ftp_mkdir($this->ftp, $dir);
     }
 
@@ -114,6 +115,7 @@ class FTP
      */
     public function deleteDirectory(string $dir): bool
     {
+        if ($this->ftp === false) return false;
         return ftp_rmdir($this->ftp, $dir);
     }
 
@@ -125,6 +127,7 @@ class FTP
      */
     public function deleteFile(string $file): bool
     {
+        if ($this->ftp === false) return false;
         return ftp_delete($this->ftp, $file);
     }
 
@@ -137,6 +140,7 @@ class FTP
      */
     public function download(string $remoteFileName, string $localFileName): bool
     {
+        if ($this->ftp === false) return false;
         return ftp_get($this->ftp, $localFileName, $remoteFileName, FTP_BINARY);
     }
 
@@ -148,6 +152,8 @@ class FTP
      */
     public function exists(string $remoteFileName): bool
     {
+        if ($this->ftp === false) return false;
+
         // Check if directory exists
         $res = ftp_nlist($this->ftp, $remoteFileName);
         if (is_array($res)) return true;
@@ -165,6 +171,7 @@ class FTP
      */
     public function getFiles($path = null)
     {
+        if ($this->ftp === false) return false;
         return ftp_nlist($this->ftp, $path);
     }
 
@@ -177,6 +184,7 @@ class FTP
      */
     public function move(string $currentFileName, string $newFileName): bool
     {
+        if ($this->ftp === false) return false;
         return ftp_rename($this->ftp, $currentFileName, $newFileName);
     }
 
@@ -187,6 +195,7 @@ class FTP
      */
     public function close(): bool
     {
+        if ($this->ftp === false) return false;
         return ftp_close($this->ftp);
     }
 }
