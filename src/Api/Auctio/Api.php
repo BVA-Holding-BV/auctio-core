@@ -46,7 +46,9 @@ class Api
 
         $stack = HandlerStack::create();
         $stack->push(GuzzleRetryMiddleware::factory([
+            'connect_timeout' => 30,
             'max_retry_attempts' => 5,
+            'retry_on_timeout' => true,
         ]));
 
         // Set client
