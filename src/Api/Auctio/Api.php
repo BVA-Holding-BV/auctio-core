@@ -16,6 +16,8 @@ use DateTime;
 use DateTimeZone;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\HandlerStack;
+use GuzzleRetry\GuzzleRetryMiddleware;
 
 class Api
 {
@@ -42,8 +44,13 @@ class Api
         // Set time-zone for converting "back" from UTC
         $this->tz = new DateTimeZone('Europe/Amsterdam');
 
+        $stack = HandlerStack::create();
+        $stack->push(GuzzleRetryMiddleware::factory([
+            'max_retry_attempts' => 5,
+        ]));
+
         // Set client
-        $this->client = new Client(['base_uri'=>$hostname, 'http_errors'=>false, 'debug'=>$debug]);
+        $this->client = new Client(['base_uri'=>$hostname, 'http_errors'=>false, 'handler'=>$stack, 'debug'=>$debug]);
 
         // Set default header for client-requests
         $this->clientHeaders = [
