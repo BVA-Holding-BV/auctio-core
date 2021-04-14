@@ -23,6 +23,10 @@ class FTP
 
         // Set ftp
         $this->ftp = ftp_connect($hostname);
+        if ($this->ftp === false) {
+            $this->setMessages('Connection failed');
+            return false;
+        }
 
         // Check if login available
         if (!empty($username)) {
