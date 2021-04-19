@@ -420,12 +420,12 @@ class Api
      * @param int $lotId
      * @param int $lotSequence
      * @param string $localFilename
-     * @param int $imageSequence
+     * @param int|null $imageSequence
      * @param null $uploadFile
      * @return bool|object
      * @throws GuzzleException
      */
-    public function createLotMedia(int $lotId, int $lotSequence, string $localFilename, int $imageSequence, $uploadFile = null)
+    public function createLotMedia(int $lotId, int $lotSequence, string $localFilename, ?int $imageSequence = null, $uploadFile = null)
     {
         // Prepare request
         $requestHeader = $this->clientHeaders;
@@ -458,7 +458,7 @@ class Api
 
         // Set request-body
         $filename = $lotSequence;
-        if ($imageSequence) $filename .= '-' . $imageSequence;
+        if (!empty($imageSequence)) $filename .= '-' . $imageSequence;
         $body = [[
             'name' => 'content',
             'filename'=> $localFilename,
