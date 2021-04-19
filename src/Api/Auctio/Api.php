@@ -69,9 +69,20 @@ class Api
         if (!empty($username) && empty($token)) {
             $this->login($username, $password);
         } elseif (!empty($token)) {
-            $this->clientHeaders['accessToken'] = (is_object($token)) ? $token->accessToken : $token['accessToken'];
-            $this->clientHeaders['refreshToken'] = (is_object($token)) ? $token->refreshToken : $token['refreshToken'];
-            $this->clientHeaders['X-CSRF-Token'] = (is_object($token)) ? $token->csrfToken : $token['csrfToken'];
+            if (is_object($token)) {
+                $tokenData = [
+                    'accessToken' => $token->accessToken,
+                    'refreshToken' => $token->refreshToken,
+                    'csrfToken' => $token->csrfToken,
+                ];
+            } else {
+                $tokenData = $token;
+            }
+
+            $this->clientHeaders['accessToken'] = $tokenData['accessToken'];
+            $this->clientHeaders['refreshToken'] = $tokenData['refreshToken'];
+            $this->clientHeaders['X-CSRF-Token'] = $tokenData['csrfToken'];
+            $this->token = $tokenData;
         }
     }
 
