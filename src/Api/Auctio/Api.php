@@ -29,6 +29,31 @@ class Api
     private array $token;
     private DateTimeZone $tz;
 
+    const ATTRIBUTE_IDS_ACC = [
+        "brand" => "075CA8D1-F8CB-4F4B-A903-A821A0BB07D2",
+        "color" => "9BFB3D50-1EDD-47C9-84D0-60743B5FD169",
+        "height" => "E8857360-0DF8-4246-AA72-E83FD2DFF8B2",
+        "length" => "F9084D30-57C8-4D06-8E53-14ADAD667627",
+        "material" => "D915A6A9-6ACE-4B0F-A7C0-B2C84E612052",
+        "model" => "FB4B8BCA-011B-42C2-AC03-80FE917FCFA5",
+        "productType" => "E64771D2-4AE4-40DC-A2AF-124827AB5E54",
+        "size" => "B684C49F-0CB4-4B14-8F5D-E9E65DA93F4F",
+        "weight" => "617D1B35-B18A-49F8-9F1F-464746585CE0",
+        "width" => "8695C69F-05A9-4442-B411-03FA37972727",
+    ];
+    const ATTRIBUTE_IDS_PROD = [
+        "brand" => "4836C054-59DD-405F-B2F6-B648B37402E6",
+        "color" => "08ED41F8-D7DF-46C1-BA55-5998EF0BE21C",
+        "height" => "CB92F545-B671-4205-90CC-611C0CBF2F44",
+        "length" => "36E8C100-92E5-45F2-9031-FA7166F21BF0",
+        "material" => "28F2E0D7-F5FE-43E3-8326-FCABFF2A12EC",
+        "model" => "5AC27D82-B565-426E-8634-BDC73FF66AC6",
+        "productType" => "9E7B69BA-1DEE-4072-8210-3E02F58FA163",
+        "size" => "AFAA0860-63C9-48DE-983F-35CDC144FC1D",
+        "weight" => "0664D8EE-88C7-42D5-9E5C-1517A7156D49",
+        "width" => "5794AC1A-0187-4DAE-9203-8D5D265F5933",
+    ];
+
     /**
      * Constructor
      *
