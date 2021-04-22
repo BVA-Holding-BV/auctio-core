@@ -206,4 +206,24 @@ class Product extends Base {
      */
     public $user11;
 
+    /**
+     * @var string
+     */
+    public $product_type;
+    /**
+     * @var string
+     */
+    public $product_model;
+    /**
+     * @var string
+     */
+    public $product_color;
+    /**
+     * @var string
+     */
+    public $product_material;
+    /**
+     * @var string
+     */
+    public $product_size;
 }
