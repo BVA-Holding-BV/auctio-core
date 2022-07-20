@@ -689,8 +689,8 @@ class Api
                     }
                 }
 
-                // Add element if not exists
-                if ($exists === false) {
+                // Add element if not exists (and not empty)
+                if ($exists === false && !empty((array) $metaDataElement->value)) {
                     $lotMetaData->metadata[] = new MetaData(["key"=>$metaDataElement->key, "value"=>$metaDataElement->value]);
                 }
             }
